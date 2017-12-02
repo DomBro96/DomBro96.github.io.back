@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-12-02T09:06:51.880Z</updated>
+  <updated>2017-12-02T11:31:34.922Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -21,21 +21,21 @@
     <link href="http://yoursite.com/2017/12/01/hello-world/"/>
     <id>http://yoursite.com/2017/12/01/hello-world/</id>
     <published>2017-12-01T07:35:59.657Z</published>
-    <updated>2017-12-02T09:06:51.880Z</updated>
+    <updated>2017-12-02T11:31:34.922Z</updated>
     
-    <content type="html"><![CDATA[<p>hello world！第一次尝试用 github + hexo 搭建自己的博客，打今儿起也不再死板的用 github 记笔记了，咱也潮流一把。感叹互联网技术为我们带来的便捷，一个前端小白都可以搭建自己喜好风格的博客。<br>送给自己一句话：<br><strong>坚持会让所有的幸福如期而至</strong>！a</p>]]></content>
+    <content type="html"><![CDATA[<h1 id="Hello-World"><a href="#Hello-World" class="headerlink" title="Hello World"></a>Hello World</h1><p>程序员的职业病？尝试一个新事物就要写个”Hello World”嘚瑟一下。</p><h1 id="That’s-Fun"><a href="#That’s-Fun" class="headerlink" title="That’s Fun"></a>That’s Fun</h1><p>第一次尝试用 github + hexo 搭建自己的博客，简直不要太爽！打今儿起也不再死板的用 github 记笔记了，也潮流一次！感叹互联网技术为我们带来的便捷，一个前端小白都可以搭建自己喜好风格的博客。用 hexo 写博客是一件很享受和放松的事情，最重要还可以装装B…hhhh</p><h1 id="To-Me"><a href="#To-Me" class="headerlink" title="To Me"></a>To Me</h1><p>最后送给自己一句话：<strong>坚持会让所有的幸福如期而至</strong>！</p>]]></content>
     
     <summary type="html">
     
       
       
-        &lt;p&gt;hello world！第一次尝试用 github + hexo 搭建自己的博客，打今儿起也不再死板的用 github 记笔记了，咱也潮流一把。感叹互联网技术为我们带来的便捷，一个前端小白都可以搭建自己喜好风格的博客。&lt;br&gt;送给自己一句话：&lt;br&gt;&lt;strong&gt;坚持会让
+        &lt;h1 id=&quot;Hello-World&quot;&gt;&lt;a href=&quot;#Hello-World&quot; class=&quot;headerlink&quot; title=&quot;Hello World&quot;&gt;&lt;/a&gt;Hello World&lt;/h1&gt;&lt;p&gt;程序员的职业病？尝试一个新事物就要写个”Hello World”嘚瑟
       
     
     </summary>
     
     
-      <category term="test" scheme="http://yoursite.com/tags/test/"/>
+      <category term="hello world" scheme="http://yoursite.com/tags/hello-world/"/>
     
   </entry>
   
