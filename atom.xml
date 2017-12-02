@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Welcome</title>
+  
+  <subtitle>Dom&#39;know</subtitle>
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://yoursite.com/"/>
+  <updated>2017-12-02T09:06:51.880Z</updated>
+  <id>http://yoursite.com/</id>
+  
+  <author>
+    <name>dombro</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>世界你好</title>
+    <link href="http://yoursite.com/2017/12/01/hello-world/"/>
+    <id>http://yoursite.com/2017/12/01/hello-world/</id>
+    <published>2017-12-01T07:35:59.657Z</published>
+    <updated>2017-12-02T09:06:51.880Z</updated>
+    
+    <content type="html"><![CDATA[<p>hello world！第一次尝试用 github + hexo 搭建自己的博客，打今儿起也不再死板的用 github 记笔记了，咱也潮流一把。感叹互联网技术为我们带来的便捷，一个前端小白都可以搭建自己喜好风格的博客。<br>送给自己一句话：<br><strong>坚持会让所有的幸福如期而至</strong>！a</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;hello world！第一次尝试用 github + hexo 搭建自己的博客，打今儿起也不再死板的用 github 记笔记了，咱也潮流一把。感叹互联网技术为我们带来的便捷，一个前端小白都可以搭建自己喜好风格的博客。&lt;br&gt;送给自己一句话：&lt;br&gt;&lt;strong&gt;坚持会让
+      
+    
+    </summary>
+    
+    
+      <category term="test" scheme="http://yoursite.com/tags/test/"/>
+    
+  </entry>
+  
+</feed>
