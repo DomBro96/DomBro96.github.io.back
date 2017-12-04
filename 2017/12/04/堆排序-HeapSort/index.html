@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
+    <title>
+        
+        堆排序-HeapSort · Dom Blog
+        
+    </title>
+    <link rel="icon" href= http://p0bl99g4r.bkt.clouddn.com/dog.JPG>
+    <!-- TODO: 在font-face加载完毕后改变字体  -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/webfont/1.6.28/webfontloader.js"></script>
+    <!-- 提前加载place holder  -->
+    <style type="text/css">
+        @font-face {
+            font-family: 'Oswald-Regular';
+            src: url(/font/Oswald-Regular.ttf);
+        }
+    </style>
+    <style type="text/css">
+        .site-intro-placeholder {
+            position: absolute;
+            z-index: -2;
+            top: 0;
+            left: 0px;
+            width: calc(100% + 300px);
+            height: 100%;
+            background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+            background-position: center center;
+            transform: translate3d(-226px, 0, 0);
+            animation: gradient-move 2.5s ease-out 0s 1;
+        }
+        @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+</style>
+    <link rel="stylesheet" href = /css/style.css?v=20171020 />
+    <script src="//cdn.staticfile.org/jquery/3.2.1/jquery.min.js" defer></script>
+    
+    <script src="/scripts/main.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+</head>
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >DomBro Studio</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">堆排序-HeapSort</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>DomBro Studio</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-img" style="background-image: url(http://p0bl99g4r.bkt.clouddn.com/dog1.JPG)"></div>
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            堆排序-HeapSort
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <!-- 文章页标签  -->
+            
+                <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = 算法algorithm>算法algorithm</a>
+    
+</div>
+            
+            <div class="post-intro-meta">
+                <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                <span class="post-intro-time">2017/12/04</span>
+            </div>
+        
+    </div>
+</div>
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <script>
+            var browser = {
+                    versions: function () {
+                        var u = window.navigator.userAgent;
+                        return {
+                            userAgent: u,
+                            trident: u.indexOf('Trident') > -1, //IE内核
+                            presto: u.indexOf('Presto') > -1, //opera内核
+                            webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+                            gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+                            mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+                            ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+                            android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+                            iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+                            iPad: u.indexOf('iPad') > -1, //是否为iPad
+                            webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+                            weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+                            uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+                        };
+                    }()
+                }
+
+            function fontLoaded(){
+                console.log('font loaded');
+                if (document.getElementsByClassName('site-intro-meta')) {
+                    document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+                    document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+                    var postIntroTags = document.getElementsByClassName('post-intro-tags')[0],
+                        postIntroMeat = document.getElementsByClassName('post-intro-meta')[0];
+                        if (postIntroTags) {
+                            postIntroTags.classList.add('post-fade-in');
+                        }
+                        if (postIntroMeat) {
+                            postIntroMeat.classList.add('post-fade-in');
+                        }
+                    }
+                }
+                
+            console.log("userAgent:" + browser.versions.userAgent);
+            // UC不支持跨域，所以直接显示
+            if (browser.versions.uc) {
+                console.log("UCBrowser");
+                fontLoaded();
+            } else {
+                WebFont.load({
+                    custom: {
+                        families: ['Oswald-Regular']
+                    },
+                    loading: function () {  //所有字体开始加载
+                        // console.log('loading');
+                    },
+                    active: function () {  //所有字体已渲染
+                        fontLoaded();
+                    },
+                    inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+                        console.log('inactive: timeout');
+                        fontLoaded();
+                    },
+                    timeout: 7000 // Set the timeout to two seconds
+                });
+            }
+        </script>
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h1 id="堆排序-HeapSort"><a href="#堆排序-HeapSort" class="headerlink" title="堆排序-HeapSort"></a>堆排序-HeapSort</h1><h2 id="what"><a href="#what" class="headerlink" title="what"></a>what</h2><p>首先我们来了解一些枯燥概念。这往往是必须的(TT)。</p>
+<h3 id="堆-heap"><a href="#堆-heap" class="headerlink" title="堆 heap"></a>堆 heap</h3><ul>
+<li>概念&amp;公式</li>
+</ul>
+<p>要了解堆排序，首先就要知道什么是堆！<strong>堆是顺序存储的完全二叉树</strong>(反正百度是这么说的)~ 翻译过来意思也就是堆实际就是逻辑上的完全二叉树，堆又分为 大根堆 和 小根堆 ，这个中文翻译很前卫… 分别有以下的特点</p>
+<p>大根堆：每个节点的关键字(存储元素)都<strong>不小于</strong>其孩子节点的关键字,写成公式长这样</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Ri &gt;= R2i+1 且 Ri &gt;= R2i+2 (i = 0,1,2...n)</span><br></pre></td></tr></table></figure>
+<p>小根堆：每个节点的关键字(存储元素)都<strong>不大于</strong>其孩子节点的关键字     </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Ri &lt;= R2i+1 且 Ri &lt;= R2i+2 (i = 0,1,2...n)</span><br></pre></td></tr></table></figure>
+<p><em>公式中的 i 就是顺序存储结构中的位置，可以把它理解为数组中的索引</em>。</p>
+<ul>
+<li>理解&amp;总结</li>
+</ul>
+<p>你可能还是有点乱，<strong>简单一句话，堆就是把一个数组按照每个元素的索引，变成一颗逻辑上的完全二叉树，例如一个元素在数组中的索引是 i ，该元素的左孩子在数组中的索引就是 2i+1，右孩子在数组中的索引就是 2i+2，父节点的索引就是 (i-1)/2,而这颗完全二叉树的每个节点元素与其子节点元素之间还要满足一定的大小关系</strong>！</p>
+<p><img src="http://p0bl99g4r.bkt.clouddn.com/sort.png" alt=""></p>
+<p>如图，是一个整型无序数组变为大根堆后的逻辑形态，每个节点元素都比其子节点大。</p>
+<h2 id="how"><a href="#how" class="headerlink" title="how"></a>how</h2><p>“堆排序” 这三个字你应该意识到，排序时一定会用到上面的堆，具体来说是大根堆。大根堆要如何实现排序？</p>
+<h3 id="堆排序-heap-sort"><a href="#堆排序-heap-sort" class="headerlink" title="堆排序 heap-sort"></a>堆排序 heap-sort</h3><ul>
+<li>大根堆的特点</li>
+</ul>
+<p>你可能没注意到<strong>大根堆的一大特点：根节点是最大的</strong>！ 也就是 索引为0 的元素是最大的。</p>
+<ul>
+<li>思路</li>
+</ul>
+<p>根据大根堆特点，可以总结一下思路。首先我们将一个数组 arrary[0…n] 调整为大根堆后，在交换 array[0] 和 array[n]。然后调整 array[0…n-1] 为大根堆，在交换 array[0] 和 array[n-1]，反复重复直到交换了 array[0] 和 array[1] 结束。 </p>
+<ul>
+<li>思路归纳</li>
+</ul>
+<p>根据上面的思路，可以归纳为两个操作：</p>
+<p>1）根据初始数组构造初始堆(构建一个完全二叉树，保证所有父节点比孩子节点大，即大顶堆)。<br>2）每次交换第一个和最后一个元素，输出最后一个元素(此时为最大值)，把剩下的元素构造为大顶堆，直到输出完数组中最后一个元素后，这个数组已经从小到大排列了。</p>
+<p><em>注意，这里说的输出最后一个元素的意思是，在下一次调整数组为大顶堆不包括该元素！</em></p>
+<h3 id="初始化堆"><a href="#初始化堆" class="headerlink" title="初始化堆"></a>初始化堆</h3><p><strong>我们建造大根堆的过程就是要保证每个节点的子节点都比该节点小的过程，若节点的一个子节点比该节点大则节点与该节点交换，若两个子节点均比该节点大，则交换更大的那个节点</strong>。</p>
+<ul>
+<li><strong>错误思路</strong></li>
+</ul>
+<p>初始化堆这里我踩了一点坑，所以拿出来说一说。一开始我想从根节点(索引为0)开始递增构建大根堆</p>
+<p><img src="http://p0bl99g4r.bkt.clouddn.com/sort2.png" alt=""></p>
+<p>如图，从根节点开始循环递增会出现最大的元素无法到到达根节点的尴尬局面。这肯定不是一个大根堆。</p>
+<ul>
+<li><strong>正确思路</strong></li>
+</ul>
+<p><strong>从中间的节点(索引n/2)开始递减构建大根堆</strong>，可以有效的解决上面的问题</p>
+<p><img src="http://p0bl99g4r.bkt.clouddn.com/sort3.png" alt=""></p>
+<p>如图在从中间(索引)遍历完每个节点后均保证了其子节点元素都比该元素小，构建大顶堆成功。</p>
+<h3 id="交换元素与调整"><a href="#交换元素与调整" class="headerlink" title="交换元素与调整"></a>交换元素与调整</h3><p>按照思路归纳中的步骤，初始化大根堆后，会交换根节点与最后一个元素，输出最后一个元素，可这时剩下元素组成的二叉树可能就不是大根堆了，所以还要将剩余元素变为大根堆，过程如下：</p>
+<p><img src="http://p0bl99g4r.bkt.clouddn.com/sort4.png" alt=""></p>
+<p>其实每次对剩余元素大根堆化的过程，与初始化大根堆是一样的，只不过传入的数组不包括上次交换的最后一个元素而已。到此，整个堆排序的过程也就介绍完了。</p>
+<h3 id="Java代码"><a href="#Java代码" class="headerlink" title="Java代码"></a>Java代码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 使用变治法的堆排序</span><br><span class="line"> *</span><br><span class="line"> * 分两步走：</span><br><span class="line"> * 第一步：将一个数组变为一个大根堆</span><br><span class="line"> * 第二步: 将该大根堆的根节点与最后一个元素进行交换，再将最后最后一个元素输出(此时最后一个元素是最大的元素)</span><br><span class="line"> */</span><br><span class="line">public class SeparateAndConquer &#123;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 获取一个节点的左孩子在数组中位置</span><br><span class="line">     * @param parent 该左孩子</span><br><span class="line">     * @return</span><br><span class="line">     */</span><br><span class="line">    private static int getLeftChild(int parent)&#123;</span><br><span class="line">        return 2*parent+1;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     *</span><br><span class="line">      * @param array 目标数组</span><br><span class="line">     * @param parent 节点在数组中的位置</span><br><span class="line">     * @param length 数组规模</span><br><span class="line">     */</span><br><span class="line">   public static &lt;AnyType extends Comparable&lt;? super AnyType&gt;&gt; void buildHeap(AnyType[] array, int parent, int length)&#123;</span><br><span class="line"></span><br><span class="line">       //保存当前父节点</span><br><span class="line">        AnyType temp = array[parent];</span><br><span class="line">       //先获得左孩子位置</span><br><span class="line">       int child = getLeftChild(parent);</span><br><span class="line"></span><br><span class="line">       while (child &lt; length)&#123;</span><br><span class="line">            //如果存在右孩子，并且右孩子值大于左孩子值，则选取右孩子节点</span><br><span class="line">            if (child + 1 &lt; length &amp;&amp; array[child].compareTo(array[child+1]) &lt; 0)&#123;</span><br><span class="line">                child++;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            //如果父亲结点值大于孩子节点的值，则直接结束</span><br><span class="line">            if (temp.compareTo(array[child]) &gt; 0)&#123;</span><br><span class="line">                break;</span><br><span class="line">            &#125;else&#123;</span><br><span class="line">                //否则选取孩子节点的值赋给父节点</span><br><span class="line">                array[parent] = array[child];</span><br><span class="line">                //选取孩子节点的左孩子节点，继续向下筛选</span><br><span class="line">                parent = child;</span><br><span class="line">                child = 2 * child + 1;</span><br><span class="line">            &#125;</span><br><span class="line">       &#125;</span><br><span class="line"> </span><br><span class="line">       array[parent] = temp;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">   public static &lt;AnyType extends Comparable&lt;? super AnyType&gt;&gt; void heapSort(AnyType[] array)&#123;</span><br><span class="line">        //首先将数组初始化为堆</span><br><span class="line">       for (int i = array.length/2; i &gt;= 0; i--)&#123;</span><br><span class="line">           buildHeap(array,i,array.length);</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       //从最后一个元素开始循环(进行n-1次循环)，完成排序</span><br><span class="line">       for (int i = array.length - 1; i &gt; 0; i--)&#123;</span><br><span class="line">           //将最后一个元素与第一个元素交换</span><br><span class="line">           AnyType temp = array[i];</span><br><span class="line">           array[i] = array[0];</span><br><span class="line">           array[0] = temp;</span><br><span class="line">           //每次交换后，还要剩下的将最小的元素放回到最后一个位置，最大的元素放回到第一个位置</span><br><span class="line">           buildHeap(array,0,i);</span><br><span class="line">           System.out.format(&quot;第 %d 趟: \t&quot;, array.length - i);</span><br><span class="line">           printArray(array);</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   public static &lt;AnyType extends Comparable&lt;? super AnyType&gt;&gt; void printArray(AnyType[] array)&#123;</span><br><span class="line">       for (int i = 0; i &lt; array.length;i++)&#123;</span><br><span class="line">           System.out.print(array[i]+&quot; &quot;);</span><br><span class="line">       &#125;</span><br><span class="line">       System.out.println();</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line"></span><br><span class="line">       Integer[] array = &#123;3,5,4,36,21&#125;;</span><br><span class="line">       System.out.println(&quot;使用堆排序前&quot;);</span><br><span class="line">       SeparateAndConquer.printArray(array);</span><br><span class="line">       SeparateAndConquer.heapSort(array);</span><br><span class="line">       System.out.println(&quot;使用堆排序后&quot;);</span><br><span class="line">       SeparateAndConquer.printArray(array);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="运行结果"><a href="#运行结果" class="headerlink" title="运行结果"></a>运行结果</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">使用堆排序前</span><br><span class="line">3 5 4 36 21 </span><br><span class="line">第 1 趟: 	21 5 4 3 36 </span><br><span class="line">第 2 趟: 	5 3 4 21 36 </span><br><span class="line">第 3 趟: 	4 3 5 21 36 </span><br><span class="line">第 4 趟: 	3 4 5 21 36 </span><br><span class="line">使用堆排序后</span><br><span class="line">3 4 5 21 36</span><br></pre></td></tr></table></figure>
+<h2 id="about"><a href="#about" class="headerlink" title="about"></a>about</h2><p>说完了怎么实现，再来分析一下堆排序算法</p>
+<h3 id="时间复杂度"><a href="#时间复杂度" class="headerlink" title="时间复杂度"></a>时间复杂度</h3><p>经验表明，<strong>堆排序是个十分稳定的算法</strong>。堆排序给出了迄今为止最佳的大O运行时间。在第一步初始化堆阶段时间复杂度为 O(N)，第二步在执行 N 次交换并调整大根堆所用时间复杂度为 O(NlogN)，综合下来时间复杂度为 O(N)。</p>
+<h3 id="算法稳定性"><a href="#算法稳定性" class="headerlink" title="算法稳定性"></a>算法稳定性</h3><p>堆排序是一种不稳定的排序方法。<br>因为在堆的调整过程中，关键字进行比较和交换所走的是该结点到叶子结点的一条路径，因此对于相同的关键字就可能出现排在后面的关键字被交换到前面来的情况。 </p>
+
+    </article>
+    <!-- 前后页  -->
+    <ul class="post-pager">
+        
+        
+            <li class="previous">
+                <a href= "/2017/12/01/hello-world/" title= 世界你好 >
+                    <span>Previous Post</span>
+                    <span>世界你好</span>
+                </a>
+            </li>
+        
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+<div id="container"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+    var gitment = new Gitment({
+        // id: "堆排序-HeapSort", // 可选。默认为 location.href
+        owner: 'DomBro96',
+        repo: 'DomBro96.github.io',
+        oauth: {
+            client_id: '4a6fa6686f2dd417ed61',
+            client_secret: 'cc1f043ee266bc750c481d6a24a98188a185e2eb',
+        },
+    })
+    gitment.render('container')
+
+</script>
+
+    <!--PC版-->
+
+    <!--PC版-->
+
+
+    
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:460716809@qq.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="https://github.com/DomBro96" class="iconfont-archer github" target="_blank" title="github"></a>
+            
+        
+    
+        
+            
+                <a href="https://twitter.com/Bro_Doom" class="iconfont-archer twitter" target="_blank" title="twitter"></a>
+            
+        
+    
+        
+            
+                <a href="https://www.instagram.com/dombro7277/" class="iconfont-archer instagram" target="_blank" title="instagram"></a>
+            
+        
+    
+        
+            
+                <a href="https://leetcode.com/dombro96/" class="iconfont-archer others" target="_blank" title="others"></a>
+            
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">Theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+        <span id="busuanzi_container_site_pv">Welcome, No. <span id="busuanzi_value_site_pv"></span> visitor.
+        </span>
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper">
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#堆排序-HeapSort"><span class="toc-number">1.</span> <span class="toc-text">堆排序-HeapSort</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#what"><span class="toc-number">1.1.</span> <span class="toc-text">what</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#堆-heap"><span class="toc-number">1.1.1.</span> <span class="toc-text">堆 heap</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#how"><span class="toc-number">1.2.</span> <span class="toc-text">how</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#堆排序-heap-sort"><span class="toc-number">1.2.1.</span> <span class="toc-text">堆排序 heap-sort</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#初始化堆"><span class="toc-number">1.2.2.</span> <span class="toc-text">初始化堆</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#交换元素与调整"><span class="toc-number">1.2.3.</span> <span class="toc-text">交换元素与调整</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Java代码"><span class="toc-number">1.2.4.</span> <span class="toc-text">Java代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#运行结果"><span class="toc-number">1.2.5.</span> <span class="toc-text">运行结果</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#about"><span class="toc-number">1.3.</span> <span class="toc-text">about</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#时间复杂度"><span class="toc-number">1.3.1.</span> <span class="toc-text">时间复杂度</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#算法稳定性"><span class="toc-number">1.3.2.</span> <span class="toc-text">算法稳定性</span></a></li></ol></li></ol></li></ol>
+    </div>
+    
+    <div class="back-top">&#xe639;</div>
+    <div class="sidebar">
+    <div class="sidebar-header sidebar-header-show-archive">
+        <div class="sidebar-category">
+            <span class="sidebar-archive-link"><span class="iconfont-archer">&#xe67d;</span>Archive</span>
+            <span class="sidebar-tags-link"><span class="iconfont-archer">&#xe610;</span>Tag</span>
+        </div>
+    </div>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-archive">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-archive"> Total : 2 </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2017/12/01/hello-world/" >世界你好</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2017 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/04</span><a class="archive-post-title" href= "/2017/12/04/堆排序-HeapSort/" >堆排序-HeapSort</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name"><a href= "#">算法algorithm</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">hello world</a></span>
+    
+    </div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #888; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: false
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tag-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var jsInfo = {
+        root: '/'
+    }
+</script>
+    <!-- 不蒜子  -->
+    
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ统计  -->
+    
+    </div>
+    </body>
+</html>
+
+
