@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
+    <title>
+        
+        动态规划-Floyed算法 · Dom Blog
+        
+    </title>
+    <link rel="icon" href= http://p0bl99g4r.bkt.clouddn.com/dog.JPG>
+    <!-- TODO: 在font-face加载完毕后改变字体  -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/webfont/1.6.28/webfontloader.js"></script>
+    <!-- 提前加载place holder  -->
+    <style type="text/css">
+        @font-face {
+            font-family: 'Oswald-Regular';
+            src: url(/font/Oswald-Regular.ttf);
+        }
+    </style>
+    <style type="text/css">
+        .site-intro-placeholder {
+            position: absolute;
+            z-index: -2;
+            top: 0;
+            left: 0px;
+            width: calc(100% + 300px);
+            height: 100%;
+            background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+            background-position: center center;
+            transform: translate3d(-226px, 0, 0);
+            animation: gradient-move 2.5s ease-out 0s 1;
+        }
+        @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+</style>
+    <link rel="stylesheet" href = /css/style.css?v=20171020 />
+    <script src="//cdn.staticfile.org/jquery/3.2.1/jquery.min.js" defer></script>
+    
+    <script src="/scripts/main.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+</head>
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >DomBro Studio</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">动态规划-Floyed算法</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>DomBro Studio</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-img" style="background-image: url(http://p0bl99g4r.bkt.clouddn.com/dog1.JPG)"></div>
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            动态规划-Floyed算法
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <!-- 文章页标签  -->
+            
+                <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = 算法algorithm>算法algorithm</a>
+    
+</div>
+            
+            <div class="post-intro-meta">
+                <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                <span class="post-intro-time">2017/12/06</span>
+            </div>
+        
+    </div>
+</div>
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <script>
+            var browser = {
+                    versions: function () {
+                        var u = window.navigator.userAgent;
+                        return {
+                            userAgent: u,
+                            trident: u.indexOf('Trident') > -1, //IE内核
+                            presto: u.indexOf('Presto') > -1, //opera内核
+                            webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+                            gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+                            mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+                            ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+                            android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+                            iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+                            iPad: u.indexOf('iPad') > -1, //是否为iPad
+                            webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+                            weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+                            uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+                        };
+                    }()
+                }
+
+            function fontLoaded(){
+                console.log('font loaded');
+                if (document.getElementsByClassName('site-intro-meta')) {
+                    document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+                    document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+                    var postIntroTags = document.getElementsByClassName('post-intro-tags')[0],
+                        postIntroMeat = document.getElementsByClassName('post-intro-meta')[0];
+                        if (postIntroTags) {
+                            postIntroTags.classList.add('post-fade-in');
+                        }
+                        if (postIntroMeat) {
+                            postIntroMeat.classList.add('post-fade-in');
+                        }
+                    }
+                }
+                
+            console.log("userAgent:" + browser.versions.userAgent);
+            // UC不支持跨域，所以直接显示
+            if (browser.versions.uc) {
+                console.log("UCBrowser");
+                fontLoaded();
+            } else {
+                WebFont.load({
+                    custom: {
+                        families: ['Oswald-Regular']
+                    },
+                    loading: function () {  //所有字体开始加载
+                        // console.log('loading');
+                    },
+                    active: function () {  //所有字体已渲染
+                        fontLoaded();
+                    },
+                    inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+                        console.log('inactive: timeout');
+                        fontLoaded();
+                    },
+                    timeout: 7000 // Set the timeout to two seconds
+                });
+            }
+        </script>
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h1 id="Floyed-算法"><a href="#Floyed-算法" class="headerlink" title="Floyed 算法"></a>Floyed 算法</h1><p>做一个 Floyed算法 的笔记，往往在算法前面加上一个英文名字就感觉很高大上，有一种听着就hin难的感觉。我尽可能写的通俗易懂，方便以后我忘了这个算法的时候，能以最快的速度唤醒的记忆。</p>
+<h2 id="what"><a href="#what" class="headerlink" title="what"></a>what</h2><p>Floyed算法 ,顾名思义一个叫 Floyed 的人发明的。这个算法具有很强的实际用用性，很多书上往往会用<strong>有向图这样的数据结构来讲解 Floyed算法</strong>，那我就反其道而行之吧！</p>
+<h3 id="一个场景"><a href="#一个场景" class="headerlink" title="一个场景"></a>一个场景</h3><p>刚才说 Floyed算法 具有很强的应用性，那我就来举一个实际的例子将你带入。</p>
+<p>  <img src="http://p0bl99g4r.bkt.clouddn.com/floyed.png" alt=""></p>
+<p>如图，我们设定每两个地点之间的路线只能沿着箭头方向(生活中的单向车道)，而有地点之间甚至没有路线，<strong>如果你想知道任意两个地点之间的最短路线咋办</strong>？告诉你　Floyed 算法就帮你达到这个目的！瞅啥呢赶紧上车！</p>
+<h3 id="场景格式化"><a href="#场景格式化" class="headerlink" title="场景格式化"></a>场景格式化</h3><p>还是刚才的场景中的图片，我们不妨按顺时针将每个地点编号，用数字表示他们的距离。比如体育馆到公园有2km的距离，我们把这句话变形为 : 1-&gt;2 = 2km 如此两两组合，我们不妨设一个二维数组(矩阵):<br>1）横坐标表示出发地，纵坐标表示目的地<br>2）<strong>坐标对应值就是出发地到目的地路线长度</strong>(注意这里加粗是因为所说的路线长度是考虑了方向的)<br>3）如果两地间没有路线我们将它的值看为无穷大(这是Floyed算法一个很重要的点)<br>4）如果两地是同一地点(横纵坐标相同)，那它所代表的路径长度就是 0</p>
+<p><img src="http://p0bl99g4r.bkt.clouddn.com/mex.png" alt=""></p>
+<p>如图，表格中第一列(横坐标)代表出发地，第一行代表目的地(纵坐标)。</p>
+<h3 id="问题分析"><a href="#问题分析" class="headerlink" title="问题分析"></a>问题分析</h3><p>我们通过一个距离矩阵描述了场景中地点间的路径，使它可以由程序语言描述出来，事实上我们想做的是利用这个矩阵描述出地点间最短路径！还是要回到最开始的问题<strong>如果你想知道任意两个地点之间的最短路线咋办</strong>？这里Floyed算法给出了一个很明确的思路：<strong>利用中间地点！</strong> 有点生活常识的人都知道，有时候并不是两个地点的直接距离是最近的，就像图片中，家-&gt;学校 的路线比 家-&gt;体育馆-&gt;公园-&gt;学校 路线要远。这里所说的 体育馆、公园 就是中间地点，<strong>如果 出发地-&gt;目的地 的路线长度比 出发地 -&gt;中间地点 -&gt;目的地 的路线长度长，那就选取后者作为两地节点的最短路线</strong>。这也就是为什么，我们规定没有路线的两个地点间距离是无穷大的原因，是一个很好理解的解决方案。我们最终希望希望矩阵变成这个样子</p>
+<p><img src="http://p0bl99g4r.bkt.clouddn.com/max2.png" alt=""></p>
+<h2 id="how"><a href="#how" class="headerlink" title="how"></a>how</h2><p>知道了 Floyed算法的原理，来看下如何实现。</p>
+<h3 id="问题解决"><a href="#问题解决" class="headerlink" title="问题解决"></a>问题解决</h3><p>上面说 Floyed算法 的核心思想就是要找一个中间地点，来比较经过中间地点的路线和直达线路的距离。可是如果有多个中间地点的路线怎么办？下面按照上图中地点的编号来代表地点，如果要知道 4 -&gt; 3 的最短路线，我们就一定要知道 4 -&gt; 3 的全部路线。这里有 4 -&gt; 1 -&gt; 3，4 -&gt; 1 -&gt; 2 -&gt; 3，还有 4 -&gt; 3 直达 三条线路，经过很简单的比较我们找出 4 -&gt; 1 -&gt; 2 -&gt; 3 是最短的一条线路。经过这个例子，解决思路已经很清晰了：<strong>Floyed算法 在寻找任意两点最短路径时会将所有点作为中间点，依次比较 出发点-&gt;每个中间点的距离+每个中间点-&gt;目标点的距离 与 出发点-&gt;目标点的距离 大小，小的就是两点间最短距离</strong>，又由于设定没有路线的两点间距离为无穷大，所以我们总是可以通过中间点找到没有路线的两点间最短距。</p>
+<h3 id="核心代码"><a href="#核心代码" class="headerlink" title="核心代码"></a>核心代码</h3><p>Floyed算法 的核心代码很简单，如果不考虑记录最短距离的路线，仅仅五行就够了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * @param disMatrix 记录两点间最短距离矩阵</span><br><span class="line"> * @param vertex    共有多少顶点(地点)</span><br><span class="line"> * @param pathMatrix 记录两点间最短路线的矩阵</span><br><span class="line"> */</span><br><span class="line">public static void floyed(int[][] disMatrix,int vertex,String[][] pathMatrix)&#123;</span><br><span class="line"></span><br><span class="line">   //这里的 K 表示中间顶点(元素)，即从第一个顶点作为中间顶点循环找到最短路径</span><br><span class="line">    for (int k = 1; k &lt;= vertex; k++)&#123;</span><br><span class="line">       for (int i = 1; i&lt;= vertex; i++)&#123;</span><br><span class="line">          for (int j = 1; j &lt;= vertex; j++)&#123;</span><br><span class="line">             //如果任何两个节点之间有一个中间节点使得两节点间的距离变得更短，那么就为其赋值为通过中间节点的路径和</span><br><span class="line">             //这里要注意的是还要判断起始和结束的节点到中间节点是不是通的，即 i-&gt;k 和 k-&gt;j 一定不能是无穷大</span><br><span class="line">             if (disMatrix[i][k] &lt; Integer.MAX_VALUE &amp;&amp; disMatrix[k][j] &lt; Integer.MAX_VALUE &amp;&amp; disMatrix[i][j] &gt; disMatrix[i][k] + disMatrix[k][j]) &#123;</span><br><span class="line">                 disMatrix[i][j] = disMatrix[i][k] + disMatrix[k][j];</span><br><span class="line">				 //只记录需要中间顶点的路径，如果不需要则是直达</span><br><span class="line">                 pathMatrix[i][j] = &quot;最短路径是节点 &quot; + i + &quot; —&gt; 节点&quot; + k + &quot; —&gt; 节点&quot; + j;</span><br><span class="line">                &#125;    </span><br><span class="line">              &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>代码会将初始的距离矩阵 <code>int[][] disMatrix</code> 变为两点间最短距离矩阵。</p>
+<h3 id="全部代码"><a href="#全部代码" class="headerlink" title="全部代码"></a>全部代码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br></pre></td><td class="code"><pre><span class="line">public class DynamicProgram &#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 初始化距离矩阵</span><br><span class="line">     * @param disMatrix 距离矩阵</span><br><span class="line">     * @param vertex 图的顶点个数</span><br><span class="line">     * @param paths 一共有多少条路径</span><br><span class="line">     */</span><br><span class="line">     public static void initMatrix(int[][] disMatrix,int vertex,int paths)&#123;</span><br><span class="line"></span><br><span class="line">         /**</span><br><span class="line">          * 通过双重循环对距离矩阵初始化</span><br><span class="line">          */</span><br><span class="line">         for (int i = 1;i &lt;= vertex; i++)&#123;</span><br><span class="line">             for (int j = 1; j &lt;= vertex; j++)&#123;</span><br><span class="line">                 if (i==j)</span><br><span class="line">                     //自己到自己的距离记为 0</span><br><span class="line">                     disMatrix[i][j] = 0;</span><br><span class="line">                 else</span><br><span class="line">                     disMatrix[i][j] = Integer.MAX_VALUE;</span><br><span class="line">             &#125;</span><br><span class="line">         &#125;</span><br><span class="line">         /**</span><br><span class="line">          *</span><br><span class="line">          * 为图中路径赋值</span><br><span class="line">          */</span><br><span class="line">         for (int i = 1; i &lt;= paths; i++)&#123;</span><br><span class="line">             System.out.println(&quot;请输入起始点:&quot;);</span><br><span class="line">             Scanner scanner = new Scanner(System.in);</span><br><span class="line">             int begin = scanner.nextInt();</span><br><span class="line">             System.out.println(&quot;请输入终止点:&quot;);</span><br><span class="line">             int end = scanner.nextInt();</span><br><span class="line">             System.out.println(&quot;请输入节点&quot;+begin+&quot;和节点&quot;+end+&quot;的距离:&quot;);</span><br><span class="line">             int distance = scanner.nextInt();</span><br><span class="line">             disMatrix[begin][end] = distance;</span><br><span class="line">         &#125;</span><br><span class="line"></span><br><span class="line">     &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     *</span><br><span class="line">     * @param disMatrix 记录两点间最短距离矩阵</span><br><span class="line">     * @param vertex    共有多少顶点点(地点)</span><br><span class="line">     * @param pathMatrix 记录两点间最短路线的矩阵</span><br><span class="line">     */</span><br><span class="line">    public static void floyed(int[][] disMatrix,int vertex,String[][] pathMatrix)&#123;</span><br><span class="line"></span><br><span class="line">        //这里的 K 表示中间顶点(元素)，即从第一个顶点作为中间顶点循环找到最短路径</span><br><span class="line">        for (int k = 1; k &lt;= vertex; k++)&#123;</span><br><span class="line">            for (int i = 1; i&lt;= vertex; i++)&#123;</span><br><span class="line">                for (int j = 1; j &lt;= vertex; j++)&#123;</span><br><span class="line">                    //如果任何两个节点之间有一个中间节点使得两节点间的距离变得更短，那么就为其赋值为通过中间节点的路径和</span><br><span class="line">                    //这里要注意的是还要判断起始和结束的节点到中间节点是不是通的，即 ik 和 kj 一定不能是无穷大</span><br><span class="line">                        if (disMatrix[i][k] &lt; Integer.MAX_VALUE &amp;&amp; disMatrix[k][j] &lt; Integer.MAX_VALUE &amp;&amp; disMatrix[i][j] &gt; disMatrix[i][k] + disMatrix[k][j]) &#123;</span><br><span class="line">                            disMatrix[i][j] = disMatrix[i][k] + disMatrix[k][j];</span><br><span class="line">                            pathMatrix[i][j] = &quot;最短路径是节点 &quot; + i + &quot; —&gt; 节点&quot; + k + &quot; —&gt; 节点&quot; + j;</span><br><span class="line">                        &#125;</span><br><span class="line"></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void printDisMatrix(int[][] disMatrix,int vertex,String[][] pathMatrix)&#123;</span><br><span class="line"></span><br><span class="line">        for (int i = 1; i &lt;= vertex; i++)&#123;</span><br><span class="line">            for (int j = 1;j &lt;= vertex; j++)&#123;</span><br><span class="line">                if (i != j )&#123;</span><br><span class="line">                    String message = &quot;节点&quot;+i+&quot;到节点&quot;+j+&quot;的最短距离为&quot;+disMatrix[i][j]+&quot; &quot;;</span><br><span class="line">                    if (pathMatrix[i][j] != null)&#123;</span><br><span class="line">                        message += pathMatrix[i][j];</span><br><span class="line">                    &#125;else &#123;</span><br><span class="line">                        message += &quot;最短路径为直接到达&quot;;</span><br><span class="line">                    &#125;</span><br><span class="line">                    System.out.println(message);</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        System.out.println(&quot;请输入图中结点个数&quot;);</span><br><span class="line">        Scanner scanner = new Scanner(System.in);</span><br><span class="line">        int vertex = scanner.nextInt();</span><br><span class="line">        System.out.println(&quot;请输入图中路径的条数&quot;);</span><br><span class="line">        int paths = scanner.nextInt();</span><br><span class="line">        int disMatrix[][] = new int[10][10];</span><br><span class="line">        String[][] pathMatrix = new String[10][10];</span><br><span class="line">        initMatrix(disMatrix,vertex,paths);</span><br><span class="line">        floyed(disMatrix,vertex,pathMatrix);</span><br><span class="line">        printDisMatrix(disMatrix,vertex,pathMatrix);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="运行结果"><a href="#运行结果" class="headerlink" title="运行结果"></a>运行结果</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">请输入图中结点个数</span><br><span class="line">4</span><br><span class="line">请输入图中路径的条数</span><br><span class="line">8</span><br><span class="line">请输入起始点:</span><br><span class="line">1</span><br><span class="line">请输入终止点:</span><br><span class="line">4</span><br><span class="line">请输入节点1和节点4的距离:</span><br><span class="line">4</span><br><span class="line">请输入起始点:</span><br><span class="line">1</span><br><span class="line">请输入终止点:</span><br><span class="line">3</span><br><span class="line">请输入节点1和节点3的距离:</span><br><span class="line">6</span><br><span class="line">请输入起始点:</span><br><span class="line">1</span><br><span class="line">请输入终止点:</span><br><span class="line">2</span><br><span class="line">...输入略...</span><br><span class="line"></span><br><span class="line">节点1到节点2的最短距离为2 最短路径为直接到达</span><br><span class="line">节点1到节点3的最短距离为5 最短路径是节点 1 —&gt; 节点2 —&gt; 节点3</span><br><span class="line">节点1到节点4的最短距离为4 最短路径为直接到达</span><br><span class="line">节点2到节点1的最短距离为9 最短路径是节点 2 —&gt; 节点4 —&gt; 节点1</span><br><span class="line">节点2到节点3的最短距离为3 最短路径为直接到达</span><br><span class="line">节点2到节点4的最短距离为4 最短路径是节点 2 —&gt; 节点3 —&gt; 节点4</span><br><span class="line">节点3到节点1的最短距离为6 最短路径是节点 3 —&gt; 节点4 —&gt; 节点1</span><br><span class="line">节点3到节点2的最短距离为8 最短路径是节点 3 —&gt; 节点4 —&gt; 节点2</span><br><span class="line">节点3到节点4的最短距离为1 最短路径为直接到达</span><br><span class="line">节点4到节点1的最短距离为5 最短路径为直接到达</span><br><span class="line">节点4到节点2的最短距离为7 最短路径是节点 4 —&gt; 节点1 —&gt; 节点2</span><br><span class="line">节点4到节点3的最短距离为10 最短路径是节点 4 —&gt; 节点2 —&gt; 节点3</span><br></pre></td></tr></table></figure>
+<h2 id="about"><a href="#about" class="headerlink" title="about"></a>about</h2><p>总的来说 Floyed算法 是一个很好理解的算法，来分析一下。</p>
+<h3 id="时间复杂度"><a href="#时间复杂度" class="headerlink" title="时间复杂度"></a>时间复杂度</h3><p>Floyed算法通过三重循环实现，时间复杂度可以看到是 O(N^3)。核心代码仅要五行，如果对时间复杂度要求不高，使用 Floyed算法求两点间最短距离 是一个很好的选择。</p>
+<h3 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h3><p>Floyed算法 在使用上是有约束条件的，初始路径之间的距离不能出现负值，即如果如果把每个地点之间距离看成一个有向图，则该有向图顶点之间的权值不能为负。其实如果一个图中带有“负权回路”那么这个图则没有最短路径。</p>
+
+    </article>
+    <!-- 前后页  -->
+    <ul class="post-pager">
+        
+        
+            <li class="previous">
+                <a href= "/2017/12/04/堆排序-HeapSort/" title= 堆排序-HeapSort >
+                    <span>Previous Post</span>
+                    <span>堆排序-HeapSort</span>
+                </a>
+            </li>
+        
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+<div id="container"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+    var gitment = new Gitment({
+        // id: "动态规划-Floyed算法", // 可选。默认为 location.href
+        owner: 'DomBro96',
+        repo: 'DomBro96.github.io',
+        oauth: {
+            client_id: '4a6fa6686f2dd417ed61',
+            client_secret: 'cc1f043ee266bc750c481d6a24a98188a185e2eb',
+        },
+    })
+    gitment.render('container')
+
+</script>
+
+    <!--PC版-->
+
+    <!--PC版-->
+
+
+    
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:460716809@qq.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="https://github.com/DomBro96" class="iconfont-archer github" target="_blank" title="github"></a>
+            
+        
+    
+        
+            
+                <a href="https://twitter.com/Bro_Doom" class="iconfont-archer twitter" target="_blank" title="twitter"></a>
+            
+        
+    
+        
+            
+                <a href="https://www.instagram.com/dombro7277/" class="iconfont-archer instagram" target="_blank" title="instagram"></a>
+            
+        
+    
+        
+            
+                <a href="https://leetcode.com/dombro96/" class="iconfont-archer others" target="_blank" title="others"></a>
+            
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">Theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+        <span id="busuanzi_container_site_pv">Welcome, No. <span id="busuanzi_value_site_pv"></span> visitor.
+        </span>
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper">
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Floyed-算法"><span class="toc-number">1.</span> <span class="toc-text">Floyed 算法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#what"><span class="toc-number">1.1.</span> <span class="toc-text">what</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一个场景"><span class="toc-number">1.1.1.</span> <span class="toc-text">一个场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#场景格式化"><span class="toc-number">1.1.2.</span> <span class="toc-text">场景格式化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#问题分析"><span class="toc-number">1.1.3.</span> <span class="toc-text">问题分析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#how"><span class="toc-number">1.2.</span> <span class="toc-text">how</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#问题解决"><span class="toc-number">1.2.1.</span> <span class="toc-text">问题解决</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#核心代码"><span class="toc-number">1.2.2.</span> <span class="toc-text">核心代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#全部代码"><span class="toc-number">1.2.3.</span> <span class="toc-text">全部代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#运行结果"><span class="toc-number">1.2.4.</span> <span class="toc-text">运行结果</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#about"><span class="toc-number">1.3.</span> <span class="toc-text">about</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#时间复杂度"><span class="toc-number">1.3.1.</span> <span class="toc-text">时间复杂度</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#注意"><span class="toc-number">1.3.2.</span> <span class="toc-text">注意</span></a></li></ol></li></ol></li></ol>
+    </div>
+    
+    <div class="back-top">&#xe639;</div>
+    <div class="sidebar">
+    <div class="sidebar-header sidebar-header-show-archive">
+        <div class="sidebar-category">
+            <span class="sidebar-archive-link"><span class="iconfont-archer">&#xe67d;</span>Archive</span>
+            <span class="sidebar-tags-link"><span class="iconfont-archer">&#xe610;</span>Tag</span>
+        </div>
+    </div>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-archive">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-archive"> Total : 3 </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2017 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/06</span><a class="archive-post-title" href= "/2017/12/06/动态规划-Floyed算法/" >动态规划-Floyed算法</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/04</span><a class="archive-post-title" href= "/2017/12/04/堆排序-HeapSort/" >堆排序-HeapSort</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2017/12/01/hello-world/" >世界你好</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name"><a href= "#">hello world</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">算法algorithm</a></span>
+    
+    </div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #888; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: false
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tag-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var jsInfo = {
+        root: '/'
+    }
+</script>
+    <!-- 不蒜子  -->
+    
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ统计  -->
+    
+    </div>
+    </body>
+</html>
+
+
