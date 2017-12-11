@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
     <title>
         
-        Linux文件与文件系统的打包 · Dom Blog
+        vim编辑器 · Dom Blog
         
     </title>
     <link rel="icon" href= http://p0bl99g4r.bkt.clouddn.com/ti.JPG>
@@ -63,7 +63,7 @@
                 <a href="/" >DomBro Studio</a>
             </div>
             <div class="post-title">
-                <a href="#" class="post-name">Linux文件与文件系统的打包</a>
+                <a href="#" class="post-name">vim编辑器</a>
             </div>
     </div>
     
@@ -84,7 +84,7 @@
         <h1 class="intro-title">
             <!-- 主页  -->
             
-            Linux文件与文件系统的打包
+            vim编辑器
             <!-- 404 -->
             
         </h1>
@@ -99,6 +99,12 @@
         <!-- 文章页meta -->
         
             <!-- 文章页标签  -->
+            
+                <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = Linux>Linux</a>
+    
+</div>
             
             <div class="post-intro-meta">
                 <span class="post-intro-calander iconfont-archer">&#xe676;</span>
@@ -173,23 +179,119 @@
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        
+        <h1 id="Linux-vim编辑器"><a href="#Linux-vim编辑器" class="headerlink" title="Linux vim编辑器"></a>Linux vim编辑器</h1><p>没接触Linux之前就经常听到 vi、vim 这两个词，后来简单接触过vi编辑器，今天就来一探究竟。</p>
+<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><a href="#1">1. what</a></li>
+<li><a href="#2">2. why</a></li>
+<li><a href="#3">3. how</a></li>
+<li><a href="#4">4. do</a></li>
+<li><a href="#5">5. more</a><ul>
+<li><a href="#5.1">5.1 Windows 与 Linux 换行字符</a></li>
+<li><a href="#5.2">5.2 编码转换</a></li>
+</ul>
+</li>
+<li><a href="#6">6. 说明</a></li>
+</ul>
+<h2 id="1">1. what? 什么是vim编辑器</h2>
+
+<p>Linux 中所有内容都是以文件形式存在的，所以作为系统管理员(root)重要工作就是修改某些软件的配置文件(MySql、tomcat、MongoDB等都需要配置启动)，所以就必须要学会使用一种以上的命令行界面的文本编辑器。Linux发行版本众多，但<strong>所有发行版本都会有的一款文本编辑器就是vi编辑器</strong>。而 vim编辑器 就是 vi编辑器的升级版，支持语法高亮，还可以拿来编程，优点一大堆。</p>
+<h2 id="2">2. why? 为啥要学vim编辑器</h2>
+
+
+<p>这原因嘛，主要有四点</p>
+<ol>
+<li>所有类 UNIX 系统都会内置 vi编辑器。</li>
+<li>很多软件的编辑接口会主动调用vi编辑器，这是最重要的一点原因，太多命令默认使用vi作为数据的编辑接口，所以一定要学会 vi 呀。</li>
+<li>vim 具有编程能力，可以根据字体颜色辨别语法的正确性，快来试试吧~</li>
+<li>编辑速度相当快。</li>
+</ol>
+<p>对vim编辑器(以下简称 vim) 是不是有好感了？ 其实 vim 的官方给vim的定位是程序开发工具，而不是文字处理软件，vim加入了很多功能如支持正则表达式的查找框架，多文件编辑等等等….总之 vim 用了都说好，你值的拥有。</p>
+<h2 id="3">3. how? 怎么使用vim编辑器</h2>
+
+
+<p>基本上 vi 分为三种模式:一般模式、编辑模式、命令行模式。下面会给出三种模式的按钮说明，不用全记（你有精力我也不拦你），记住每种模式常用按钮操作就可以啦！</p>
+<ul>
+<li>一般模式</li>
+</ul>
+<p>在一般模式下可以进行光标移动、复制粘贴、查找替换等操作</p>
+<p><img src="http://p0bl99g4r.bkt.clouddn.com/vim2.jpg" alt=""></p>
+<p><img src="http://p0bl99g4r.bkt.clouddn.com/vim1.jpg" alt=""></p>
+<p><img src="http://p0bl99g4r.bkt.clouddn.com/vim6.jpg" alt=""></p>
+<ul>
+<li>一般模式切换到编辑模式可用按钮</li>
+</ul>
+<p><img src="http://p0bl99g4r.bkt.clouddn.com/vim5.jpg" alt=""></p>
+<ul>
+<li>一般模式切换到命令行模式可用按钮</li>
+</ul>
+<p><img src="http://p0bl99g4r.bkt.clouddn.com/vim3.jpg" alt=""></p>
+<p><img src="http://p0bl99g4r.bkt.clouddn.com/vim4.jpg" alt=""></p>
+<h2 id="4">4. do? vim编辑器可以做什么</h2>
+
+
+<ul>
+<li>块选择(Visual Block)</li>
+</ul>
+<p>上述的简单vi操作，几乎都是以航为单位操作。下面介绍对一块范围的操作。</p>
+<p><img src="http://p0bl99g4r.bkt.clouddn.com/vi7.jpg" alt=""></p>
+<ul>
+<li>多文件编辑</li>
+</ul>
+<p>这是一个很爽的操作，你可以通过键盘复制一个文件的内容到另一个文件 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim file1 file2</span><br></pre></td></tr></table></figure>
+<p>这样 vim 就会编辑两个文件了，图片是操作：</p>
+<p><img src="http://p0bl99g4r.bkt.clouddn.com/vi8.jpg" alt=""></p>
+<ul>
+<li>多窗口的功能</li>
+</ul>
+<p>vim 另一个强大的功能就是”切割窗口”，将一个或多个文件切割成多个窗口，在命令行模式通过</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">：sp&#123;file&#125;</span><br><span class="line">file 可有可无，如果有则在该窗口中启动另一个文件，没有则是同一文件的两个窗口间</span><br></pre></td></tr></table></figure>
+<p><img src="http://p0bl99g4r.bkt.clouddn.com/vi9.jpg" alt=""></p>
+<ul>
+<li>vim 环境设置与记录：~/.vimrc，~/.viminfo</li>
+</ul>
+<blockquote>
+<p>有没有发现，如果我们以vim软件来查找一个文件内部的某个字符串时，这个字符串会被反白，而下次我们再次以vim编辑这个文件时，该查找的字符串反白情况还是存在呢。甚至于在编辑其他文件时，如果其他文件内也存在这个字符串，竟然还是主动反白。另外，当我们重复编辑同一个文件时，当第二次进入该文件时，光标竟然就在上次离开的那一行上面。<br>这是因为我们的vim会主动将你曾经做过的行为记录下来，好让你下次可以轻松作业。那个记录操作的文件就是：～/.viminfo。如果你曾经使用过vim，那你的主文件夹应该会存在这个文件才对。这个文件是自动产生的，你不必自行创建。而你在vim里头所做过的操作就可以在这个文件内部查询到。<br>此外，每个distributions对vim的默认环境都不太相同，举例来说，某些版本在查找到关键字时并不会高亮度反白，有些版本则会主动帮你进行缩排的行为。但这些其实都可以自行设置的，那就是vim 的环境设置。vim 的环境设置参数有很多，如果你想要知道目前的设置值，可以在一般模式时输入“:set all”来查阅，不过设置选项实在太多了，在这里仅列出一些平时比较常用的一些简单的设置值，提供给你参考。<br>所谓的缩排，就是当您按下[Enter]编辑新的一行时，光标不会在行首，而是在与上一行的第一个非空格符处对齐。</p>
+</blockquote>
+<p><img src="http://p0bl99g4r.bkt.clouddn.com/vi10.jpg" alt=""></p>
+<p>整体vim的设置值一般是放置在/etc/vimrc这个文件中，不过，不建议你修改它。你可以修改～/.vimrc这个文件（默认不存在，请你自行手动创建），将你所希望的设置值写入。<br>举例来说，可以是这样的一个文件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[root@www ～]# vim ～/.vimrc</span><br><span class="line">&quot;这个文件的双引号（&quot;） 是批注</span><br><span class="line">set hlsearch &quot;高亮度反白</span><br><span class="line">set backspace=2 &quot;可随时用退格键删除</span><br><span class="line">set autoindent &quot;自动缩排</span><br><span class="line">set ruler &quot;可显示最后一行的状态</span><br><span class="line">set showmode &quot;左下角那一行的状态</span><br><span class="line">set nu &quot;可以在每一行的最前面显示行号</span><br><span class="line">set bg=dark &quot;显示不同的底色色调</span><br><span class="line">syntax on &quot;进行语法检验，颜色显示</span><br><span class="line">在这个文件中，使用“set hlsearch”或“ :set hlsearch”，即最前面有没有冒号“:”效果都是一样的。至于双引号则是批注符号，不要用错批注符号，否则每次使用vim时都会发生警告信息。</span><br><span class="line">创建好这个文件后，当你下次重新以vim编辑某个文件时，该文件的默认环境设置就是这么设置的。这样是否很方便你的操作？所以多利用vim的环境设置功能吧！</span><br></pre></td></tr></table></figure></p>
+<h2 id="5">5. more! 更多操作</h2>
+
+
+<p>这一小节下面，介绍两个常见的文件编辑问题，不定义与 vim 有关</p>
+<h3 id="5.1">5.1 Windows 与 Linux 换行字符</h3>
+
+<p>熟悉 Windows 和 Linux 文本编辑的同学可能知道，这<strong>两种系统的换行方式是不一样的，Windows 是以 “\r\n”(^M$) 换行（即CRLF这两个符号），而 Linux 是以 “\n”($) 换行（即LF这个符号）</strong>。两种系统不同的换行符，造成的影响很大！ 比如将 Windos 下面的文件放到 Linux 下面时，你会发现每行都会多出来一个 “^M” ，如果这是一个在 Windows 下面编写的脚本文件，可能会造成程序无法执行的尴尬事件！ 如何解决？当然是将文件换行变为 Linux 可读的样子(LF)就好了呀。你会不会想到用 vim 将每行多出来的 “^M” 删掉？这也太没人性了，<strong>Linux 提供了简单的命令来进行格式转换</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@www ～]# dos2UNIX [-kn] file [newfile]</span><br><span class="line">[root@www ～]# UNIX2dos [-kn] file [newfile]</span><br><span class="line">参数：</span><br><span class="line">-k ：保留该文件原本的 mtime 时间格式（不更新文件上次内容经过修订的时间）</span><br><span class="line">-n ：保留原本的旧文件，将转换后的内容输出到新文件，如： dos2UNIX -n oldfile newfile</span><br></pre></td></tr></table></figure>
+<p>在不同系统之间复制一些纯文本文件时，千万记得要使用UNIX2doc或doc2UNIX来转换一下换行格式。</p>
+<h3 id="5.2">5.2 编码的转换</h3>
+
+
+<p>还有一个很大的问题就是编码的转换，想要将big5编码转成utf8，怎么办?答案是使用 iconv 这个命令。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@www ～]# iconv --list</span><br><span class="line">[root@www ～]# iconv -f 原本编码 -t 新编码 filename [-o newfile]</span><br><span class="line">参数：</span><br><span class="line">--list ：列出 iconv 支持的语系数据</span><br><span class="line">-f ：from ，后接原本的编码格式；</span><br><span class="line">-t ：to ，即后来的新编码要是什么格式；</span><br><span class="line">-o file：如果要保留原本的文件，那么使用 -o 新文件名，可以建立新编码文件。</span><br></pre></td></tr></table></figure>
+<p>当你输入命令 iconv –list ，会列出一大堆信息，那就是 iconv 支持的编码。</p>
+<ul>
+<li>举个例子</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">将 /tmp/vitest/vi.big5 转成 utf8 编码。</span><br><span class="line">[root@www ～]# cd /tmp/vitest</span><br><span class="line">[root@www vitest]# iconv -f big5 -t utf8 vi.big5 -o vi.utf8</span><br><span class="line">[root@www vitest]# file vi*</span><br><span class="line">vi.big5: ISO-8859 text, with CRLF line terminators</span><br><span class="line">vi.utf8: UTF-8 Unicode text, with CRLF line terminators</span><br><span class="line">你会发现有明显的不同</span><br></pre></td></tr></table></figure>
+<h3 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h3><p>整理笔记参考了 <a href="http://linux.vbird.org/linux_basic/0210filepermission.php#filepermission_perm" target="_blank" rel="noopener">《鸟哥的Linux私房菜》</a> 一书。这本书我是买的<a href="http://sale.jd.com/act/W5hugLDc1R.html" target="_blank" rel="noopener">京东阅读</a>的正版电子书籍。<br><br>如果不想买书看的话可以直接戳<a href="http://linux.vbird.org/" target="_blank" rel="noopener">这里进入鸟哥Linux私房菜的线上博客 : http://linux.vbird.org/</a>。请大家支持正版！！<br><br>至于笔记中的命令我是都敲过一遍的并进行了理解，并不是单纯的复制粘贴呦！</p>
+
     </article>
     <!-- 前后页  -->
     <ul class="post-pager">
         
             <li class="next">
-                <a href= "/2017/12/11/vim编辑器/" title= vim编辑器 >
+                <a href= "/2017/12/11/磁盘与Linux分区/" title= 磁盘与Linux分区 >
                     <span>Next Post</span>
-                    <span>vim编辑器</span>
+                    <span>磁盘与Linux分区</span>
                 </a>
             </li>
         
         
             <li class="previous">
-                <a href= "/2017/12/11/文件与文件系统的压缩与打包/" title= 文件与文件系统的压缩与打包 >
+                <a href= "/2017/12/11/Linux文件与文件系统的打包/" title= Linux文件与文件系统的打包 >
                     <span>Previous Post</span>
-                    <span>文件与文件系统的压缩与打包</span>
+                    <span>Linux文件与文件系统的打包</span>
                 </a>
             </li>
         
@@ -205,7 +307,7 @@
 <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
 <script>
     var gitment = new Gitment({
-        // id: "Linux文件与文件系统的打包", // 可选。默认为 location.href
+        // id: "vim编辑器", // 可选。默认为 location.href
         owner: 'DomBro96',
         repo: 'DomBro96.github.io',
         oauth: {
@@ -285,7 +387,7 @@
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Linux-vim编辑器"><span class="toc-number">1.</span> <span class="toc-text">Linux vim编辑器</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#目录"><span class="toc-number">1.1.</span> <span class="toc-text">目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1"><span class="toc-number">1.2.</span> <span class="toc-text">1. what? 什么是vim编辑器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2"><span class="toc-number">1.3.</span> <span class="toc-text">2. why? 为啥要学vim编辑器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3"><span class="toc-number">1.4.</span> <span class="toc-text">3. how? 怎么使用vim编辑器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4"><span class="toc-number">1.5.</span> <span class="toc-text">4. do? vim编辑器可以做什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5"><span class="toc-number">1.6.</span> <span class="toc-text">5. more! 更多操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5.1"><span class="toc-number">1.6.1.</span> <span class="toc-text">5.1 Windows 与 Linux 换行字符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5.2"><span class="toc-number">1.6.2.</span> <span class="toc-text">5.2 编码的转换</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#说明"><span class="toc-number">1.6.3.</span> <span class="toc-text">说明</span></a></li></ol></li></ol></li></ol>
     </div>
     
     <div class="back-top">&#xe639;</div>

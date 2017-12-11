@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
+    <title>
+        
+        Linux的文件权限与目录配置 · Dom Blog
+        
+    </title>
+    <link rel="icon" href= http://p0bl99g4r.bkt.clouddn.com/ti.JPG>
+    <!-- TODO: 在font-face加载完毕后改变字体  -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/webfont/1.6.28/webfontloader.js"></script>
+    <!-- 提前加载place holder  -->
+    <style type="text/css">
+        @font-face {
+            font-family: 'Oswald-Regular';
+            src: url(/font/Oswald-Regular.ttf);
+        }
+    </style>
+    <style type="text/css">
+        .site-intro-placeholder {
+            position: absolute;
+            z-index: -2;
+            top: 0;
+            left: 0px;
+            width: calc(100% + 300px);
+            height: 100%;
+            background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+            background-position: center center;
+            transform: translate3d(-226px, 0, 0);
+            animation: gradient-move 2.5s ease-out 0s 1;
+        }
+        @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+</style>
+    <link rel="stylesheet" href = /css/style.css?v=20171020 />
+    <script src="//cdn.staticfile.org/jquery/3.2.1/jquery.min.js" defer></script>
+    
+    <script src="/scripts/main.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+</head>
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >DomBro Studio</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">Linux的文件权限与目录配置</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>DomBro Studio</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-img" style="background-image: url(http://p0bl99g4r.bkt.clouddn.com/dog1.JPG)"></div>
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            Linux的文件权限与目录配置
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <!-- 文章页标签  -->
+            
+                <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = Linux>Linux</a>
+    
+</div>
+            
+            <div class="post-intro-meta">
+                <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                <span class="post-intro-time">2017/12/11</span>
+            </div>
+        
+    </div>
+</div>
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <script>
+            var browser = {
+                    versions: function () {
+                        var u = window.navigator.userAgent;
+                        return {
+                            userAgent: u,
+                            trident: u.indexOf('Trident') > -1, //IE内核
+                            presto: u.indexOf('Presto') > -1, //opera内核
+                            webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+                            gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+                            mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+                            ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+                            android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+                            iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+                            iPad: u.indexOf('iPad') > -1, //是否为iPad
+                            webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+                            weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+                            uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+                        };
+                    }()
+                }
+
+            function fontLoaded(){
+                console.log('font loaded');
+                if (document.getElementsByClassName('site-intro-meta')) {
+                    document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+                    document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+                    var postIntroTags = document.getElementsByClassName('post-intro-tags')[0],
+                        postIntroMeat = document.getElementsByClassName('post-intro-meta')[0];
+                        if (postIntroTags) {
+                            postIntroTags.classList.add('post-fade-in');
+                        }
+                        if (postIntroMeat) {
+                            postIntroMeat.classList.add('post-fade-in');
+                        }
+                    }
+                }
+                
+            console.log("userAgent:" + browser.versions.userAgent);
+            // UC不支持跨域，所以直接显示
+            if (browser.versions.uc) {
+                console.log("UCBrowser");
+                fontLoaded();
+            } else {
+                WebFont.load({
+                    custom: {
+                        families: ['Oswald-Regular']
+                    },
+                    loading: function () {  //所有字体开始加载
+                        // console.log('loading');
+                    },
+                    active: function () {  //所有字体已渲染
+                        fontLoaded();
+                    },
+                    inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+                        console.log('inactive: timeout');
+                        fontLoaded();
+                    },
+                    timeout: 7000 // Set the timeout to two seconds
+                });
+            }
+        </script>
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><a href="#1">1. Linux文件权限</a><ul>
+<li><a href="#1.1">1.1 用户与用户组</a></li>
+<li><a href="#1.2">1.2 Linux文件权限概念</a></li>
+</ul>
+</li>
+<li><a href="#2">2. Linux目录配置</a><ul>
+<li><a href="#2.1">2.1 Linux目录配置</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="1">1. Linux文件权限</h2>
+
+<blockquote>
+<p>Linux最优秀的地方之一，就在于它的<strong>多用户、多任务环境</strong>。而为了让各个用户具有较保密的文件数据，因此文件的权限管理就变得很重要了。Linux一般将文件可存取访问的身份分为 3 个类别，分别是<strong>owner、group、others</strong>，且 3 种身份各有<strong>read、write、execute</strong>等权限。</p>
+</blockquote>
+<h3 id="1.1">1.1 用户与用户组</h3>
+
+<ul>
+<li>文件所有者（用户）</li>
+</ul>
+<blockquote>
+<p>　由于 Linux 是多用户多、多任务的系统，因此可能常常会有很多人同时在这套主机来进行工作的情况发生，为了考虑每个人的隐私权以及每个热洗好的工作环境，因此 “文件所有者” 的概念就显得<strong>相当重要</strong>。<br><br>　例如当你将你的Email情书转存成文件之后，放在你自己的主文件夹中，你总不希望被其他人看见自己的情书吧？这个时候你就把该文件<strong>设置成只有文件所有者才能查看与修改这个文件的内容</strong>，那么即使其他人知道你有这个相当“有趣”的文件，不过由于<strong>你有设置适当的权限，所以其他人自然也就无法知道该文件的内容</strong>。</p>
+</blockquote>
+<ul>
+<li>用户组</li>
+</ul>
+<blockquote>
+<p>　其实用户组最有用的功能之一，就是当你在团队开发资源的时候。不同团体之间是有竞争性质的，但却要交纳同一份报告。<strong>每组的组员之间必须要能够互相修改对方的数据，但是其他组的组员则不能看到本组自己的文件内容</strong>，此时该如何是好？<br><br>　在Linux下面这样的限制是很简单的，可以<strong>进行简单的文件权限设置，就能限制非自己团队（也即是用户组）的其他人不能够阅览内容，而且也可以让自己的团队成员可以修改你所创建的文件</strong>。同时，如果你自己还有私人隐密的文件，仍然可以设置成让自己的团队成员也看不到我的文件数据。</p>
+</blockquote>
+<p><strong>不过 root 用户（超级用户）可以到达任何他想去的地方哦！</strong></p>
+<ul>
+<li>Linux 用户身份与用户组记录的文件</li>
+</ul>
+<blockquote>
+<p>Linux 系统中，默认所有系统账号与一般身份用户和 root 相关信息都记录在 <strong>/etc/passwd</strong> 这个文件内可以使用 <code>cat</code>命令查看该文件中是否有指定用户。所有用户组名都记录在 <strong>/etc/group</strong> 文件内，同样可以使用 <code>cat</code>查看。个人密码记录在  <strong>/etc/shadow</strong> 文件下（默认只用 root 才可以打开这个文件）。</p>
+</blockquote>
+<h3 id="1.2">1.2 Linux文件权限概念</h3>
+
+<ul>
+<li>Linux 文件属性</li>
+</ul>
+<p><strong>以 root 身份登录</strong> Linux 执行 <code>ls -al</code>(list命令，显示文件档案相关属性， 常用命令 <code>-l</code>)</p>
+<blockquote>
+<p>[root@www ~]# ls -al<br><br>total 156<br><br>drwxr-x—　4　root　root　4096　Sep　8 14:06 .<br><br>drwxr-xr-x　23　root　root　4096　Sep　8 14:21 ..<br><br>-rw——-　1　root　root　1474　Sep　4 18:27 anaconda-ks.cfg<br><br>-rw——-　1　root　root　199　Sep　8 17:14 .bash_history<br><br>-rw-r–r–　1　root　root　　24　Jan　6　2007 .bash_logout<br><br>-rw-r–r–　1　root　root　191　Jan　6　2007 .bash_profil<br>-rw-r–r–　1　root　root　176　Jan　6　2007 .bashrc<br><br>-rw-r–r–　1　root　root　100　Jan　6　2007 .cshrc<br><br>drwx——　3　root　root　4096　Sep　5 10:37 .gconf　&lt;=范例说明处<br><br>drwx——　2　root　root　4096　Sep　5 14:09 .gconfd`<br><br>-rw-r–r–　1　root　root　42304　Sep　4 18:26 install.log &lt;=范例说明处<br><br>-rw-r–r–　1　root　root　5661　Sep　4 18:25 install.log.syslog<br><br> [1] 　　　[2]　　[３]　[４]　[５]　[　６　　　]　　[７]<br><br>[１权限 ] 　 [２连接]　[３所有者]　　[４用户组]　[５文件容量]　　　[６修改日期]　[７文件名]</p>
+</blockquote>
+<ul>
+<li>第一列权限与文件类型</li>
+</ul>
+<p>仔细看的话，会发现这里共有十个字符</p>
+<blockquote>
+<p>第一个字符代表这个文件是“目录、文件或链接文件等”。<br><br>若是[d]则是目录，例如上面文件名为“.gconf”的第11行。<br><br>若是[-]则是文件，例如上面文件名为“install.log”第5行。<br><br>若是[l]则表示为连接文件（linkfile）。<br><br>若是[b]则表示设备文件里面的可供存储的接口设备。<br><br>若是[c]则表示设备文件里面的串行端口设备，例如键盘、鼠标（一次性读取设备）。<br><br>接下来的字符中，以3个为一组，且<strong>均为“rwx”的3个参数的组合</strong>。<strong>其中[r]代表可读（read）， [w]代表可写（write），[x]代表可执行（execute）。要注意的是，这3个权限的位置不会改变</strong>，<strong>如果没有权限，就会出现减号[-]而已</strong>。</p>
+</blockquote>
+<ul>
+<li>其他列解释</li>
+</ul>
+<blockquote>
+<p>根据每列的名字可以看出个大概，此处省略，大家可以<a href="http://linux.vbird.org/linux_basic/0210filepermission.php#filepermission_perm" target="_blank" rel="noopener">戳这里《看看鸟哥的Linux私房菜》</a>是怎么说的。</p>
+</blockquote>
+<ul>
+<li>改变文件属性与权限</li>
+</ul>
+<blockquote>
+<p><strong>chgrp：改变文件所属用户组</strong>。<br><br>chgrp改变一个文件的用户组真是很简单的，直接以chgrp来改变即可，这个命令就是change group的简称。不过，请记得，要被改变的组名必须要在/etc/group文件内存在才行，否则就会显示错误。<br><br>[root@www ~]# chgrp [-R] dirname/filename …<br><br>选项与参数：<br><br>-R : 进行递归（recursive）的持续更改，也即连同子目录下的所有文件、目录都更新成为这个用户组之意。常常用在更改某一目录内所有的文件情况。<br><br>范例：<br><br>[root@www ~]# chgrp users install.log<br><br>[root@www ~]# ls -l<br><br>-rw-r–r– 1 root users 68495 Jun 25 08:53 install.log</p>
+<p><strong>chown：改变文件所有者</strong>。<br><br>[root@www ~]# chown [-R] 账号名称 文件或目录<br><br>[root@www ~]# chown [-R] 账号名称:组名 文件或目参数：<br>-R : 进行递归（recursive）的持续更改，即连同子目录下的所有文件都更改<br><br>范例：将install.log的所有者改为bin这个账号：<br><br>[root@www ~]# chown bin install.log<br><br>[root@www ~]# ls -l<br><br>-rw-r–r– 1 bin users 68495 Jun 25 08:53 install.log<br><br>范例：将install.log的所有者与用户组改回为root：<br><br>[root@www ~]# chown root:root install.log<br><br>[root@www ~]# ls -l<br><br>-rw-r–r– 1 root root 68495 Jun 25 08:53 install.log</p>
+<p><strong>chmod：改变文件的权改变所属用户组</strong>：<br>文件权限的改变使用的是chmod这个命令，但是权限的设置方法有两种，分别可以使用<strong>数字</strong>或者是<strong>符号</strong>来进行权限的更改。<br><br><em>数字类型改变文件权限</em> :<br><br>Linux文件的基本权限就有9个，分别是owner、group、others三种身份各有自己的read、write、execute权限，先复习一下刚刚上面提到的数据：文件的权限字符为“-rwxrwxrwx”，这 9 个权限是三个三个一组的。其中，我们可以使用数字来代表各个权限，各权限的分数对照表如下：<br><br>r:4<br><br>w:2<br><br>x:1<br><br>每种身份（owner、group、others）各自的三个权限（r、w、x）分数是需要累加的，例如当权限为 [-rwxrwx—]，分数则是：<br><br>owner = rwx = 4+2+1 = 7<br><br>group = rwx = 4+2+1 = 7<br><br>others= — = 0+0+0 = 0<br><br>所以等一下我们设置权限的更改时，该文件的权限数字就是770，更改权限的命令chmod的语法是这样的：<br><br>[root@www ~]# chmod [-R] xyz 文件或目录<br><br>参数：<br><br>xyz : 就是刚刚提到的数字类型的权限属性，为 rwx 属性数值的相加。<br><br>-R : 进行递归（recursive）的持续更改，即连同子目录下的所有文件都会更改<br><br>举例来说，如果要将.bashrc这个文件所有的权限都设置启用，那么就执行<br><br>[root@www ~]# ls -al .bashrc<br><br><strong>-rw-r–r–</strong> 1 root root 395 Jul 4 11:45 .bashrc<br><br>[root@www ~]# chmod 777 .bashrc<br><br>[root@www ~]# ls -al .bashrc<br><br><strong>-rwxrwxrwx</strong> 1 root root 395 Jul 4 11:45 .bashrc<br><br><em>符号类型改变文件权限</em> :<br><br>user（u）：具有可读、可写、可执行的权限；<br><br>group与others（g/o）：具有可读与执行的权限。<br><br>所以就是：<br><br>[root@www ~]# chmod u=rwx,go=rx .bashrc<br><br><strong>注意：那个 u=rwx,go=rx 是连在一起的，中间并没有任何空格</strong>。<br><br>[root@www ~]# ls -al .bashrc<br><br>-rwxr-xr-x 1 root root 395 Jul 4 11:45 .bashrc<br><br><strong>那么假如是“-rwxr-xr”这样的权限呢？可以使用“ chmod u=rwx,g=rx,o=r filename”来设置</strong>。<br>如果我不知道原先的文件属性，而我只想要增加.bashrc这个文件的<strong>每个人均可写入的权限</strong>，那么我就可以使用：<br><br>[root@www ~]# ls -al .bashrc<br>[root@www ~]# chmod <strong>a+w</strong> .bashrc<br><br>[root@www ~]# ls -al .bashrc<br><br>-rwxrwxrwx 1 root root 395 Jul 4 11:45 .bashrc<br><br>而如果是要将权限去掉而不更改其他属性呢？例如要去掉全部人的可执行权限，则：<br><br>[root@www ~]# chmod a-x .bashrc<br><br>[root@www ~]# ls -al .bashrc<br><br>-rw-rw-rw- 1 root root 395 Jul 4 11:45 .bashrc</p>
+</blockquote>
+<ul>
+<li>权限对 文件 的重要性</li>
+</ul>
+<blockquote>
+<p>　<strong>文件是实际含有数据的地方</strong>，包括一般文本文件、数据库内容文件、二进制可执行文件（binary program）等。因此权限对于文件来说，它的意义如下。<br><br>　　　r（read）：可读取此文件的实际内容，如读取文本文件的文字内容等。<br><br>　　　w（write）：可以编辑、新增或者是修改该文件的内容（<strong>但不含删除该文件</strong>）。<br><br>　　　x（eXecute）：该文件具有可以被系统执行的权限。<br><br>　可执行（x）权限，这里必须要小心啦！<strong>因为在 Windows 下面一个文件是否具有执行的能力是通过“扩展名”来判断的，例如.exe，.bat，.com等，但是在Linux下面，我们的文件是否能被执行则是由是否具有“x”这个权限来决定，而跟文件名是没有绝对的关系</strong>。<br><br>　至于最后一个w权限呢？当你对一个文件具有w权限时，你可以具有写入、编辑、新增修改文件的内容的权限，<strong>但并不具备删除该文件本身的权限</strong>。<strong>对于文件的 r、w、x 来说，主要都是针对“文件的内容”而言，与文件名的存在与否没有关系的。因为文件记录的是实际的数据</strong>。</p>
+</blockquote>
+<ul>
+<li>权限对目录的重要性</li>
+</ul>
+<blockquote>
+<p>　文件是存放实际数据的所在，目录主要的内容是记录文件名列表，文件名与目录有强烈的关联。所以如果是针对目录时，那个r、w、x对目录是什么意义呢？<br><br>　　r（read contents in directory）<br>表示具有<strong>读取目录结构列表的权限</strong>，所以当你具有读取（r）一个目录的权限时，表示你可以查询该目录下的文件名数据，<strong>所以你就可以利用ls这个命令将该目录的内容列表显示出来</strong>。<br><br>　　w（modify contents of directory）<br>这个可写入的权限对目录来说是很强大的。因为它表示你具有更改该目录结构列表的权限，也就是下面这些权限：<br><br>　　　　新建新的文件与目录；<br><br>　　　　删除已经存在的文件与目录（<strong>不论该文件的权限为何</strong>）将已存在的文件或<br>目录进行重命名；<br><br>　　　　转移该目录内的文件、目录位置。<br>总之，目录的w权限就与该目录下面的文件名变动有关就对了。<br><br>　　x（access directory）<br>目录的执行权限有啥用途啊？目录只是记录文件名而已，总不能拿来执行吧？没错，目录不可以被执行，<strong>目录的 x 代表的是用户能否进入该目录成为工作目录的用途</strong>，所谓的工作目录（work directory）就是你目前所在的目录。举例来说，当你登录 Linux时，你所在的主文件夹就是你当下的工作目录。而变换目录的命令是<strong>“cd”</strong> (change directory）</p>
+</blockquote>
+<h2 id="2">2. Linux目录配置</h2>
+
+
+<blockquote>
+<p>　Linux 发行版本和开发团队或公司实在太多了。如何保证你所接触到的 Linux 目录配置方法和之前学习的 Linux 系统的目录配置一样，这就出现了后来的 Filesystem Hierarchy Standard (FHS)标准的出炉。<br><br>　根据 <a href="http://www.pathname.com/fhs/" target="_blank" rel="noopener">FHS: http://www.pathname.com/fhs/</a>　的官方文件指出，其主要目的是希望让用户可以了解到已安装软件通常放置于那个目录下，所以其希望独立的软件开发商、操作系统制作者以及想要维护系统的用户，都能够遵循FHS的标准。也就是说，FHS的重点在于规范每个特定的目录下应该要放置什么样子的数据而已。这样做好处非常多，因为Linux操作系统就能够在既有的面貌下（目录架构不变）发展出开发者想要的独特风格<br><br>　事实上，FHS是根据过去的经验一直在持续改版的，FHS依据文件系统使用的频繁与否与是否允许用户随意改动，而将目录定义成为四种交互作用的形态</p>
+</blockquote>
+<p><img src="http://p0bl99g4r.bkt.clouddn.com/dir_type.jpg" alt=""></p>
+<blockquote>
+<p>可分享的：可以分享给其他系统挂载使用的目录，所以包括执行文件与用户的邮件等数据，是能够分享给网络上其他主机挂载用的目录。<br><br>不可分享的：自己机器上面运行的设备文件或者是与程序有关的socket文件等，由于仅与自身机器有关，所以当然就不适合分享给其他主机了。<br><br>不变的：有些数据是不会经常变动的，跟随着distribution而不变动。例如函数库、文件说明文件、系统管理员所管理的主机服务配置文件等。<br><br>可变动的：经常改变的数据，例如登录文件、新闻组等。</p>
+</blockquote>
+<h3 id="2.1">2.1 Linux目录配置</h3>
+
+
+<ul>
+<li>FHS 目录树架构</li>
+</ul>
+<blockquote>
+<p>FHS 针对目录树架构金鼎移除三层目录下面应该放置什么数据，分别是<br><br>/（root,根目录）：与开机系统有关；<br><br>/usr（UNIX software resource）：与软件安装/执行有关；<br><br>/var（variable）：与系统运作过程有关。</p>
+</blockquote>
+<ul>
+<li>根目录( / ) 的意义与内容</li>
+</ul>
+<blockquote>
+<p>　根目录是整个系统最重要的一个目录，<strong>因为不但所有的目录都是由根目录衍生出来的，同时根目录也与开机、还原、系统修复等操作有关</strong>。由于系统开机时需要特定的开机软件、内核文件、开机所需程序、函数库等文件数据，若系统出现错误时，<strong>根目录也必须要包含有能够修复文件系统的程序才行</strong>。因为根目录是这么重要，所以在FHS的要求方面，其希望根目录不要放在非常大的分区内，因为越大的分区录所在分区就可能会有较多发生错误的机会。<br><br>　因此FHS标准建议：<strong>根目录（/）所在分区应该越小越好</strong>，<strong>且应用程序所安装的软件最好不要与根目录放在同一个分区内，保持根目录越小越好</strong>。如此不但性能较好，根目录所在的文件系统也较不容易发生问题</p>
+</blockquote>
+<p><em>有鉴于上述的说明，因此 FHS 定义出根目录（/）下面应该要有下面这些子目录的存在才好</em><br></p>
+<p><img src="http://p0bl99g4r.bkt.clouddn.com/dir_01.jpg" alt=""></p>
+<p><img src="http://p0bl99g4r.bkt.clouddn.com/dir_02.jpg" alt=""></p>
+<p><em>FHS 针对根目录所定义的标准金上面图片中举例数据，不过 Linux 下面还有许多目录也需要了解，下面是几个在 Linux 当中也是非常重要的目录</em></p>
+<p><img src="http://p0bl99g4r.bkt.clouddn.com/dir_03.jpg" alt=""></p>
+<ul>
+<li>不可与根目录分开的目录</li>
+</ul>
+<blockquote>
+<p>　因为根目录与开机有关，开机过程中仅有根目录会被挂载，其他分区则是在开机完成之后才会持续进行挂载的行为。就是因为如此，因此根目录下与<strong>开机过程有关的目录就不能够与根目录放到不同的分区去</strong>。有下面<br>　/bin：重要执行文件<br><br>　/etc:　配置文件<br><br>　/dev：所需要的设备文件<br><br>　/lib：执行文件所需的函数库与内核所需的模块<br><br>　/sbin：重要的系统执行文件<br><br><strong>这五个目录千万不可与根目录分开放在不同的分区</strong>。</p>
+</blockquote>
+<ul>
+<li>/usr 的意义与内容</li>
+</ul>
+<blockquote>
+<p>　依据FHS的基本定义，/usr里面放置的数据属于可分享的与不可变动的（shareable，static），如果你知道如何通过网络进行分区的挂载（例如在服务器篇会谈到的NFS服务器），那么/usr确实可以分享给局域网内的其他主机来使用。<br> <br>　其实 usr 是 UNIX Software Resource 的缩写，也就是<strong>“UNIX 操作系统软件资源”所放置的目录</strong>，而不是用户的数据。这点要注意。FHS<strong>建议所有软件开发者应该将他们的数据合理地分别放置到这个目录下的子目录，而不要自行新建该软件自己独里的目录</strong>。<br>　因为是所有系统默认的软件（distribution 发布者提供的软件）都会放置到/usr 下面，因此这个目录有点类似 Windows 系统的“C:\Windows\”和“C:\Program files\”这两个目录的综合体，系统刚安装完毕时，这个目录会占用最多的硬盘容量。一般来说，/usr的子目录建议有下图所示的这些</p>
+</blockquote>
+<p><img src="http://p0bl99g4r.bkt.clouddn.com/usr_dir.jpg" alt=""><br></p>
+<ul>
+<li>/var 的意义与内容</li>
+</ul>
+<blockquote>
+<p>如果/usr是安装时会占用较大硬盘容量的目录，那么<strong>/var就是在系统运行后才会渐渐占用硬盘容量的目录</strong>。 <strong>因为/var目录主要针对常态性变动的文件，包括缓存（cache）、登录文件（log file）以及某些软件运行所产生的文件，包括程序文件（lock file，run file）</strong>，或者例如 MySQL数据库的文件等。</p>
+</blockquote>
+<p> <img src="https://github.com/DomBro96/MyNotes/blob/master/img/LinuxNoteImg/var_dir.jpg" alt=""><br></p>
+<ul>
+<li>目录树</li>
+</ul>
+<blockquote>
+<p>　<strong>所有的文件与目录都是由根目录开始的</strong>。那是所有目录与文件的源头。然后再一个一个分支下来，<strong>有点像是树枝状。因此我们也称这种目录配置方式为“目录树（directorytree）”</strong>。<br>这个目录树有什么特性呢？它主要的特性有：<br><br>　　·目录树的起始点为根目录（/，root）；<br><br>　　·每一个目录不只能使用本地端的文件系统，也可以使用网络上的文件系统。举例来说，可以利用Network File System（NFS）服务器挂载某特定目录等。<br><br>　　·每一个文件在此目录树中的文件名（包含完整路径）都是独一无二的。</p>
+</blockquote>
+<p>　<img src="http://p0bl99g4r.bkt.clouddn.com/filetree.jpg" alt=""></p>
+<h3 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h3><p>整理笔记参考了 <a href="http://linux.vbird.org/linux_basic/0210filepermission.php#filepermission_perm" target="_blank" rel="noopener">《鸟哥的Linux私房菜》</a> 一书。这本书我是买的<a href="http://sale.jd.com/act/W5hugLDc1R.html" target="_blank" rel="noopener">京东阅读</a>的正版电子书籍。<br><br>如果不想买书看的话可以直接戳<a href="http://linux.vbird.org/" target="_blank" rel="noopener">这里进入鸟哥Linux私房菜的线上博客 : http://linux.vbird.org/</a>。请大家支持正版！！</p>
+
+    </article>
+    <!-- 前后页  -->
+    <ul class="post-pager">
+        
+            <li class="next">
+                <a href= "/2017/12/11/文件与文件系统的压缩与打包/" title= 文件与文件系统的压缩与打包 >
+                    <span>Next Post</span>
+                    <span>文件与文件系统的压缩与打包</span>
+                </a>
+            </li>
+        
+        
+            <li class="previous">
+                <a href= "/2017/12/10/文件系统管理/" title= 文件系统管理 >
+                    <span>Previous Post</span>
+                    <span>文件系统管理</span>
+                </a>
+            </li>
+        
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+<div id="container"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+    var gitment = new Gitment({
+        // id: "Linux的文件权限与目录配置", // 可选。默认为 location.href
+        owner: 'DomBro96',
+        repo: 'DomBro96.github.io',
+        oauth: {
+            client_id: '4a6fa6686f2dd417ed61',
+            client_secret: 'cc1f043ee266bc750c481d6a24a98188a185e2eb',
+        },
+    })
+    gitment.render('container')
+
+</script>
+
+    <!--PC版-->
+
+    <!--PC版-->
+
+
+    
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:460716809@qq.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="https://github.com/DomBro96" class="iconfont-archer github" target="_blank" title="github"></a>
+            
+        
+    
+        
+            
+                <a href="https://twitter.com/Bro_Doom" class="iconfont-archer twitter" target="_blank" title="twitter"></a>
+            
+        
+    
+        
+            
+                <a href="https://www.instagram.com/dombro7277/" class="iconfont-archer instagram" target="_blank" title="instagram"></a>
+            
+        
+    
+        
+            
+                <a href="https://leetcode.com/dombro96/" class="iconfont-archer others" target="_blank" title="others"></a>
+            
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">Theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+        <span id="busuanzi_container_site_pv">Welcome, No. <span id="busuanzi_value_site_pv"></span> visitor.
+        </span>
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper">
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#目录"><span class="toc-number">1.</span> <span class="toc-text">目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1"><span class="toc-number">2.</span> <span class="toc-text">1. Linux文件权限</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1.1"><span class="toc-number">2.1.</span> <span class="toc-text">1.1 用户与用户组</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1.2"><span class="toc-number">2.2.</span> <span class="toc-text">1.2 Linux文件权限概念</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2"><span class="toc-number">3.</span> <span class="toc-text">2. Linux目录配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2.1"><span class="toc-number">3.1.</span> <span class="toc-text">2.1 Linux目录配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#说明"><span class="toc-number">3.2.</span> <span class="toc-text">说明</span></a></li></ol></li></ol>
+    </div>
+    
+    <div class="back-top">&#xe639;</div>
+    <div class="sidebar">
+    <div class="sidebar-header sidebar-header-show-archive">
+        <div class="sidebar-category">
+            <span class="sidebar-archive-link"><span class="iconfont-archer">&#xe67d;</span>Archive</span>
+            <span class="sidebar-tags-link"><span class="iconfont-archer">&#xe610;</span>Tag</span>
+        </div>
+    </div>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-archive">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-archive"> Total : 14 </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2017 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/初始bash/" >初始bash</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/磁盘与Linux分区/" >磁盘与Linux分区</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/Linux文件与文件系统的打包/" >Linux文件与文件系统的打包</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/Java优雅的处理异常/" >Java优雅的处理异常</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/浅谈token/" >浅谈token</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/文件与文件系统的压缩与打包/" >文件与文件系统的压缩与打包</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/Java工厂设计模式/" >Java工厂设计模式</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2017/12/01/hello-world/" >世界你好</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2017 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/vim编辑器/" >vim编辑器</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/Linux的文件权限与目录配置/" >Linux的文件权限与目录配置</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/10</span><a class="archive-post-title" href= "/2017/12/10/文件系统管理/" >文件系统管理</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/10</span><a class="archive-post-title" href= "/2017/12/10/Linux文件与目录管理/" >Linux文件与目录管理</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/06</span><a class="archive-post-title" href= "/2017/12/06/动态规划-Floyed算法/" >动态规划-Floyed算法</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/04</span><a class="archive-post-title" href= "/2017/12/04/堆排序-HeapSort/" >堆排序-HeapSort</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name"><a href= "#">设计模式</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">JavaSE</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Linux</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">hello world</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">算法algorithm</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">JavaWeb</a></span>
+    
+    </div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #888; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: false
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tag-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var jsInfo = {
+        root: '/'
+    }
+</script>
+    <!-- 不蒜子  -->
+    
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ统计  -->
+    
+    </div>
+    </body>
+</html>
+
+
