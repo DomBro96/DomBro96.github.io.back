@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
+    <title>
+        
+        初始bash · Dom Blog
+        
+    </title>
+    <link rel="icon" href= http://p0bl99g4r.bkt.clouddn.com/dog.JPG>
+    <!-- TODO: 在font-face加载完毕后改变字体  -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/webfont/1.6.28/webfontloader.js"></script>
+    <!-- 提前加载place holder  -->
+    <style type="text/css">
+        @font-face {
+            font-family: 'Oswald-Regular';
+            src: url(/font/Oswald-Regular.ttf);
+        }
+    </style>
+    <style type="text/css">
+        .site-intro-placeholder {
+            position: absolute;
+            z-index: -2;
+            top: 0;
+            left: 0px;
+            width: calc(100% + 300px);
+            height: 100%;
+            background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+            background-position: center center;
+            transform: translate3d(-226px, 0, 0);
+            animation: gradient-move 2.5s ease-out 0s 1;
+        }
+        @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+</style>
+    <link rel="stylesheet" href = /css/style.css?v=20171020 />
+    <script src="//cdn.staticfile.org/jquery/3.2.1/jquery.min.js" defer></script>
+    
+    <script src="/scripts/main.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+</head>
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >DomBro Studio</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">初始bash</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>DomBro Studio</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-img" style="background-image: url(http://p0bl99g4r.bkt.clouddn.com/dog1.JPG)"></div>
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            初始bash
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <!-- 文章页标签  -->
+            
+                <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = Linux>Linux</a>
+    
+</div>
+            
+            <div class="post-intro-meta">
+                <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                <span class="post-intro-time">2017/12/11</span>
+            </div>
+        
+    </div>
+</div>
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <script>
+            var browser = {
+                    versions: function () {
+                        var u = window.navigator.userAgent;
+                        return {
+                            userAgent: u,
+                            trident: u.indexOf('Trident') > -1, //IE内核
+                            presto: u.indexOf('Presto') > -1, //opera内核
+                            webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+                            gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+                            mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+                            ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+                            android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+                            iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+                            iPad: u.indexOf('iPad') > -1, //是否为iPad
+                            webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+                            weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+                            uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+                        };
+                    }()
+                }
+
+            function fontLoaded(){
+                console.log('font loaded');
+                if (document.getElementsByClassName('site-intro-meta')) {
+                    document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+                    document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+                    var postIntroTags = document.getElementsByClassName('post-intro-tags')[0],
+                        postIntroMeat = document.getElementsByClassName('post-intro-meta')[0];
+                        if (postIntroTags) {
+                            postIntroTags.classList.add('post-fade-in');
+                        }
+                        if (postIntroMeat) {
+                            postIntroMeat.classList.add('post-fade-in');
+                        }
+                    }
+                }
+                
+            console.log("userAgent:" + browser.versions.userAgent);
+            // UC不支持跨域，所以直接显示
+            if (browser.versions.uc) {
+                console.log("UCBrowser");
+                fontLoaded();
+            } else {
+                WebFont.load({
+                    custom: {
+                        families: ['Oswald-Regular']
+                    },
+                    loading: function () {  //所有字体开始加载
+                        // console.log('loading');
+                    },
+                    active: function () {  //所有字体已渲染
+                        fontLoaded();
+                    },
+                    inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+                        console.log('inactive: timeout');
+                        fontLoaded();
+                    },
+                    timeout: 7000 // Set the timeout to two seconds
+                });
+            }
+        </script>
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><a href="#1">1. shell</a><ul>
+<li><a href="#1.1">1.1 what</a></li>
+<li><a href="#1.2">1.2 why</a></li>
+<li><a href="#1.3">1.3 Linux中的shell</a></li>
+</ul>
+</li>
+<li><a href="#2">2. bash</a><ul>
+<li><a href="#2.1">2.1 bash的功能</a></li>
+<li><a href="#2.2">2.2 bash的内置命令</a></li>
+</ul>
+</li>
+<li><a href="#3">3. 变量</a><ul>
+<li><a href="#3.1">3.1 what &amp; why</a></li>
+<li><a href="#3.2">3.2 how</a></li>
+<li><a href="#3.3">3.3 环境变量的功能</a></li>
+<li><a href="#3.4">3.4 变量的有效范围</a></li>
+<li><a href="#3.5">3.5 变量的键盘读取</a></li>
+<li><a href="#3.6">3.6 变量内容的删除、替代、替换</a></li>
+</ul>
+</li>
+<li><a href="#4">4. 命令别名与历史命令</a><ul>
+<li><a href="#4.1">4.1 命令别名alias</a></li>
+<li><a href="#4.2">4.2 历史命令history</a></li>
+</ul>
+</li>
+<li><a href="#5">5. Bash Shell 的环境操作</a><ul>
+<li><a href="#5.1">5.1 bash 的环境配置文件</a><ul>
+<li><a href="#5.1.1">5.1.1 login shell 读取文件介绍</a></li>
+<li><a href="#5.1.2">5.1.2 non-login shell 读取文件介绍</a></li>
+</ul>
+</li>
+<li><a href="#5.2">5.2 bash 操作与通配符</a></li>
+<li><a href="#5.2.1">5.2.1 bash默认组合键</a></li>
+<li><a href="#5.2.2">5.2.2 通配符与特殊符号</a></li>
+</ul>
+</li>
+<li><a href="#6">6. 总结</a></li>
+</ul>
+<h2 id="id">1. shell</h2>
+
+
+<p>Shell 是个什么东西？接触了 Linux 后总能听到有人 Shell来Shell去，英文里面 shell 是蛋壳的意思，当你了解了 Linux下shell 的含义，你会觉得很贴切。</p>
+<h3 id="1.1">1.1 what</h3>
+
+<ul>
+<li>系统软件与硬件的关系</li>
+</ul>
+<p>众所周知，没有软件的计算机只会滋滋放电，<strong>操作系统就是一组软件，计算机的硬件想要工作，需要操作系统对硬件进行管理</strong>。操作系统<strong>通过内核(kernel)对硬件进行管理</strong>。</p>
+<ul>
+<li>应用软件如何工作</li>
+</ul>
+<p>当你打开你的音乐软件听歌时，计算机的音响会发出声音，那是不是普通的应用软件也可以对硬件进行操作呢？<strong>当然不是! 如果任意软件都可以对硬件直接进行操作，那你的计算机早就炸了！</strong> 我们平时用的应用软件则是在操作系统上运行的，比如你经常听到某某软件的Windows版本，Linux版本。上面说到唯一可以与硬件通信的是系统的内核(kernel)，<strong>所以应用软件工作时，首先会和系统的内核进行沟通(把用户传来的指令发给内核)，在由内核对计算机硬件进行控制</strong>。</p>
+<p><em>其实在这里我就已经把 shell 的含义说出来了，shell 就是让用户用来操作应用程序的方式，比如命令行、图形桌面等等，通过 shell 去对你的应用软件进行操作，软件与内核沟通，内核对硬件进行控制，如果把硬件比作蛋黄，那么最外层的shell不就正是蛋壳吗?</em></p>
+<ul>
+<li>shell 的种类</li>
+</ul>
+<p>shell是用来操作应用程序的，所以广义上来说只要是可以操作应用程序的接口(方法)，都可以叫他 shell（<strong>命令行，图形界面都是广义上的 shell</strong>）。<strong>狭义上的 shell 指的就是命令行上操作程序的接口 ，比如bash</strong>。</p>
+<p><em>如果不做注释，下面所有出现的 shell 指的都是狭义上的。</em></p>
+<h3 id="1.2">1.2 why</h3>
+
+<p>有没有想过为打开 Linux(不限发行版本) 的各种教材，几乎全部都是让我们在 shell 下进行操作，为什么呢？因为重要被！有下面几点原因</p>
+<ul>
+<li>1.一致性</li>
+</ul>
+<p>习惯了 Winodws系统的人很难去让他摆弄命令行，下意识会使用Linux的图形界面，但是 Linux 与 Windows 很大的不同是 Linux 发行版本众多，不是每个发行版本的图形界面都一个德性（样子）的，比如我的ubuntu就比 centOS 界面美观，所以不同的发行版本界面风格和界面操作是不一样的，但是<strong>每个Linux的发行版本使用的 shell 几乎都是一样的，当你把shell玩转了,轻轻松松切换各种发行版本</strong>！ </p>
+<ul>
+<li>2.速度快</li>
+</ul>
+<p>市面上流行的服务器几乎都是Linux系统，当你远程控制服务器时，考虑到网络网络延迟、连接稳定等原因，你一会选择速度更快更稳定的shell来操作你的远程主机，而不是图形界面。</p>
+<ul>
+<li>3.shell是Linxu的精髓</li>
+</ul>
+<p>使用 shell，你会对 Linux 的原理更加透彻，让你对自己Linux主机有充分的主动权！<strong>shell 才是 Linux 的精髓之所在</strong>！</p>
+<h3 id="1.3">1.3 Linux中的shell们</h3>
+
+
+<p>注意到小标题有一个“们”，shell 的旗下的小弟有很多，这里就不一一列举了(向写出这些shell的革命前辈献上膝盖)。<strong>你可以通过 /etc/shells 查看你的Linux中支持多少种shell</strong>。我的虚拟机中支持四种：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">dombro@ubuntu:~$ cat /etc/shells </span><br><span class="line"># /etc/shells: valid login shells</span><br><span class="line">/bin/sh</span><br><span class="line">/bin/dash</span><br><span class="line">/bin/bash</span><br><span class="line">/bin/rbash</span><br></pre></td></tr></table></figure>
+<p>Linux 中每个用户使用的shell不一定相同，可以通过 /etc/passwd 文件查看每个用户登陆后使用的shell,看最一个数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dombro:x:1000:1000:ubuntu,,,:/home/dombro:/bin/bash</span><br><span class="line">dongbo:x:1001:1002:,,,:/home/dongbo:/bin/bash</span><br></pre></td></tr></table></figure>
+<p><strong>Linxu下面默认的 shell 是 /bin/bash</strong>！</p>
+<h2 id="2">2. bash</h2>
+
+<p>/bin/bash 是Linxu默认的shell，有必要去了解一下,我暂时还真的没接触过别的…</p>
+<h3 id="3">2.1 bash的功能</h3>
+
+
+<p>说是功能，不如说是优点。bash 主要有下面这几种优点</p>
+<ul>
+<li>1.命令记忆功能(history)</li>
+</ul>
+<p>估计所有玩过Linux的人都会说这是一个相当棒的功能，在命令行中按上下键就可以找到前后输入的命令。有没有觉得很神奇？事实上，你上一次登录状态下的所有命令都会被记在用户主文件夹下的.bash_history中，像这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">dombro@ubuntu:~$ cat .bash_history </span><br><span class="line">cd /home/</span><br><span class="line">cd /usr</span><br><span class="line">history </span><br><span class="line">alias </span><br><span class="line">tee --help</span><br><span class="line">who</span><br><span class="line">who | tee who.out</span><br><span class="line">cat who.out</span><br><span class="line">bind -p</span><br><span class="line">vim who.out</span><br><span class="line">vim --help</span><br><span class="line">vi --help</span><br><span class="line">vim --help</span><br></pre></td></tr></table></figure>
+<p>而本次的登录时的命令会被保存在内存中，退出时，这些在内存中的历史命令被写入~.bash_history文件中。但是这样一来也有一个坏处，如果你的主机被攻击了，黑客可以很轻松的获得你曾经执行过的敏感命令（密码输入），所以将记录命令的数目减少点~<a href="#4.2">具体的历史命令在4.2小节查看</a></p>
+<ul>
+<li>2.命令与文件补齐(tab)</li>
+</ul>
+<p>别跟我说你没用过这个功能，在实际输入命令或者文件名时一定要多多使用[tab]，来让bash自动的帮你补齐，省时省力！举个例子：把所有c开头的命令显示出来</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">dombro@ubuntu:~$ c[tab][tab]</span><br><span class="line">Display all 122 possibilities? (y or n)</span><br><span class="line">c++                        column</span><br><span class="line">c2ph                       combinediff</span><br><span class="line">c89                        comm</span><br><span class="line">c89-gcc                    command</span><br><span class="line">c99                        command_not_found_handle</span><br><span class="line">c99-gcc                    compare</span><br><span class="line">cal                        compare-im6</span><br><span class="line">calendar                   compgen</span><br><span class="line">calibrate_ppa              compiz</span><br><span class="line">caller                     compiz-decorator</span><br><span class="line">canberra-gtk-play          complete</span><br><span class="line">下面省略</span><br></pre></td></tr></table></figure>
+<ul>
+<li>3.命令别名的设置(alias)</li>
+</ul>
+<p>试一下直接输入<code>ll</code>命令，会不会显示出文件夹下文件的信息？实际上 Linxu 下面并没有 <code>ll</code> 这个命令啦，<code>ll</code>只是一个命令的别名，如果你嫌命令太长不好记，可以把命令设置别名像这样</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alias command=&apos;alias_command&apos;</span><br></pre></td></tr></table></figure>
+<p>如果你想知道你设置了哪些别名直接在命令行下<code>alias</code>就好</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">dombro@ubuntu:~$ alias </span><br><span class="line">alias alert=&apos;notify-send --urgency=low -i &quot;$([ $? = 0 ] &amp;&amp; echo terminal || echo error)&quot; &quot;$(history|tail -n1|sed -e &apos;\&apos;&apos;s/^\s*[0-9]\+\s*//;s/[;&amp;|]\s*alert$//&apos;\&apos;&apos;)&quot;&apos;</span><br><span class="line">alias egrep=&apos;egrep --color=auto&apos;</span><br><span class="line">alias fgrep=&apos;fgrep --color=auto&apos;</span><br><span class="line">alias grep=&apos;grep --color=auto&apos;</span><br><span class="line">alias l=&apos;ls -CF&apos;</span><br><span class="line">alias la=&apos;ls -A&apos;</span><br><span class="line">alias ll=&apos;ls -alF&apos;</span><br><span class="line">alias ls=&apos;ls --color=auto&apos;</span><br></pre></td></tr></table></figure>
+<p><a href="#4.2">具体的命令别名在4.1小节查看</a></p>
+<ul>
+<li>4.程序脚本(shell script)</li>
+</ul>
+<p>有没有经常听说脚本文件这个词？Linxu下的shell脚本程序可以做更多的事！</p>
+<ul>
+<li>5.通配符(wildcard)</li>
+</ul>
+<p>你一定是用过 *、%等通配符！这也是bash为我们提供的！</p>
+<h3 id="2.2">2.2 bash的内置命令</h3>
+
+
+
+<p>上面说，我们在 shell 下面通过命令操作应用程序，那是不是所有命令都是来自于应用程序？absolutely not！为了方便 shell 操作(感觉可以提高性能)，bash 为我们内置了许多命令比如 cd、umask..</p>
+<ul>
+<li>使用 type 命令</li>
+</ul>
+<p>使用 type 命令可以告诉我们这个命令是不是 一个bash内置命令 ！用法：<code>type [-tpa] command</code>。例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">dombro@ubuntu:~$ type ll</span><br><span class="line">ll is aliased to `ls -alF&apos;</span><br><span class="line">#当你看到 alias字眼 意味着这个命令是一个别名</span><br><span class="line">dombro@ubuntu:~$ type java</span><br><span class="line">java is /usr/java/jdk1.8.0_144/bin/java</span><br><span class="line">#当你看到 一串绝对路径 证明这个命令是一个外部命令 </span><br><span class="line">dombro@ubuntu:~$ type cd</span><br><span class="line">cd is a shell builtin</span><br><span class="line">#当你看到 builtin 证明这个命令是一个内置命令 </span><br><span class="line"></span><br><span class="line">#使用 -t 选项 ： 会直接返回一个单词告诉你这个命令的意义</span><br><span class="line">dombro@ubuntu:~$ type -t cd</span><br><span class="line">builtin</span><br><span class="line">dombro@ubuntu:~$ type -t java</span><br><span class="line">file</span><br><span class="line">dombro@ubuntu:~$ type -t ll</span><br><span class="line">alias</span><br><span class="line"></span><br><span class="line">#使用 -p 选项 ： 只有 command 为外部命令时才会显示完整文件名</span><br><span class="line">dombro@ubuntu:~$ type -p ls</span><br><span class="line">#什么都没显示，说明 ls 是一个内置命令</span><br><span class="line">dombro@ubuntu:~$ type -p java</span><br><span class="line">/usr/java/jdk1.8.0_144/bin/java</span><br><span class="line"></span><br><span class="line">#使用 -a 选项 : 由 PATH 变量定义的路径中，将所有 command 的命令都列出来，包含 alias别名</span><br><span class="line">dombro@ubuntu:~$ type -a ls</span><br><span class="line">ls is aliased to `ls --color=auto&apos;</span><br><span class="line">ls is /bin/ls</span><br><span class="line">#PATH中的ls</span><br></pre></td></tr></table></figure>
+<p>type除了可以判断我们知道的命令是不是内置命令，还有一个作用，type只会寻找可以被执行的文件，即 type 在于找出可执行文件。</p>
+<h2 id="3">3. 变量</h2>
+
+
+<p><em>变量是 bash 中非常重要的东西</em>！ </p>
+<h3 di="3.1">3.1 what&amp;why</h3>
+
+
+<p>Linux 下的变量和程序语言所说的变量在定义上几乎差不多，都是用一个固定串去表示一个不固定的内容。就是用一个简单的字眼代替一个容易变动的数字！</p>
+<ul>
+<li>方便操作的变量</li>
+</ul>
+<p>我们都知道 Linux 是多用户的，多任务的环境，每个人登陆后都会获取一个shell 。上面提到了，每个人的 shell 可能是不同的，有可能 用户1的shell 是bash，用户2的shell就是csh，系统如何去判断呢？是每次用户登录都会读取 /etc/passwd？ 我想不是这样的，每个用户使用的 shell 类型(文件)记录在一个叫 <code>SHELL</code> 的变量中，比如当我以主用户登录时 <code>SHELL</code> 中的值就是 <code>/bin/bash</code> ，系统则直接读取这个 <code>SHELL</code> 变量就好了。<strong>是不是有点类似程序语言中通过条件判断，为一个变量取不同值呢？</strong> </p>
+<p><em>更方便的变量操作还有 MAIL ，邮件操作当你执行 <code>mail</code> 这个命令时，根据用户不同 <code>MAIL</code> 变量的值为对应用户邮件目录，所以你才会准确无误的获取到你的邮件，而不需要知道你邮件的具体地址</em>。 </p>
+<ul>
+<li>影响 bash 环境操作的变量</li>
+</ul>
+<p>你肯定听过 <code>PATH变量</code> 这个词。可不可以在任意目录下执行某个命令与 <code>PATH变量</code> 有很大的关系，系统就是通过 PATH 这个变量记录的路径去查找命令的。<br>说的明白点，上面举的<code>SHELL</code>的例子、<code>MAIL</code>的例子，等等<strong>这些用来在用户登录之前（准确来说是进入shell之前）得到该用户的一些数据的变量就叫环境变量</strong>。常见的环境变量有 <code>PATH</code>、<code>SHELL</code>、<code>MAIL</code>、<code>HOME</code>等。</p>
+<ul>
+<li>脚本程序设计(shell script)的变量</li>
+</ul>
+<p>在脚本程序中同样可以使用变量，这个用法和编程时的用法是一样的。</p>
+<h3 id="3.2">3.2 how</h3>
+
+
+
+<ul>
+<li>变量与变量代表的内容</li>
+</ul>
+<p>可以使用 <code>echo $变量名</code> 或 <code>echo ${变量名}</code> 的方式去查看变量的内容</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">dombro@ubuntu:~$ echo $PATH</span><br><span class="line">/usr/java/jdk1.8.0_144/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin</span><br><span class="line">#&#123;变量名&#125;效果是一样的</span><br><span class="line">dombro@ubuntu:~$ echo $&#123;PATH&#125;</span><br><span class="line">/usr/java/jdk1.8.0_144/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin</span><br></pre></td></tr></table></figure>
+<p>使用<code>=</code>来设置变量，举个例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dombro@ubuntu:~$ myname=dombro</span><br><span class="line">dombro@ubuntu:~$ echo $myname </span><br><span class="line">dombro</span><br></pre></td></tr></table></figure>
+<p><em>当变量未被设置是默认为空。</em></p>
+<ul>
+<li>变量设置规则</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">1．变量与变量内容以一个等号“=”来连接，如下所示：</span><br><span class="line">“myname=dombro”</span><br><span class="line">2．等号两边不能直接接空格符，如下所示为错误的：</span><br><span class="line">“myname=dombro”或“myname=dombro Tsai”</span><br><span class="line">3．变量名称只能是英文字母与数字，但是开头字符不能是数字，如下为错误的：</span><br><span class="line">“2myname=dombro”</span><br><span class="line">4．变量内容若有空格符可使用双引号“&quot;”或单引号“&apos;”将变量内容结合起来，但是</span><br><span class="line">双引号内的特殊字符如$等，可以保有原本的特性，如下所示：</span><br><span class="line">若“var=&quot;lang is $LANG&quot;”，则“echo $var”可得“lang is en_US”</span><br><span class="line">单引号内的特殊字符则仅为一般字符（纯文本），如下所示：</span><br><span class="line">若“ar=&apos;lang is $LANG&apos;”，则“echo $var”可得“lang is $LANG”</span><br><span class="line">5．可用转义字符“\”将特殊符号（如[Enter]、$、\、空格符、！等）变成一般字符。</span><br><span class="line">6．在一串命令中，还需要通过其他的命令提供的信息，可以使用反单引号“`命令`”或“$（命令）”。特别注意，那个是键盘上方的数字键 1 左边那个按键，而不是单引号。例如想要取得内核版本的设置：</span><br><span class="line">“version=$（uname-r）”再“echo $version”可得“2.6.18-128.el5”</span><br><span class="line">7．若该变量为了增加变量内容时，则可用&quot;$变量名称&quot;或$&#123;变量&#125;累加内容，如下所示：</span><br><span class="line">“PATH=&quot;$PATH&quot;:/home/bin”</span><br><span class="line">8．若该变量需要在其他子进程执行，则需要以export来使变量变成环境变量：</span><br><span class="line">“export PATH”</span><br><span class="line">9．通常大写字符为系统默认变量，自行设置变量可以使用小写字符，方便判断（纯粹依照用户兴趣与嗜好）。</span><br><span class="line">10．取消变量的方法为使用“unset变量名称”，例如取消myname的设置：</span><br><span class="line">“unset myname”</span><br></pre></td></tr></table></figure>
+<ul>
+<li>范例：让变量用在下个shell程序</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">dombro@ubuntu:~$ name=dombro</span><br><span class="line">dombro@ubuntu:~$ echo $name </span><br><span class="line">dombro</span><br><span class="line">dombro@ubuntu:~$ bash </span><br><span class="line">#进入到子进程</span><br><span class="line">dombro@ubuntu:~$ echo $name</span><br><span class="line">#并没有出现在原进程中设置的变量值</span><br><span class="line">dombro@ubuntu:~$ exit</span><br><span class="line">#退出该进程</span><br><span class="line">exit</span><br><span class="line">dombro@ubuntu:~$ export name</span><br><span class="line">#使用 export</span><br><span class="line">dombro@ubuntu:~$ bash</span><br><span class="line">dombro@ubuntu:~$ echo $name</span><br><span class="line">#再次进入子进程，查看name变量，出现了变量值</span><br><span class="line">dombro</span><br></pre></td></tr></table></figure>
+<ul>
+<li>范例：双引号与单引号的区别</li>
+</ul>
+<p>双引号与单引号的区别在于，双引号可以保留变量内容，而单引号则是一般字符</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">dombro@ubuntu:~$ myname=&quot;$name is me&quot;</span><br><span class="line">dombro@ubuntu:~$ echo $myname </span><br><span class="line">dombro is me</span><br><span class="line">dombro@ubuntu:~$ myname=&apos;$name is me&apos;</span><br><span class="line">dombro@ubuntu:~$ echo $myname </span><br><span class="line">$name is me</span><br></pre></td></tr></table></figure>
+<ul>
+<li>范例：反单引号 ` 的作用</li>
+</ul>
+<p>在一串命令中，在 ` 内的命令将会被先执行，而其执行出来的结果将作为外部的输入信息。下面例子将进入用户目前内核的模块目录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">dombro@ubuntu:~$ cd /lib/modules/`uname -r`/kernel</span><br><span class="line">dombro@ubuntu:/lib/modules/4.4.0-98-generic/kernel$ </span><br><span class="line"></span><br><span class="line">#其实上面的做了两个操作，首先进行反单引号内的 uname -r 得到内核版本 4.4.0-98-generic ，再将该结果带入cd命令。</span><br></pre></td></tr></table></figure>
+<p>实际上使用括号() 来代替 ` 比较好，因为反单引号太容易看错了。</p>
+<h3 id="3.3">3.3 环境变量的功能</h3>
+
+
+<p>上面说环境变量在我们未进入shell程序之前被读取，环境变量可以帮助我们完成很多功能，我们可以通过 <code>env</code> 和 <code>export</code>来查看所有的环境变量。</p>
+<ul>
+<li>使用 env 查看环境变量</li>
+</ul>
+<p>在你的 Linux 的 bash 中输入 env，会把你所有的环境变量都列出来。是在是太多了，就不把我的贴上来了，简单介绍几个常见的环境变量。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">HOME</span><br><span class="line">代表用户的主文件夹。还记得我们可以使用cd～去到自己的主文件夹吗？或者利用cd就可以直接回到用户主文件夹了。那就是使用这个变量，有很多程序都可能会用到这个变量的值。</span><br><span class="line">SHELL</span><br><span class="line">它告知我们目前这个环境使用的shell是哪个程序？Linux默认使用/bin/bash的。</span><br><span class="line">HISTSIZE</span><br><span class="line">这个与“历史命令”有关，即是我们曾经执行过的命令可以被系统记录下来，而记录的“条数”则是由这个值来设置的。</span><br><span class="line">MAIL</span><br><span class="line">当我们使用mail这个命令在收信时系统会去读取的邮件信箱文件（mailbox）。</span><br><span class="line">PATH</span><br><span class="line">就是执行文件查找的路径，目录与目录中间以冒号（:）分隔，由于文件的查找是依序由PATH的变量内的目录来查询，所以目录的顺序也是重要的。</span><br><span class="line">LANG</span><br><span class="line">这个重要。就是语系数据，很多信息都会用到它。举例来说，当我们在启动某些Perl的程序语言文件时，它会主动去分析语系数据文件，如果发现有它无法解析的编码语系，可能会产生错误。一般来说，我们中文编码通常是 zh_CN.gb2312 或者是 zh_CN.UTF-8，这两个编码偏偏不容易被解译出来，所以有的时候，可能需要修改一下语系数据。这部分我们会在下个小节做介绍的。</span><br><span class="line">RANDOM</span><br><span class="line">这是“随机数”的变量。目前大多数的distributions都会有随机数生成器，那就是/dev/random这个文件。我们可以通过这个随机数文件相关的变量（$RANDOM）来随机取得随机数值。在BASH 的环境下，这个 RANDOM 变量的内容介于 0～32767 之间，所以你只要 echo$RANDOM时，系统就会主动随机取出一个介于0～32767的数值。万一我想要使用0～9之间的数值呢？利用declare声明数值类型，然后这样做就可以了：</span><br><span class="line">[root@www ～]# declare -i number=$RANDOM*10/32768 ; echo $number</span><br><span class="line">8 &lt;== 此时会随机取出 0～9 之间的数值。</span><br><span class="line">大致上是有这些环境变量，里面有些比较重要的参数，在下面我们都会另外进行一些说明的。</span><br></pre></td></tr></table></figure>
+<ul>
+<li>使用 set 查看所有变量</li>
+</ul>
+<p>Linux 下面不止有环境变量，上面我们自己还定义了几个变量，那要如何去查看？就可以使用 <code>set</code> 这个命令。<code>set</code> 命令可以查看包括环境变量、还有与 bash 操作接口有关的变量，以及用户自定义的变量。只要使用 set </p>
+<p>列举几个重要的变量</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line">dombro@ubuntu:~$ set</span><br><span class="line">BASH=/bin/bash</span><br><span class="line">BASH_VERSION=&apos;4.3.48(1)-release&apos;</span><br><span class="line">COLUMNS=80</span><br><span class="line">BASH=/bin/bash &lt;== bash 的主程序放置路径</span><br><span class="line">BASH_VERSINFO=（[0]=&quot;3&quot; [1]=&quot;2&quot; [2]=&quot;25&quot; [3]=&quot;1&quot; [4]=&quot;release&quot;</span><br><span class="line">[5]=&quot;i686-redhat-linux-gnu&quot;） &lt;== bash 的版本。</span><br><span class="line">BASH_VERSION=&apos;3.2.25（1）-release&apos; &lt;== 也是 bash 的版本。</span><br><span class="line">COLORS=/etc/DIR_COLORS.xterm &lt;== 使用的颜色记录文件</span><br><span class="line">COLUMNS=115 &lt;== 在目前的终端机环境下，使用的字段有几个字符长度</span><br><span class="line">HISTFILE=/root/.bash_history &lt;== 历史命令记录的放置文件，隐藏文件</span><br><span class="line">HISTFILESIZE=1000 &lt;== 保存的（与上个变量有关）的文件命令的最大记录条数。</span><br><span class="line">HISTSIZE=1000 &lt;== 目前环境下可记录的历史命令最大条数。</span><br><span class="line">HOSTTYPE=i686 &lt;== 主机安装的软件主要类型。我们用的是 i686 兼容机器软件</span><br><span class="line">IFS=$&apos; \t\n&apos; &lt;== 默认的分隔符</span><br><span class="line">LINES=35 &lt;== 目前的终端机下的最大行数</span><br><span class="line">MACHTYPE=i686-redhat-linux-gnu &lt;== 安装的机器类型</span><br><span class="line">MAILCHECK=60 &lt;== 与邮件有关。每 60 秒去扫描一次信箱有无新信。</span><br><span class="line">OLDPWD=/home &lt;== 上个工作目录。我们可以用 cd - 来使用这个变量。</span><br><span class="line">OSTYPE=linux-gnu &lt;== 操作系统的类型。</span><br><span class="line">PPID=20025 &lt;== 父进程的 PID（会在后续章节才介绍）</span><br><span class="line">PS1=&apos;[\u@\h \W]\$ &apos; &lt;== PS1 就厉害了。这个是命令提示符，也就是我们常见的</span><br><span class="line">[root@www ～]# 或 [dmtsai ～]$ 的设置值。可以改动的。</span><br><span class="line">PS2=&apos;&gt; &apos; &lt;== 如果你使用转义符号（\） 第二行以后的提示符也可以被列出来。</span><br><span class="line">name=VBird &lt;== 刚才设置的自定义变量</span><br><span class="line">$ &lt;== 目前这个 shell 所使用的 PID</span><br><span class="line">? &lt;== 刚才执行完命令的回传码。</span><br><span class="line">一般来说，不论是否为环境变量，只要跟我们目前这个shell的操作接口有关的变量，通常都会被设置为大写字符，也就是说，基本上，在Linux默认的情况中，使用&#123;大写的字母&#125;来设置的变量一般为系统内定需要的变量。那么上面那些变量当中，有哪些是比较重要的？大概有这几个吧！</span><br><span class="line">PS1（提示符的设置）</span><br><span class="line">这是PS1（数字的1，不是英文字母），这个东西就是我们的“命令提示符”。当我们每次按下[Enter]按键去执行某个命令后，最后要再次出现提示符时，就会主动去读取这个变量值了。上面 PS1 内显示的是一些特殊符号，这些特殊符号可以显示不同的信息，每个 distributions的 bash 默认的 PS1 变量内容可能有些区别，你可以用 man bash 查询一下 PS1 的相关说明，以理解下面的一些符号意义。</span><br><span class="line">\d：可显示出“星期月日”的日期格式，如“Mon Feb 2”。</span><br><span class="line">\H：完整的主机名。举例来说，我练习机为“Ubuntun”。</span><br><span class="line">\h：仅取主机名在第一个小数点之前的名字，如主机为“www”，后面的省略。</span><br><span class="line">\t：显示时间，为24小时格式的“HH:MM:SS”。</span><br><span class="line">\T：显示时间，为12小时格式的“HH:MM:SS”。</span><br><span class="line">\A：显示时间，为24小时格式的“HH:MM”。</span><br><span class="line">\@：显示时间，为12小时格式的“am/pm”样式。</span><br><span class="line">\u：目前用户的账号名称，如“root”。</span><br><span class="line">\v：BASH的版本信息，如测试主版本为3.2.25（1），仅取“3.2”显示。</span><br><span class="line">\w：完整的工作目录名称，由根目录写起的目录名称。但主文件夹会以～替代。</span><br><span class="line">\W：利用basename函数取得工作目录名称，所以仅会列出最后一个目录名。</span><br><span class="line">\#：执行的第几个命令。</span><br><span class="line">\$：提示符，如果是root时，提示符为#，否则就是$。</span><br><span class="line">好了让我们来看看 CentOS 默认的 PS1 内容：[\u@\h \W]\$，现在你知道那些反斜杠后的数据意义了吧？要注意，那个反斜杠后的数据为 PS1 的特殊功能，与 bash 的变量设置没关系。不要搞混了。那你现在知道为何你的命令提示符是“[root@www～]#”了吧？好了，那么假设我想要有类似下面的提示符：</span><br><span class="line">[root@www /home/dmtsai 16:50 #12]#</span><br><span class="line">那个#代表第12次执行的命令。那么应该如何设置PS1呢？可以这样：</span><br><span class="line">[root@www ～ ]# cd /home</span><br><span class="line">[root@www home]# PS1=&apos;[\u@\h \w \A #\#]\$ &apos;</span><br><span class="line">[root@www /home 17:02 #85]#</span><br><span class="line"># 看到了吗？提示符...</span><br><span class="line"></span><br><span class="line">“$”本身也是个变量。这个代表的是目前这个Shell的线程代号，即是所谓的PID（Process ID）。更多的进程观念，我们会在第四部分的时候提及。想要知道我们的shell的PID，用“echo $$”即可，出现的数字就是你的PID号码。</span><br><span class="line">?（关于上个执行命令的回传码）</span><br><span class="line">问号也是一个特殊的变量？没错！在bash里面这个变量很重要。这个变量是上一个执行的命令所回传的值，上面这句话的重点是“上一个命令”与“回传值”两个地方。当我们执行某些命令时，这些命令都会回传一个执行后的代码。一般来说，如果成功执行该命令，则会回传一个0值，如果执行过程发生错误，就会回传“错误代码”才对。一般就是以非0的数值来替代。我们以下面的例子来说明：</span><br><span class="line">[root@www ～]# echo $SHELL</span><br><span class="line">/bin/bash &lt;==可顺利显示，没有错误。</span><br><span class="line">[root@www ～]# echo $?</span><br><span class="line">0 &lt;==因为没问题，所以回传码为 0</span><br><span class="line">[root@www ～]# 12name=VBird</span><br><span class="line">-bash: 12name=VBird: command not found &lt;==发生错误了，bash回报有问题</span><br><span class="line">[root@www ～]# echo $?</span><br><span class="line">127 &lt;==因为有问题，回传错误代码（非0）</span><br><span class="line"># 错误代码回传码依据软件而有不同，我们可以利用这个代码来找出错误的原因。</span><br><span class="line">[root@www ～]# echo $?</span><br><span class="line">0</span><br><span class="line">#怎么又变成正确了？这是因为“?”只与“上一个执行命令”有关，</span><br><span class="line"># 所以，我们上一个命令是执行“echo $? ”，当然没有错误，所以是 0 没错。</span><br><span class="line">OSTYPE，HOSTTYPE，MACHTYPE（主机硬件与内核的等级）</span><br></pre></td></tr></table></figure>
+<ul>
+<li>export 自定义变量转成环境变量</li>
+</ul>
+<p>在<a href="#3.2">3.2小节如何使变量用在下一个shell中</a>，其实我们已经使用了 <code>export</code> 这个命令，实际上在该例子中第二次输入的 <code>bash</code> 命令是一个子进程。有必要讲一下 Linux 执行命令的行为，<strong>当你登录 Linux 并取得一个 bash 后，你的 bash 就是一个独立的进程，被称为 PID 的就是。你在 bash 所执行的任何命令都是有这个 bash 衍生出来的，那些被执行的命令就被称为子进程了，最初的 bash 就叫做父进程</strong>。 为什么要了解这个概念？<strong>因为子进程会继承父进程的环境变量，但子进程不会继承父进程的自定义变量</strong>。 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dombro@ubuntu:~$ export 变量名称  </span><br><span class="line"># 可以把一个自定义变量变为环境变量</span><br></pre></td></tr></table></figure>
+<p>如果 <code>export</code> 后面没有接任何参数，则会把所有的环境变量显示出来</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">declare -x CLASSPATH=&quot;.:/usr/java/jdk1.8.0_144/lib:/usr/java/jdk1.8.0_144/jre/lib&quot;</span><br><span class="line">declare -x CLUTTER_IM_MODULE=&quot;xim&quot;</span><br><span class="line">declare -x COMPIZ_CONFIG_PROFILE=&quot;ubuntu&quot;</span><br><span class="line">declare -x DBUS_SESSION_BUS_ADDRESS=&quot;unix:abstract=/tmp/dbus-c9fpv2E1HK&quot;</span><br><span class="line">....省略了很多</span><br></pre></td></tr></table></figure>
+<h3 id="3.4">3.4 变量的有效范围</h3>
+
+<p>咳咳，这是一段纯文字的内容。通过上面的环境变量与自定义变量，我们知道变量是有范围的。当程序之间出现父子进程的关系，则变量可否被引用与 export 有关。<strong>被 export 后的变量，我们可以称他为环境变量。环境变量可以被子进程引用，但是其他自定义的变量内容不会被子进程引用</strong>。有没有想过为什么？</p>
+<p>当启动一个 shell ,操作系统会分配一块记忆块给shell使用，此内存内的变量可以被子进程取用。若在父进程利用export功能，可以让自定义变量写到上述的记忆块当中(环境变量)。当启动子进程时，子shell 可以将 父shell 环境变量所在的记忆块导入自己的环境变量块当中。</p>
+<p><em>需要注意的是，这个环境变量与 bash的操作环境 意思不太一样，举例来说，PS1 并不是环境变量，但是这个 PS1 会影响到 bash的接口(命令提示符)</em></p>
+<h3 id="3.5">3.5 变量的键盘读取</h3>
+
+
+<p>上面说的变量都是直接定义的，<strong>变量还可以通过用户由键盘输入，还可以为变量声明属性，如数组或数字</strong>。</p>
+<ul>
+<li>read 命令 ： 读取来子键盘的输入</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@www ～]# read [-pt] variable</span><br><span class="line">参数：</span><br><span class="line">-p ：后面可以接提示符。</span><br><span class="line">-t ：后面可以接等待的“秒数。”这个比较有趣，不会一直等待用户。</span><br></pre></td></tr></table></figure>
+<p>范例一 ：使用 read,由键盘输入变量</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">dombro@ubuntu:~$ read test</span><br><span class="line">hello   &lt;==== 我就是在这里输入的</span><br><span class="line">dombro@ubuntu:~$ echo $test </span><br><span class="line">hello</span><br></pre></td></tr></table></figure>
+<p>范例二 ：给用户一些提示，并提供30秒的时间</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">dombro@ubuntu:~$ read -p &quot;Please input your name&quot; -t 15 named</span><br><span class="line">Please input your name dombro</span><br><span class="line">dombro@ubuntu:~$ echo $named </span><br><span class="line">dombro</span><br></pre></td></tr></table></figure>
+<p><em>read 之后不加任何参数，直接加上变量名称，那么下面就会主动出现一个空白行等待你的输入（如范例一）。如果加上-t后面接秒数，例如上面的范例二，那么30秒之内没有任何操作时，该命令就会自动略过了，如果是加上-p，在输入的光标前就会有比较多可以用的提示符给我们参考。在命令的执行里面，这样比较美观</em>。</p>
+<ul>
+<li>declare / typeset</li>
+</ul>
+<p>declare 和 typeset 具有相同的功能——声明变量类型。如果 declare 后面没有加任何参数，bash 会把所有比变量名称与内容调出，就好像set一样。下面是 declare 用法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@www ～]# declare [-aixr] variable</span><br><span class="line">参数：</span><br><span class="line">-a ：将后面名为 variable 的变量定义成为数组（array）类型</span><br><span class="line">-i ：将后面名为 variable 的变量定义成为整数数字（integer）类型</span><br><span class="line">-x ：用法与 export 一样，就是将后面的 variable 变成环境变量</span><br><span class="line">-r ：将变量设置成为 readonly 类型，该变量不可被更改内容，也不能重设</span><br></pre></td></tr></table></figure>
+<p>范例一 ： 使用 -i 选项设置整型变量</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dombro@ubuntu:~$ declare -i sum=100+200   </span><br><span class="line">dombro@ubuntu:~$ echo $sum </span><br><span class="line">300</span><br></pre></td></tr></table></figure>
+<p>注意：<strong>所有变量默认的都是字符串类型，这里使用 -i 选项设置sum变量为整型变量，所以在 echo 时才会把 100+200 的整型结果显示出来</strong>。</p>
+<p>范例二 ： 使用 -x 选项将 sum 变为环境变量</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dombro@ubuntu:~$ declare -x sum   </span><br><span class="line">dombro@ubuntu:~$ env | grep sum</span><br><span class="line">sum=300</span><br></pre></td></tr></table></figure>
+<p>范例三 ： 使用 -r 选项让 sum 变为只读属性，不可改动</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dombro@ubuntu:~$ declare -r sum</span><br><span class="line">dombro@ubuntu:~$ sum=121</span><br><span class="line">bash: sum: readonly variable</span><br></pre></td></tr></table></figure>
+<p>范例四 ： 让 sum 变成非环境变量的自定义变量</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dombro@ubuntu:~$ declare +x sum &lt;=== 将 - 变成 + 可以进行取消操作</span><br><span class="line">dombro@ubuntu:~$ declare -p sum &lt;=== -p 可以单独列出变量的类型</span><br><span class="line">declare -ir sum=&quot;300&quot;</span><br></pre></td></tr></table></figure>
+<p>范例五 ： 使用 -a 选项声明数组</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">dombro@ubuntu:~$ declare -a names</span><br><span class="line">dombro@ubuntu:~$ names[0]=tom</span><br><span class="line">dombro@ubuntu:~$ names[1]=jim</span><br><span class="line">dombro@ubuntu:~$ names[2]=jack</span><br><span class="line">dombro@ubuntu:~$ echo $names[0],$names[1],$names[2]</span><br><span class="line">tom[0],tom[1],tom[2] &lt;=== 注意到并没有使用&#123;&#125;所以结果错误</span><br><span class="line">dombro@ubuntu:~$ echo $&#123;names[0]&#125;,$&#123;names[1]&#125;,$&#123;names[2]&#125;</span><br><span class="line">tom,jim,jack &lt;=== 出现正确结果</span><br></pre></td></tr></table></figure>
+<p><strong>建议直接 ${数组}的方式来读取数组，会准确无误</strong>。</p>
+<h3 id="3.6">3.6 变量内容的删除、替代、替换</h3>
+
+
+<ul>
+<li>变量内容的删除</li>
+</ul>
+<p>删除变量你可以使用 <code>unset</code> 命令，但你有想过如果想删除变量的部分内容怎么擦做吗？</p>
+<p>首先你需要知道几个符号所表示的意义</p>
+<blockquote>
+<p># 表示从左往右(从前向后)，删除符合替换文字”最短的” 那一个<br>## 表示从左往右(从前向后)，删除符合替换文字”最长的” 那一个<br>* 表示通配符<br>% 表示从右向左(从后向前)，删除合替换文字”最短的” 那一个<br>%% 表示从右向左(从后向前)，删除合替换文字”最长的” 那一个</p>
+</blockquote>
+<p>范例一 ： 从左向右删除最短匹配串</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">dombro@ubuntu:~$ path=$&#123;PATH&#125;  &lt;=== 首先把 PATH 变量赋给 自定义的path</span><br><span class="line">dombro@ubuntu:~$ echo $path &lt;=== 查看一下</span><br><span class="line">/usr/java/jdk1.8.0_144/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin</span><br><span class="line">dombro@ubuntu:~$ echo $&#123;path#/*bin:&#125; </span><br><span class="line">&lt;=== path 代表要操作的变量 </span><br><span class="line">&lt;=== # 代表从左向右删除最短</span><br><span class="line">&lt;=== /*bin: 则代表删除变量中最短的 &apos;/&apos; 到 &apos;bin:&apos; 这个串 	</span><br><span class="line">/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin</span><br><span class="line">&lt;=== 发现最短的匹配串是 /usr/java/jdk1.8.0_144/bin: 便将其删除</span><br></pre></td></tr></table></figure>
+<p>范例二 ： 从左向右删除最长匹配串</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">dombro@ubuntu:~$ echo $path </span><br><span class="line">/usr/java/jdk1.8.0_144/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin</span><br><span class="line">dombro@ubuntu:~$ echo $&#123;path##/*bin:&#125;</span><br><span class="line">&lt;=== ## 代表从左向右删除最长</span><br><span class="line">/usr/games:/usr/local/games:/snap/bin</span><br><span class="line">&lt;=== 发现最长的匹配串是 /usr/java/jdk1.8.0_144/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:</span><br></pre></td></tr></table></figure>
+<p>范例三 ： 从右向左删除最短匹配串</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">dombro@ubuntu:~$ echo $path </span><br><span class="line">/usr/java/jdk1.8.0_144/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin</span><br><span class="line">dombro@ubuntu:~$ echo $&#123;path%:*bin&#125;</span><br><span class="line">&lt;=== % 代表从右向左删除最短匹配串</span><br><span class="line">/usr/java/jdk1.8.0_144/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games</span><br><span class="line">&lt;=== 发现最短的匹配串是 :/snap/bin</span><br></pre></td></tr></table></figure>
+<p>范例四 ： 从右向左删除最长匹配串</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">dombro@ubuntu:~$ echo $path </span><br><span class="line">/usr/java/jdk1.8.0_144/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin</span><br><span class="line">dombro@ubuntu:~$ echo $&#123;path%%:*bin&#125;</span><br><span class="line">/usr/java/jdk1.8.0_144/bin</span><br><span class="line">&lt;=== 发现最长的匹配串是 :/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin</span><br></pre></td></tr></table></figure>
+<p><em>注意我们通过 <code>echo</code> 命令只是进行查看而已，并没有进行删除，你可以通过`path=${path%%:</em>bin}` 来达到删除变量内容的目的*</p>
+<ul>
+<li>变量内容的替代</li>
+</ul>
+<p>首先你要知道下面两个符号的意义</p>
+<blockquote>
+<p>${变量/旧字符串/新字符串} 若变量内容符合旧字符串，则第一个旧字符串会被新字符串替换。<br>${变量//旧字符串/新字符串} 变量内容符合旧字符串，则全部旧字符串会被新字符串替换。</p>
+</blockquote>
+<p>范例一 ： 替代第一个旧字符串</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">dombro@ubuntu:~$ echo $path </span><br><span class="line">/usr/java/jdk1.8.0_144/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin</span><br><span class="line">dombro@ubuntu:~$ echo $&#123;path/bin/BIN&#125;</span><br><span class="line">/usr/java/jdk1.8.0_144/BIN:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin</span><br></pre></td></tr></table></figure>
+<p>范例一 ： 替代全部旧字符串</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">dombro@ubuntu:~$ echo $path </span><br><span class="line">/usr/java/jdk1.8.0_144/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin</span><br><span class="line">dombro@ubuntu:~$ echo $&#123;path//bin/BIN&#125;</span><br><span class="line">/usr/java/jdk1.8.0_144/BIN:/usr/local/sBIN:/usr/local/BIN:/usr/sBIN:/usr/BIN:/sBIN:/BIN:/usr/games:/usr/local/games:/snap/BIN</span><br></pre></td></tr></table></figure>
+<ul>
+<li>变量的测试与内容的替换</li>
+</ul>
+<p>范例一 ： 测试变量是否存在，若不存在直接付给该变量一个值 <code>变量=${变量-变量值}</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">dombro@ubuntu:~$ echo $username</span><br><span class="line">&lt;=== 为空说明没有这个变量</span><br><span class="line">dombro@ubuntu:~$ username=$&#123;username-dombro&#125;</span><br><span class="line">dombro@ubuntu:~$ echo $username</span><br><span class="line">dombro</span><br></pre></td></tr></table></figure>
+<p><em>范例中的重点在于 - ，他表示当变量不存在时，为该变量赋 -后面字符串 的值</em>。</p>
+<p>范例二 ： 当变量未设置或变量为空字符串时直接付给变量一个值 <code>变量=${变量:-变量值}</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">dombro@ubuntu:~$ username=&quot;&quot;</span><br><span class="line">dombro@ubuntu:~$ echo $username</span><br><span class="line">&lt;=== 为空串</span><br><span class="line">dombro@ubuntu:~$ username=$&#123;username-dombro&#125;</span><br><span class="line">dombro@ubuntu:~$ echo $username</span><br><span class="line">&lt;=== 并不能更改，因为username已被设置为空串</span><br><span class="line">dombro@ubuntu:~$ username=$&#123;username:-dombro&#125;</span><br><span class="line">dombro@ubuntu:~$ echo $username</span><br><span class="line">dombro</span><br></pre></td></tr></table></figure>
+<ul>
+<li>变量综合范例</li>
+</ul>
+<p>这里针对上面提出的替换内容做一个综合范例，帮助理解</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">dombro@ubuntu:~$ str=&quot;oldvar&quot;;var=$&#123;str-newvar&#125;</span><br><span class="line">dombro@ubuntu:~$ echo var=&quot;$var&quot;,str=&quot;$str&quot;</span><br><span class="line">var=oldvar,str=oldvar &lt;=== 由于str变量存在，所以并未被设为newvar</span><br><span class="line">dombro@ubuntu:~$ unset str;var=$&#123;str=newvar&#125;</span><br><span class="line">dombro@ubuntu:~$ echo var=&quot;$var&quot;,str=&quot;$str&quot;</span><br><span class="line">var=newvar,str=newvar &lt;=== 由于str变量不存在，所以可以使用 = 被设为newvar</span><br><span class="line">dombro@ubuntu:~$ str=&quot;oldvar&quot;;var=$&#123;str=newvar&#125;</span><br><span class="line">dombro@ubuntu:~$ echo var=&quot;$var&quot;,str=&quot;$str&quot;</span><br><span class="line">var=oldvar,str=oldvar &lt;== 由于str变量存在，所以使用 = 并不能设为newvar</span><br><span class="line">dombro@ubuntu:~$ unset str;var=$&#123;str?no var&#125;</span><br><span class="line">bash: str: no var &lt;=== 变量 str 不存在，变量如果不存在使用 ? 会显示提示信息</span><br><span class="line">dombro@ubuntu:~$ str=&quot;oldvar&quot;;var=$&#123;str?no var&#125;</span><br><span class="line">dombro@ubuntu:~$ echo var=&quot;$var&quot;,str=&quot;$str&quot;</span><br><span class="line">var=oldvar,str=oldvar &lt;=== 变量存在，则不会显示提示信息</span><br></pre></td></tr></table></figure>
+<h2 id="4">4. 命令别名与历史命令</h2>
+
+
+
+<p><a href="#2.1">2.1小节bash的功能</a> 中介绍了 bash 两个很优秀的功能，命令的别名与历史命令，下面分别介绍一下</p>
+<h3 id="4.1">4.1 命令别名 alias</h3>
+
+<p>可以说命令别名是一个很有趣的功能，尤其是当你的惯用命令很长的时候。通过例子看一下</p>
+<ul>
+<li>使用别名命令 alias 让命令变得简单</li>
+</ul>
+<p>有时候要输入的命令很长是一件很烦人的事情…这时候就可以使用命令的别名 <code>alias 别名=&#39;命令参数&#39;</code> 这种写法。</p>
+<p>范例一：将命令 <code>ls -a|more</code> 设为 <code>lm</code> 别名</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">dombro@ubuntu:~$ alias lm=&apos;ls -l|more&apos;</span><br><span class="line">dombro@ubuntu:~$ lm</span><br><span class="line">total 72</span><br><span class="line">-rw-rwxr-- 1 dombro dombro    0 Aug 27 10:38 at_example.txt</span><br><span class="line">drwxr-xr-x 3 dombro dombro 4096 Oct 22 14:00 Desktop</span><br><span class="line">drwxr-xr-x 2 dombro dombro 4096 Aug 13 17:18 Documents</span><br><span class="line">drwxr-xr-x 2 dombro dombro 4096 Aug 13 17:18 Downloads</span><br><span class="line">-rw-r--r-- 1 dombro dombro 8980 Aug 13 17:08 examples.desktop</span><br><span class="line">-rw-r--r-- 1 dombro dombro 5490 Nov 13 13:48 manpath.config</span><br><span class="line">-rw-rw-r-- 1 dombro dombro 5504 Nov 13 13:44 man.test.config</span><br><span class="line">drwxr-xr-x 2 dombro dombro 4096 Aug 13 17:18 Music</span><br><span class="line">-rwxr-xr-x 1 dombro dombro   27 Aug 29 20:49 newfile</span><br><span class="line">drwxr-xr-x 2 dombro dombro 4096 Aug 13 17:18 Pictures</span><br><span class="line">drwxr-xr-x 2 dombro dombro 4096 Aug 13 17:18 Public</span><br><span class="line">drwxrwxr-x 3 dombro dombro 4096 Aug 31 15:16 school</span><br><span class="line">drwxrwxr-x 2 dombro dombro 4096 Nov 13 13:22 temp</span><br><span class="line">drwxr-xr-x 2 dombro dombro 4096 Aug 13 17:18 Templates</span><br><span class="line">-rw-rw-r-- 1 dombro dombro    0 Nov 13 13:09 testfile</span><br><span class="line">drwxr-xr-x 2 dombro dombro 4096 Aug 13 17:18 Videos</span><br><span class="line">``` </span><br><span class="line"></span><br><span class="line">可以注意到命令别名与命令执行效果是一样一样的~</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">- 命令别名设置可以替代既有命令</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">这句话是不是有点不易理解？为什么要使用别名替代既有命令？比如你在删除(rm)时，需要特别小心，要加上 `-i` 这个选项</span><br></pre></td></tr></table></figure>
+<p>dombro@ubuntu:~$ rm -i at_example.txt<br>rm: remove regular empty file ‘at_example.txt’? n<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">  </span><br><span class="line">每次都加这个 `-i` 感觉很麻烦，所以我们可以设置 `rm -i` 的别名为 `rm`</span><br></pre></td></tr></table></figure></p>
+<p>dombro@ubuntu:~$ alias rm=’rm -i’<br>dombro@ubuntu:~$ rm at_example.txt<br>rm: remove regular empty file ‘at_example.txt’? n<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">- 查看当前所有命令别名</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">直接输入 alias 会直接列出当前所有别名</span><br></pre></td></tr></table></figure></p>
+<p>dombro@ubuntu:~$ alias<br>alias egrep=’egrep –color=auto’<br>alias fgrep=’fgrep –color=auto’<br>alias grep=’grep –color=auto’<br>alias l=’ls -CF’<br>alias la=’ls -A’<br>alias ll=’ls -alF’<br>alias lm=’ls -l|more’<br>alias ls=’ls –color=auto’<br>alias rm=’rm -i’<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">- unalias 移除命令的别名</span><br><span class="line"></span><br><span class="line">没什么说的，使用 `unalias 命令别名` 就可以把命令别名去掉</span><br></pre></td></tr></table></figure></p>
+<p>dombro@ubuntu:~$ unalias lm<br>dombro@ubuntu:~$ lm<br>lm: command not found<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;h3 id=&quot;4.2&quot;&gt;4.2 历史命令&lt;/h3&gt;</span><br><span class="line"></span><br><span class="line">有关与历史命令不举过多例子，说几个概念吧</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">- history 命令</span><br><span class="line"></span><br><span class="line">1.直接输入 `history` 会将目前内存内的所有 history 记忆列出来</span><br></pre></td></tr></table></figure></p>
+<p>dombro@ubuntu:~$ history<br>    1  cd /home/<br>    2  cd /usr<br>    3  history<br>    4  alias<br>    5  tee –help<br>    6  who<br>    7  who | tee who.out<br>    8  cat who.out<br>    9  bind -p<br>   10  vim who.out<br>   11  vim –help<br>   12  vi –help<br>   13  vim –help<br>…后面省略<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">2.`history [数字n]` 会列出最近 n 条命令行</span><br></pre></td></tr></table></figure></p>
+<p>dombro@ubuntu:~$ history 20<br>  660  clear<br>  661  str=”oldvar”;var=${str-newvar}<br>  662  echo var=”$var”,str=”$str”<br>  663  unset str;var=${str=newvar}<br>  664  echo var=”$var”,str=”$str”<br>  665  str=”oldvar”;var=${str=newvar}<br>  666  echo var=”$var”,str=”$str”<br>  667  unset str;var=${str?no var}<br>  668  str=”oldvar”;var=${str?no var}<br>  669  echo var=”$var”,str=”$str”<br>  670  alias lm=’ls -l|more’<br>  671  lm<br>  672  rm -i at_example.txt<br>  673  alias rm=’rm -i’<br>  674  rm at_example.txt<br>  675  alias<br>  676  unalias lm<br>  677  lm<br>  678  history<br>  679  history 20<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">3.`history -w` 这种情况会将内存中的历史记录写入 `~/.bash_history` 文件中</span><br><span class="line"></span><br><span class="line">4.`history -c` 将目前shell中所有history内容全部删除</span><br><span class="line"></span><br><span class="line">5.`history -a historyfile` 将目前新增的history命令新增写入historyfile中，若没有加historyfile,则默认为 `~/.bash_history`</span><br><span class="line"></span><br><span class="line">6.`history -r historyfile` 将historyfile的内容读到目前这个shell的history记忆中</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">- 不使用 `history` 执行命令</span><br><span class="line"></span><br><span class="line">**地球人都知道可以通过 ↑ ↓ 去查找执行过的历史命令** ，这里介绍几个其他的方法</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">1.`!number` 执行第 number 条命令</span><br><span class="line"></span><br><span class="line">2.`!command` **有最近的命令向前搜寻命令串开头为`command`的那个命令**</span><br></pre></td></tr></table></figure></p>
+<p>dombro@ubuntu:~$ !cl</p>
+<p>&lt;=== 执行了 clear 命令，所以清屏了<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">3.**`!!` 就是执行上一命令的意思，相当于按 ↑ 在按 [Enter]**</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;h2 id=&quot;5&quot;&gt;5. Bash Shell 的环境操作&lt;/h2&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">emmm，下面这一部分有点生硬。我试着写的通俗易懂一点。 首先你需要注意一点，**上面所有提到的自定义变量，命令别名在你注销 bash 后就会失效(也就是下次登录那些变量别名就都没有了)**！ </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;h3 id=&quot;5.1&quot;&gt;5.1 bash 的环境配置操作&lt;/h3&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">是不是会很好奇当我们进入 Linux 时，明明什么都没有进行，但是一进入bash就会取得一堆变量？千万不要感到很神奇，其实计算机科学中所有的为我们做的事情，肯定是有一个地方储存。你肯定会想到 Linxu 中所有东西都是以文件形式存在的这句话！**没错，Linux 下面存在一些环境配置文件，让 bash　启动时直接读取这些配置文件，以规划好bash的环境操作**。环境变量的配置文件还可以将用户设置的变量、别名写入其中！</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">- login shell </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&gt; 在取得 bash 时需要完整的登录流程的，就称为 login shell。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">翻译成普通话就是：你在控制台（通过命令行）输入了账号密码登录了Linux，就叫 login shell。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">- non-login shell</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&gt; 取得 bash 接口的方法不需要重复登录的举动</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">翻译成普通话就是：你没有在，命令行输入了账号密码登录了Linux，就叫 non-login shell。例如用 X-windows 使用 `ctrl`+`alt`+`t` 进入 shell时，就是 non-login shell。</span><br><span class="line"></span><br><span class="line">介绍 login-shell 和 non-login shell 的原因是因为，这两种取得 bash 的情况，读取的配置文件数据并不一致。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;h4 id=&quot;5.1.1&quot;&gt;5.1.1 login shell 读取文件介绍&lt;/h4&gt;</span><br><span class="line"></span><br><span class="line">我们总是要登录系统的，所以先介绍login shell读取的文件。login shell 其实自会读取这两个配置文件：</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">1./etc/profile:系统整体设置，你最好不要修改这个文件；</span><br><span class="line"></span><br><span class="line">2.~/.bash_profile 或 ~/.bash_login 或 ~/.profile :属于用户个人设置，你要该自己的数据就写入这里。</span><br><span class="line"></span><br><span class="line">*前方高能预警，这两个文件的的内容可是hin复杂的，真的好不想写这里...* </span><br><span class="line"></span><br><span class="line">- /etc/profile 内容概述</span><br><span class="line"></span><br><span class="line">&gt; 你可以使用 vim 去读取这个文件，这个文件可以利用用户的标识符(UID)来决定很多重要变量数据，也是每个用户登录取得 bash 时一定会读取的配置文件。所以如果你想要帮所有用户设置整体环境，那就是在这里修改。不过还是不要随便修改这个文件。</span><br><span class="line"></span><br><span class="line">下面是这个文件设置的主要变量：</span><br><span class="line"></span><br><span class="line">PATH : 会根据UID决定PATH变量要不要含有sbin的系统命令目录。</span><br><span class="line"></span><br><span class="line">MAIL : 根据账号设置好用户额 mailbox 到/var/spool/mail/账号名。</span><br><span class="line"></span><br><span class="line">USER : 根据用户的账号设置此变量的内容。</span><br><span class="line"></span><br><span class="line">HOSTORYSIZE : 历史命令记录条数。</span><br><span class="line"></span><br><span class="line">HOSTNAME : 根据主机的hostname命令决定此变量内容。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">/etc/profile 可不止会做这些事情而已，还会调取外部设置数据；至于调去哪些，我想这并不是重点的内容。 **你只需要记住，bash 的login shell情况下所读取的整体环境配置文件只有/etc/profile，但是/etc/profile还会调用其他的配置文件，目的是让我们的bash接口变得非常友善**。</span><br><span class="line"></span><br><span class="line">- 用户个人偏好设置文件</span><br><span class="line"></span><br><span class="line">login shell 所读取的个人偏好配置文件其实主要有三个，介绍了三个文件</span><br><span class="line"></span><br><span class="line">&gt; ~/.bash_profile </span><br><span class="line">&gt; ~/.bash_login </span><br><span class="line">&gt; ~/.profile </span><br><span class="line"></span><br><span class="line">**实际上bash的 login shell 设置只会按照顺序读取上面三个文件的其中一个。也就是说如果 ~/bash_profile 存在，那么其他两个文件无论存不存在都不会去读取**。我的Ubuntu下面就只有 ~/.profile 文件。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">你可以将用户个人偏好设置看作是 /etc/profile 的一个补充！也就是说当 shell 通过读取 /etc/profile 之后，如果你有一些自己的变量设置，你可以在你的个人偏好设置文件中进行设置。</span><br><span class="line"></span><br><span class="line">实际上在读取完个人偏好设置文件内容后会在调用 ~/.bashrc 设置的内容。</span><br><span class="line"></span><br><span class="line">- source 命令：读入环境变量配置文件的命令</span><br><span class="line"></span><br><span class="line">由于 /etc/profile 和个人偏好设置都是在取得 login shell 的时候才会读取的配置文件，所以当你将你的偏好配置写入上述文件后，通常是的注销登录该设置才会生效。 source 命令就可以帮助我们解决这个麻烦事！</span><br><span class="line"></span><br><span class="line">`source 配置文件名` 就可以将你刚刚对环境配置文件的修改生效。这个操作很常见的，比如你要将 java javac 加入到 PATH变量 中去，在修改环境配置文件后，一定要使用 `source` 命令才会时 java 这个命令生效。 </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;h4 id=&quot;5.1.2&quot;&gt;5.1.2 non-login shell 读取文件介绍&lt;/h4&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">当你取得 non-shell 时，该 bash 配置文件仅会读取 ~/.bashrc 而已。</span><br><span class="line">而 ~/.bashrc  会调用 /etc/bashrc 这个文件（不同的发行版本调用的文件名会不太一样，但步骤上大同小异）。为什么？因为 /etc/bashrc 这个文件会帮助 bash 定义出下面的数据：</span><br><span class="line"></span><br><span class="line">根据不同的UID设置规定 umask 的值；</span><br><span class="line"></span><br><span class="line">根据不同的UID规定提示符(也就是PS1变量)；</span><br><span class="line"></span><br><span class="line">调用 /etc/profile.d/*sh 的设置</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">- 5.1 小节</span><br><span class="line"></span><br><span class="line">说实话，这个部分真的觉得很鸡肋啊有没有？有很多知识点都没有记写，但是我认为环境配置文件确是获取 bash 之前最重要的一环，根据用户的信息，bash 在读取环境配置文件后才会确定当前用户的环境配置是什么。是不是很炫酷？ 你只要记住 </span><br><span class="line"></span><br><span class="line">1./etc/profile 这个环境配置文件是所有用户在login shell登录时都会读取的环境配置文件，他包含了一些基本的设置。</span><br><span class="line"></span><br><span class="line">2./etc/profile 文件还会调用其他一些文件 如 /etc/inputrc、/etc/profile.d/*sh、/etc/sysconfig/i18n等等，调用的目的除了获取一些必要的配置信息还有就是让我们的bash 接口变得友善。</span><br><span class="line"></span><br><span class="line">3.你或许会注意到 个人偏好配置文件 都是在用户主目录下，所以这个里面的配置主要是为了对 /etc/profile 的补充，我们尽量只去修该偏好文件里的内容，不要轻易去修改/etc/profile 的内容。 </span><br><span class="line"></span><br><span class="line">4.个人偏好设置文件会再调用 ~/.bashrc 这个文件</span><br><span class="line"></span><br><span class="line">5.non-login shell 只会读取 ~/.bashrc 这个文件，但这个文件会再调用 /etc/bashrc 这个文件。</span><br><span class="line"></span><br><span class="line">6.在对环境配置文件进行更改后，应该使用 source 使其改动写入当前 bash 。</span><br><span class="line"></span><br><span class="line">7.下面图片列出 bash 在两种 shell 读取配置文件的过程，很直接:</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">![](http://p0bl99g4r.bkt.clouddn.com/bash7.jpg)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;h2 id=&quot;6&quot;&gt;6. bash 操作与通配符&lt;/h2&gt;</span><br><span class="line"></span><br><span class="line">bash 为我们提供了很多操作组合键和通配符。目的当然是为我们营造一个最舒适的用户环境，所以不会用的话是不是感觉有点亏？</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;h3 id=&quot;6.1&quot;&gt;6.1 bash默认组合键&lt;/h3&gt;</span><br><span class="line"></span><br><span class="line">有没有使用过 [ctrl] + c 这个组合键终止过一个命令？第一次摆弄 Linux 时我以为 Linxu 下面 [ctrl] + c 和 windows 下面一样是复制的意思...结果当然复制不成功，还以为是 Linux 出问题了（T_T）。下面给出 bash 的默认组合键。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">![bash组合按键图片](http://p0bl99g4r.bkt.clouddn.com/bash2.jpg)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;h3 id=&quot;6.2&quot;&gt;6.2 通配符与特殊符号&lt;/h3&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">- bash 通配符</span><br><span class="line"></span><br><span class="line">bash 的操作环境中还有一个非常有用的功能，那就是通配(wildcard)。下面列出的几个通配符，相信你是一定用到过的。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">![bash通配符图片](http://p0bl99g4r.bkt.clouddn.com/bash2.jpg)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">范例一：使用 * 找出/etc/下面以字母m为开头的文件名</span><br></pre></td></tr></table></figure></p>
+<p>root@ubuntu:/etc# ls -dl m*<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">范例二：使用 ? 找出/etc/下面文件名刚好是五个字母的文件名</span><br></pre></td></tr></table></figure></p>
+<p>dombro@ubuntu:~$ ll -d /etc/?????<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">? 代表着一定有一个字母</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">范例三 ： 找出 /etc/下面文件名含有数字的文件名</span><br></pre></td></tr></table></figure></p>
+<p>dombro@ubuntu:~$ ll -d /etc/<em>[0-9]</em><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">[] 中括号代表一定会出现其中的一个字符，而[-] 代表包含 - 两端编码顺序内的所有字符</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">范例四 : 找出 /et	c/ 下面文件名开头非为小写字母的文件名</span><br></pre></td></tr></table></figure></p>
+<p>dombro@ubuntu:~$ ll -d /etc/[^A-Z]*<br>```</p>
+<p>[^] 代表不包含^后面的字符</p>
+<ul>
+<li>bash 特殊符号</li>
+</ul>
+<p>在 bash 下面有一些符号拥有特殊的意义，所以在给文件起名字的时候尽量避开他们！用图片给出</p>
+<p><img src="http://p0bl99g4r.bkt.clouddn.com/bash2.jpg" alt=""></p>
+<h2 id="6">6. 总结</h2>
+
+
+<p>标题列的是 初始bash 所以这篇笔记只是简单对 bash 有了一个了解。对 bash 的特点有一个大致上的了解。后续会提到 bash 的管道命令、重定向等等。</p>
+
+    </article>
+    <!-- 前后页  -->
+    <ul class="post-pager">
+        
+            <li class="next">
+                <a href= "/2017/12/11/Java优雅的处理异常/" title= Java优雅的处理异常 >
+                    <span>Next Post</span>
+                    <span>Java优雅的处理异常</span>
+                </a>
+            </li>
+        
+        
+            <li class="previous">
+                <a href= "/2017/12/11/磁盘与Linux分区/" title= 磁盘与Linux分区 >
+                    <span>Previous Post</span>
+                    <span>磁盘与Linux分区</span>
+                </a>
+            </li>
+        
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+<div id="container"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+    var gitment = new Gitment({
+        // id: "初始bash", // 可选。默认为 location.href
+        owner: 'DomBro96',
+        repo: 'DomBro96.github.io',
+        oauth: {
+            client_id: '4a6fa6686f2dd417ed61',
+            client_secret: 'cc1f043ee266bc750c481d6a24a98188a185e2eb',
+        },
+    })
+    gitment.render('container')
+
+</script>
+
+    <!--PC版-->
+
+    <!--PC版-->
+
+
+    
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:460716809@qq.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="https://github.com/DomBro96" class="iconfont-archer github" target="_blank" title="github"></a>
+            
+        
+    
+        
+            
+                <a href="https://twitter.com/Bro_Doom" class="iconfont-archer twitter" target="_blank" title="twitter"></a>
+            
+        
+    
+        
+            
+                <a href="https://www.instagram.com/dombro7277/" class="iconfont-archer instagram" target="_blank" title="instagram"></a>
+            
+        
+    
+        
+            
+                <a href="https://leetcode.com/dombro96/" class="iconfont-archer others" target="_blank" title="others"></a>
+            
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">Theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+        <span id="busuanzi_container_site_pv">Welcome, No. <span id="busuanzi_value_site_pv"></span> visitor.
+        </span>
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper">
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#目录"><span class="toc-number">1.</span> <span class="toc-text">目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#id"><span class="toc-number">2.</span> <span class="toc-text">1. shell</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1.1"><span class="toc-number">2.1.</span> <span class="toc-text">1.1 what</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1.2"><span class="toc-number">2.2.</span> <span class="toc-text">1.2 why</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1.3"><span class="toc-number">2.3.</span> <span class="toc-text">1.3 Linux中的shell们</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2"><span class="toc-number">3.</span> <span class="toc-text">2. bash</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3"><span class="toc-number">3.1.</span> <span class="toc-text">2.1 bash的功能</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2.2"><span class="toc-number">3.2.</span> <span class="toc-text">2.2 bash的内置命令</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3"><span class="toc-number">4.</span> <span class="toc-text">3. 变量</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#undefined"><span class="toc-number">4.1.</span> <span class="toc-text">3.1 what&why</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3.2"><span class="toc-number">4.2.</span> <span class="toc-text">3.2 how</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3.3"><span class="toc-number">4.3.</span> <span class="toc-text">3.3 环境变量的功能</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3.4"><span class="toc-number">4.4.</span> <span class="toc-text">3.4 变量的有效范围</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3.5"><span class="toc-number">4.5.</span> <span class="toc-text">3.5 变量的键盘读取</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3.6"><span class="toc-number">4.6.</span> <span class="toc-text">3.6 变量内容的删除、替代、替换</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4"><span class="toc-number">5.</span> <span class="toc-text">4. 命令别名与历史命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4.1"><span class="toc-number">5.1.</span> <span class="toc-text">4.1 命令别名 alias</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6"><span class="toc-number">6.</span> <span class="toc-text">6. 总结</span></a></li></ol>
+    </div>
+    
+    <div class="back-top">&#xe639;</div>
+    <div class="sidebar">
+    <div class="sidebar-header sidebar-header-show-archive">
+        <div class="sidebar-category">
+            <span class="sidebar-archive-link"><span class="iconfont-archer">&#xe67d;</span>Archive</span>
+            <span class="sidebar-tags-link"><span class="iconfont-archer">&#xe610;</span>Tag</span>
+        </div>
+    </div>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-archive">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-archive"> Total : 12 </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2017 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/浅谈token/" >浅谈token</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/Java优雅的处理异常/" >Java优雅的处理异常</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/文件与文件系统的压缩与打包/" >文件与文件系统的压缩与打包</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/初始bash/" >初始bash</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/磁盘与Linux分区/" >磁盘与Linux分区</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/Linux文件与文件系统的打包/" >Linux文件与文件系统的打包</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/Java工厂设计模式/" >Java工厂设计模式</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/10</span><a class="archive-post-title" href= "/2017/12/10/文件系统管理/" >文件系统管理</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2017/12/01/hello-world/" >世界你好</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2017 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/10</span><a class="archive-post-title" href= "/2017/12/10/Linux文件与目录管理/" >Linux文件与目录管理</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/06</span><a class="archive-post-title" href= "/2017/12/06/动态规划-Floyed算法/" >动态规划-Floyed算法</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/04</span><a class="archive-post-title" href= "/2017/12/04/堆排序-HeapSort/" >堆排序-HeapSort</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name"><a href= "#">设计模式</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">JavaSE</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Linux</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">JavaWeb</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">hello world</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">算法algorithm</a></span>
+    
+    </div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #888; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: false
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tag-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var jsInfo = {
+        root: '/'
+    }
+</script>
+    <!-- 不蒜子  -->
+    
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ统计  -->
+    
+    </div>
+    </body>
+</html>
+
+

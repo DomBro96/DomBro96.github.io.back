@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
+    <title>
+        
+        文件与文件系统的压缩与打包 · Dom Blog
+        
+    </title>
+    <link rel="icon" href= http://p0bl99g4r.bkt.clouddn.com/dog.JPG>
+    <!-- TODO: 在font-face加载完毕后改变字体  -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/webfont/1.6.28/webfontloader.js"></script>
+    <!-- 提前加载place holder  -->
+    <style type="text/css">
+        @font-face {
+            font-family: 'Oswald-Regular';
+            src: url(/font/Oswald-Regular.ttf);
+        }
+    </style>
+    <style type="text/css">
+        .site-intro-placeholder {
+            position: absolute;
+            z-index: -2;
+            top: 0;
+            left: 0px;
+            width: calc(100% + 300px);
+            height: 100%;
+            background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+            background-position: center center;
+            transform: translate3d(-226px, 0, 0);
+            animation: gradient-move 2.5s ease-out 0s 1;
+        }
+        @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+</style>
+    <link rel="stylesheet" href = /css/style.css?v=20171020 />
+    <script src="//cdn.staticfile.org/jquery/3.2.1/jquery.min.js" defer></script>
+    
+    <script src="/scripts/main.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+</head>
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >DomBro Studio</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">文件与文件系统的压缩与打包</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>DomBro Studio</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-img" style="background-image: url(http://p0bl99g4r.bkt.clouddn.com/dog1.JPG)"></div>
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            文件与文件系统的压缩与打包
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <!-- 文章页标签  -->
+            
+                <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = Linux>Linux</a>
+    
+</div>
+            
+            <div class="post-intro-meta">
+                <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                <span class="post-intro-time">2017/12/11</span>
+            </div>
+        
+    </div>
+</div>
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <script>
+            var browser = {
+                    versions: function () {
+                        var u = window.navigator.userAgent;
+                        return {
+                            userAgent: u,
+                            trident: u.indexOf('Trident') > -1, //IE内核
+                            presto: u.indexOf('Presto') > -1, //opera内核
+                            webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+                            gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+                            mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+                            ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+                            android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+                            iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+                            iPad: u.indexOf('iPad') > -1, //是否为iPad
+                            webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+                            weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+                            uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+                        };
+                    }()
+                }
+
+            function fontLoaded(){
+                console.log('font loaded');
+                if (document.getElementsByClassName('site-intro-meta')) {
+                    document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+                    document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+                    var postIntroTags = document.getElementsByClassName('post-intro-tags')[0],
+                        postIntroMeat = document.getElementsByClassName('post-intro-meta')[0];
+                        if (postIntroTags) {
+                            postIntroTags.classList.add('post-fade-in');
+                        }
+                        if (postIntroMeat) {
+                            postIntroMeat.classList.add('post-fade-in');
+                        }
+                    }
+                }
+                
+            console.log("userAgent:" + browser.versions.userAgent);
+            // UC不支持跨域，所以直接显示
+            if (browser.versions.uc) {
+                console.log("UCBrowser");
+                fontLoaded();
+            } else {
+                WebFont.load({
+                    custom: {
+                        families: ['Oswald-Regular']
+                    },
+                    loading: function () {  //所有字体开始加载
+                        // console.log('loading');
+                    },
+                    active: function () {  //所有字体已渲染
+                        fontLoaded();
+                    },
+                    inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+                        console.log('inactive: timeout');
+                        fontLoaded();
+                    },
+                    timeout: 7000 // Set the timeout to two seconds
+                });
+            }
+        </script>
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><a href="#0">前言</a></li>
+<li><a href="#1">1.压缩文件的用途与技术</a></li>
+<li><a href="#2">2.Linux 系统常见的压缩命令</a><ul>
+<li><a href="#2.1">2.1 gzip,zcat</a></li>
+<li><a href="#2.2">2.2 bzip2,bzcat</a></li>
+</ul>
+</li>
+<li><a href="#3">3.打包命令：tar</a><ul>
+<li><a href="#3.1">3.1 tar</a></li>
+</ul>
+</li>
+<li><a href="#4">4.完整备份工具：dump</a><ul>
+<li><a href="#4.1">4.1 dump</a></li>
+<li><a href="#4.2">4.2 restore</a><h2 id="0">前言</h2>
+
+
+</li>
+</ul>
+</li>
+</ul>
+<p>在Linux下面有相当多的压缩指令命令可以运行操作。这些压缩指令命令可以让我们更方便地从网络上面下载大型的文件呢！此外，我们知道在Linux下面的扩展名是没有什么很特殊的意义的，不过，针对这些压缩指令命令所做出来的压缩文件，为了方便记忆，还是会有一些特殊的命名方式。</p>
+<h2 id="1">1. 压缩文件的用途与技术</h2><br>文件太大会导致占据过大的磁盘空间，从网上下载资源时文件过大也会导致传输速度变慢。文件压缩技术就可以解决这类问题。较大型的文件通过文件压缩，可以将它的磁盘使用量降低，可以达到减低文件大小的效果，有的压缩程序还可以进行大小限制，是一个大型文件分成数个小型文件。<br><br>目前计算机系统中都是使用 byte 单位来计量，但计算机最小单位是 bit ，且 1byte=8bit 这意味着每个 byte 当中会有 8 个空格，每个空格可以是 0或1 。当我们将数据记录到计算机，为了满足操作系统数据的访问会将数据转为 byte 的形态来记录，这意味着当数据不满足 1byte 大小，该 byte 里面会有很多拿来“补位”的空格。一些计算机工程师利用复杂的计算方式，将这些没有使用到的空间丢出来，让文件占用的空间变小，这就是压缩技术。<br><br><br><h2 id="2">2. Linux 系统常见的压缩命令</h2>
+
+<p>Linux 支持的压缩命令非常多，且不同的命令所用的压缩技术命不相同，当然彼此之间就无法相互压缩/解压缩文件。所以，虽然文件扩展名在 Linux 中并没什么卵用，但为了让我们人类知道某个压缩文件是那种压缩命令制作出来的，好用来对照着解压缩，<strong>所以压缩文件的扩展名还是 hin 有必要滴</strong>。以下是几个常见的压缩文件扩展名：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">*.Z compress程序压缩文件（已经不流行，淘汰啦！）</span><br><span class="line">*.gz gzip程序压缩的文件；</span><br><span class="line">*.bz2 bzip2程序压缩的文件；</span><br><span class="line">*.tar tar程序打包的数据，并没有压缩过；</span><br><span class="line">*.tar.gz tar程序打包的文件，其中经过gzip的压缩；</span><br><span class="line">*.tar.bz2 tar程序打包的文件，其中经过bzip2的压缩。</span><br></pre></td></tr></table></figure></p>
+<p><strong>Linux 中最常见的压缩命令就是 gZip和bzip2</strong>。</p>
+<h3 id="2.1">2.1 gZip,zcat</h3>
+
+<p><strong>gZip 是应用最广的压缩命令</strong>。目前 gZip 可以解开 compress，Zip 与gZip等软件压缩文件。以下是命令语法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[root@www~]#gzip [-cdtv#] 文件名</span><br><span class="line">[root@www ~]# zcat 文件名.gz</span><br><span class="line">参数：</span><br><span class="line">-c ：将压缩的数据输出到屏幕上，可通过数据流重定向来处理；</span><br><span class="line">-d ：解压缩的参数；</span><br><span class="line">-t ：可以用来检验一个压缩文件的一致性，看看文件有无错误；</span><br><span class="line">-v ：可以显示出原文件/压缩文件的压缩比等信息；</span><br><span class="line">-# ：压缩等级，-1最快，但是压缩比最差，-9 最慢，但是压缩比最好默认是 –6。</span><br><span class="line">``` </span><br><span class="line">- 范例：使用 gZip 进行压缩,默认状态下原文件会被压缩成 .gz 文件，原文件就不存在了。</span><br></pre></td></tr></table></figure></p>
+<p>[root@www ~]#cd /tmp<br>[root@www tmp]#cp/ etc/man.config .<br>[root@www tmp]#gzip -v man.config<br>man.config: 56.1% – replaced with man.config.gz<br>[root@www tmp]# ll /etc/man.config /tmp/man*<br>-rw-r–r–1root root 4617 Jan 6 2007 /etc/man.config<br>-rw-r–r–1root root 2057 Nov 10 17:14 /tmp/man.config.gz &lt;==gzip压缩比较佳<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 范例：用 zcat 将上一范例压缩的文本文件读出来</span><br></pre></td></tr></table></figure></p>
+<p>[root@www tmp]# zcat man.config.gz</p>
+<h1 id="此时屏幕上会显示该压缩文件解压后的文件内容。"><a href="#此时屏幕上会显示该压缩文件解压后的文件内容。" class="headerlink" title="此时屏幕上会显示该压缩文件解压后的文件内容。"></a>此时屏幕上会显示该压缩文件解压后的文件内容。</h1><h1 id="zcat可以读取纯文本文件被压缩后的压缩文件。"><a href="#zcat可以读取纯文本文件被压缩后的压缩文件。" class="headerlink" title="zcat可以读取纯文本文件被压缩后的压缩文件。"></a>zcat可以读取纯文本文件被压缩后的压缩文件。</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 范例：将第一个范例的文件解压缩</span><br></pre></td></tr></table></figure>
+<p>[root@www tmp]#gzip -d man.config.gz</p>
+<h1 id="与gzip相反，gzip-d-会将原本的-gz-删除，产生原本的-man-config-文件。"><a href="#与gzip相反，gzip-d-会将原本的-gz-删除，产生原本的-man-config-文件。" class="headerlink" title="与gzip相反，gzip -d 会将原本的 .gz 删除，产生原本的 man.config 文件。"></a>与gzip相反，gzip -d 会将原本的 .gz 删除，产生原本的 man.config 文件。</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 范例：将上一范例解压缩的文件用最佳压缩比压缩，并保留原来的文件</span><br></pre></td></tr></table></figure>
+<p>[root@www tmp]#gzip -9 -c man.config &gt; man.config.gz</p>
+<p>#其实gzip的压缩已经优化过了，所以虽然gzip提供1~9的压缩等级，不过使用默认的6就非常好用了。因此上述的范例四可以不要加入那个-9的参数。</p>
+<p>#范例的重点在那个-c与&gt;的使用。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&lt;h3 id=&quot;2.2&quot;&gt;2.2 bzip2,bzcat&lt;/h3&gt;</span><br><span class="line"></span><br><span class="line">如果gzip是为了替代compress并提供更好的压缩比而成立的，那么bzip2则是为了取代gzip并提供更佳的压缩比而来的。bzip2真是很不错的东西，这玩意的压缩比竟然比gzip还要好。至于bzip2的用法几乎与gzip相同。</span><br></pre></td></tr></table></figure></p>
+<p>[root@www ~]#bzip2[-cdkzv#] 文件名<br>[root@www ~]# bzcat 文件名.bz2<br>参数：<br>-c ：将压缩过程中产生的数据输出到屏幕上；<br>-d ：解压缩的参数；<br>-k ：保留原文件，而不会删除原始的文件；<br>-z ：压缩的参数；<br>-v ：可以显示出原文件/压缩文件的压缩比等信息；<br>-# ：与gzip同样的，都是在计算压缩比的参数，-9 最佳，-1最快。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 范例： 将文件以 bzip2 进行压缩</span><br></pre></td></tr></table></figure></p>
+<p>[root@www tmp]#bzip2-z man.config</p>
+<h1 id="此时-man-config-会变成-man-config-bz2"><a href="#此时-man-config-会变成-man-config-bz2" class="headerlink" title="此时 man.config 会变成 man.config.bz2"></a>此时 man.config 会变成 man.config.bz2</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 范例：将上一范例内容读出来</span><br></pre></td></tr></table></figure>
+<p>[root@www tmp]# bzcat man.config.bz2</p>
+<h1 id="此时屏幕上会显示-man-config-bz2-解压缩之后的文件内容。"><a href="#此时屏幕上会显示-man-config-bz2-解压缩之后的文件内容。" class="headerlink" title="此时屏幕上会显示 man.config.bz2 解压缩之后的文件内容。"></a>此时屏幕上会显示 man.config.bz2 解压缩之后的文件内容。</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 范例： 将第一个范例的文件解压缩</span><br></pre></td></tr></table></figure>
+<p>[root@www tmp]#bzip2 -d man.config.bz2<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 范例： 用最佳压缩比压缩，并保留原文件</span><br></pre></td></tr></table></figure></p>
+<p>[root@www tmp]#bzip2 -9 -c man.config &gt; man.config.bz2<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;h2 id=&quot;3&quot;&gt;3. 打包命令 tar&lt;/h2&gt;</span><br><span class="line"></span><br><span class="line">上面提到的 gip、bzip2大多仅针对单一文件来进行压缩。而将多个文件过目录包成一个大文件的命令功能，称他为 &quot;打包命令&quot; 。Linux 下面这种打包命令就是大名鼎鼎的 **tar** 。 **tar 不仅可以将多个目录或文件打包成一个大文件，还可以通过 gZip/bzip2 的支持，将该文件同时进行压缩**。目前 Windows 的WinRAR 也支持 .tar.gz 文件名的解压缩。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;h3 id=&quot;3.1&quot;&gt;3.1 tar&lt;/h3&gt;</span><br><span class="line"></span><br><span class="line">tar 的参数很多，具体可以找男人 man 一下</span><br></pre></td></tr></table></figure></p>
+<p>[root@www ~]#tar [-j|-z] [cv] [-f 新建的文件名] filename… &lt;==打包与压缩<br>[root@www ~]#tar [-j|-z] [tv] [-f新建的文件名] &lt;==查看文件名<br>[root@www ~]#tar [-j|-z] [xv] [-f 新建的文件名] [-C 目录] &lt;==解压缩<br>参数：<br>-c ：新建打包文件，可搭配 -v 来查看过程中被打包的文件名（filename）。<br>-t ：查看打包文件的内容含有哪些文件名，重点在查看文件名。<br>-x ：解打包或解压缩的功能，可以搭配 -C（大写） 在特定目录解开。<br>特别留意的是，-c, -t, -x 不可同时出现在一串命令行中。<br>-j ：通过bzip2的支持进行压缩/解压缩，此时文件名最好为 <em>.tar.bz2。<br>-z ：通过gzip的支持进行压缩/解压缩，此时文件名最好为 </em>.tar.gz。<br>-v ：在压缩/解压缩的过程中，将正在处理的文件名显示出来。<br>-f filename：-f 后面要接被处理的文件名。建议 -f 单独写一个参数。<br>-C 目录 ：这个参数用在解压缩时，若要在特定目录解压缩，可以使用这个参数。<br>其他后续练习会使用到的参数介绍：<br>-p ：保留备份数据的原本权限与属性，常用于备份（-c）重要的配置文件。<br>-P ：保留绝对路径，即允许备份数据中含有根目录存在之意。<br>–exclude=FILE：在压缩的过程中，不要将 FILE 打包。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 最简单的使用 tar 就只要记忆下面的方式即可</span><br><span class="line"></span><br><span class="line">&gt; 压 缩：tar -jcv -f filename.tar.bz2 要被压缩的文件或目录名称</span><br><span class="line">查 询：tar -jtv -f filename.tar.bz2</span><br><span class="line">解压缩：tar -jxv -f filename.tar.bz2 -C 欲解压缩的目录</span><br><span class="line">filename.tar.bz2 使我们自己取的文件名，tar 并不会主动创建文件名，要我们自定义。所以扩展名就显得很重要了。如果不加 -j|-z 的话，文件名是\*.tar 就行。 使用 -j|-z 最好根据 压缩软件的支持取名为\* .tar.gz或\*.tar.bz2。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">- 范例：使用 tar 加入 -j 或 -z 的参数备份 /etc/目录</span><br></pre></td></tr></table></figure></p>
+<p>[root@www ~]#tar -zpcv -f /root/etc.tar.gz /etc<br>tar: Removing leading `/‘ from member names &lt;==注意这个警告消息<br>/etc/<br>….中间省略….<br>/etc/esd.conf<br>/etc/crontab</p>
+<h1 id="由于加上-v-这个参数，因此正在作用中的文件名就会显示在屏幕上。"><a href="#由于加上-v-这个参数，因此正在作用中的文件名就会显示在屏幕上。" class="headerlink" title="由于加上 -v 这个参数，因此正在作用中的文件名就会显示在屏幕上。"></a>由于加上 -v 这个参数，因此正在作用中的文件名就会显示在屏幕上。</h1><h1 id="如果你可以翻到第一页，会发现出现上面的错误信息，下面会讲解。"><a href="#如果你可以翻到第一页，会发现出现上面的错误信息，下面会讲解。" class="headerlink" title="如果你可以翻到第一页，会发现出现上面的错误信息，下面会讲解。"></a>如果你可以翻到第一页，会发现出现上面的错误信息，下面会讲解。</h1><h1 id="至于-p的参数，重点在于保留原本文件的权限与属性之意。"><a href="#至于-p的参数，重点在于保留原本文件的权限与属性之意。" class="headerlink" title="至于 -p的参数，重点在于保留原本文件的权限与属性之意。"></a>至于 -p的参数，重点在于保留原本文件的权限与属性之意。</h1><p>[root@www ~]#tar -jpcv -f /root/etc.tar.bz2 /etc</p>
+<h1 id="显示的消息会跟上面一模一样。"><a href="#显示的消息会跟上面一模一样。" class="headerlink" title="显示的消息会跟上面一模一样。"></a>显示的消息会跟上面一模一样。</h1><p>[root@www ~]# ll /root/etc*<br>-rw-r–r–1root root 8740252 Nov 15 23:07 /root/etc.tar.bz2<br>-rw-r–r–1root root 13010999 Nov 15 23:01/root/etc.tar.gz</p>
+<h1 id="为什么建议你使用-j-这个参数？从上面的数值你可以知道了吧？"><a href="#为什么建议你使用-j-这个参数？从上面的数值你可以知道了吧？" class="headerlink" title="为什么建议你使用 -j 这个参数？从上面的数值你可以知道了吧？"></a>为什么建议你使用 -j 这个参数？从上面的数值你可以知道了吧？</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 使用 tar 文件的数据内容（可查看文件名），与备份文件名有否根目录的意义</span><br></pre></td></tr></table></figure>
+<p>[root@www ~]#tar -jtv -f /root/etc.tar.bz2<br>….前面省略….<br>-rw-r–r– root/root 1016 2008-05-25 14:06:20 etc/dbus-1/session.conf<br>-rw-r–r– root/root 153 2007-01-07 19:20:54 etc/esd.conf<br>-rw-r–r– root/root 255 2007-01-06 21:13:33 etc/crontab<br>如果加上-v 这个参数时，详细的文件权限/属性都会被列出来。<br>如果只是想要知道文件名而已，那么就将-v去掉即可。<br>从上面的数据我们可以发现一件很有趣的事情，那就是每个文件名都没了根目录了。<br>这也是上一个练习中出现的那个警告信息“tar:Removing leading <code>/&#39; from member names（删除了文件名开头的</code>/‘）”所告知的情况。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">去掉根目录的原因主要是为了安全。我们使用tar备份的数据可能会需要解压缩回来使用，在 tar 所记录的文件名（就是我们刚才使用 tar -jtvf 所查看到的文件名）那就是解压缩后的实际文件名。如果去掉了根目录，假设你将备份数据在/tmp 中解开，那么解压缩的文件名就会变成“/tmp/etc/xxx”。但如果没有去掉根目录，解压缩后的文件名就会是绝对路径，即解压缩后的数据一定会被放置到/etc/xxx去。如此一来，你的原本的/etc/下面的数据就会被备份数据所覆盖过去了。</span><br><span class="line"></span><br><span class="line">- 将文件名中的根目录也备份下来，并查看以下内分文件内容文件名</span><br></pre></td></tr></table></figure></p>
+<p>[root@www ~]#tar -jpPcv -f /root/etc.and.root.tar.bz2 /etc<br>….中间过程省略….<br>[root@www ~]#tar -jtf /root/etc.and.root.tar.bz2<br>/etc/dbus-1/session.conf<br>/etc/esd.conf<br>/etc/esd.conf<br>/etc/crontab</p>
+<h1 id="这次查阅文件名不含-v-参数，所以仅有文件名而已，没有详细属性-权限等参数。"><a href="#这次查阅文件名不含-v-参数，所以仅有文件名而已，没有详细属性-权限等参数。" class="headerlink" title="这次查阅文件名不含 -v 参数，所以仅有文件名而已，没有详细属性/权限等参数。"></a>这次查阅文件名不含 -v 参数，所以仅有文件名而已，没有详细属性/权限等参数。</h1><p>有发现不同点了吧？如果加上-P 参数，那么文件名内的根目录就会存在。不过，个人建议，还是不要加上-P 这个参数来备份。毕竟很多时候，我们备份是为了要未来追踪问题用的，倒不一定需要还原回原本的系统中。所以拿去根目录后，备份数据的应用会比较有弹性，也比较安全。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 使用 tar 解打包</span><br></pre></td></tr></table></figure></p>
+<p>[root@www ~]#tar-jxv -f /root/etc.tar.bz2<br>[root@www ~]# ll<br>….（前面省略）….<br>drwxr-xr-x 105 root root 12288 Nov 1104:02 etc<br>….（后面省略）….<br>此时该打包文件会在本目录下进行解压缩的操作。所以，你等一下就会在主文件夹下面发现一个名为 etc 的目录<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">如果想在 /tmp 文件夹下解开这个打包文件，当然可以 `cd/tmp` 但是有一种更简单的方法在指定路径下解压</span><br><span class="line"></span><br><span class="line">- 使用 -C 在指定路径下解压缩</span><br></pre></td></tr></table></figure></p>
+<p>[root@www ~]#tar -jxv -f /root/etc.tar.bz2 -C /tmp<br>[root@www ~]# ll /tmp<br>….（前面省略）….<br>drwxr-xr-x 105 root root 12288 Nov 1104:02 etc<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">- 仅解开单一文件</span><br></pre></td></tr></table></figure></p>
+<h1 id="1-先找到我们要的文件名，假设解开-shadow-文件好了："><a href="#1-先找到我们要的文件名，假设解开-shadow-文件好了：" class="headerlink" title="1. 先找到我们要的文件名，假设解开 shadow 文件好了："></a>1. 先找到我们要的文件名，假设解开 shadow 文件好了：</h1><p>[root@www ~]#tar -jtv -f /root/etc.tar.bz2 |grep’shadow’<br>-r——– root/root 1230 2008-09-29 02:21:20 etc/shadow-<br>-r——– root/root 622 2008-09-29 02:21:20 etc/gshadow-<br>-r——– root/root 636 2008-09-29 02:21:25 etc/gshadow<br>-r——– root/root 1257 2008-09-29 02:21:25 etc/shadow &lt;==这是我们要的。</p>
+<h1 id="先找出重要的文件名。其中那个grep是“选取”关键字的功能。"><a href="#先找出重要的文件名。其中那个grep是“选取”关键字的功能。" class="headerlink" title="先找出重要的文件名。其中那个grep是“选取”关键字的功能。"></a>先找出重要的文件名。其中那个grep是“选取”关键字的功能。</h1><h1 id="2-将该文件解开。语法与实际方法如下："><a href="#2-将该文件解开。语法与实际方法如下：" class="headerlink" title="2. 将该文件解开。语法与实际方法如下："></a>2. 将该文件解开。语法与实际方法如下：</h1><p>[root@www ~]#tar -jxv -f 打包文件.tar.bz2 待解开文件名<br>[root@www ~]#tar -jxv -f /root/etc.tar.bz2 etc/shadow<br>etc/shadow<br>[root@www ~]# ll etc<br>total 8<br>-r——–1root root 1257 Sep29 02:21shadow &lt;==只有一个文件。</p>
+<p>#此时只会解开一个文件而已。不过，重点是那个文件名。你要找到正确的文件名。</p>
+<h1 id="在本例中，你不能写成-etc-shadow-，因为它是记录在-etc-tar-bz2-内的文件名。"><a href="#在本例中，你不能写成-etc-shadow-，因为它是记录在-etc-tar-bz2-内的文件名。" class="headerlink" title="在本例中，你不能写成 /etc/shadow ，因为它是记录在 etc.tar.bz2 内的文件名。"></a>在本例中，你不能写成 /etc/shadow ，因为它是记录在 etc.tar.bz2 内的文件名。</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 打包某目录但不包含该目录下的某些文件做法 --exclude</span><br></pre></td></tr></table></figure>
+<p>[root@www ~]#tar -jcv -f /root/system.tar.bz2 –exclude=/root/etc*  –exclude=/root/system.tar.bz2 /etc/root<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">上面这个例子在打包的时候，将/root/etc* 和本身排除在外进行打包</span><br><span class="line"></span><br><span class="line">- 仅备份比某个时刻还要新的文件 --newer-mtime --newer</span><br><span class="line"></span><br><span class="line">其中 --newer 表示后续的日期包含 mtime（文件内容更改时间）与ctime（文件站状态如权限与属性更改时间），--newer-mtime 只包含 mtime</span><br></pre></td></tr></table></figure></p>
+<p>[root@www ~]#tar-jcv -f /root/etc.newer.then.passwd.tar.bz2  –newer-mtime=”2008/09/29” /etc/*<br>….（中间省略）….<br>/etc/smartd.conf &lt;==真的有备份的文件<br>….（中间省略）….<br>/etc/yum.repos.d/ &lt;==目录都会被记录下来<br>tar: /etc/yum.repos.d/CentOS-Base.repo: file iSunchanged; not dumped</p>
+<h1 id="最后一行显示的是“没有被备份的”，也即-not-dumped-的意思。"><a href="#最后一行显示的是“没有被备份的”，也即-not-dumped-的意思。" class="headerlink" title="最后一行显示的是“没有被备份的”，也即 not dumped 的意思。"></a>最后一行显示的是“没有被备份的”，也即 not dumped 的意思。</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">范例中的仅仅把 /etc/ 文件下,文件内容更改时间 mtime 比 2008/09/29 新的文件进行打包。这个命令是一个对差异文件备份特别方便的命令。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">- 基本名称 tarfile tarball</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">tar 打包出来的文件有没有进行压缩所得到的文件称谓的不同。如果只是打包而已，就是 `tar -cv -f file.tar` 而已，这个文件称之为 tarfile。如果还有压缩支持 `tar -jcv -f file.tar.bz2` 即使用 gZip 或 bZip2 进行压缩压缩，称呼为 tarball。当然，这就是一个基本称谓而已。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">此外，tar 除了可以将数据打包成为文件之外，还能够将文件打包到某些特别的设备去，举例来说，磁带机（tape）就是一个常见的例子。磁带机由于是一次性读取/写入的设备，因此我们不能够使用类似 cp 等命令来复制的。那如果想要将/home, /root, /etc 备份到磁带机（/dev/st0）时，就可以使用“tar -cv -f /dev/st0 /home /root /etc”，很简单容易吧？磁带机用在备份（尤其是企业应用）是很常见的工作。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">- tar 特殊应用 **利用管道命令与数据流**</span><br><span class="line"></span><br><span class="line">在 tar 的使用中，有一种方式最特殊，那就是通过标准输入输出的数据流重定向（standard input/standard output），以及管道命令（pipe）的方式，将待处理的**文件一边打包一边解压缩到目标目录去**。下面是范例</span><br></pre></td></tr></table></figure>
+<h1 id="将-etc-整个目录一边打包一边在-tmp中解开"><a href="#将-etc-整个目录一边打包一边在-tmp中解开" class="headerlink" title="将 /etc 整个目录一边打包一边在 /tmp中解开"></a>将 /etc 整个目录一边打包一边在 /tmp中解开</h1><p>[root@www ~]#cd /tmp<br>[root@www ~]#tar -cvf - /etc |tar-xvf -</p>
+<h1 id="这个操作有点像是cp-r-etc-tmp依旧是有其有用途的。"><a href="#这个操作有点像是cp-r-etc-tmp依旧是有其有用途的。" class="headerlink" title="这个操作有点像是cp -r /etc /tmp依旧是有其有用途的。"></a>这个操作有点像是cp -r /etc /tmp依旧是有其有用途的。</h1><h1 id="要注意的地方在于输出文件变成-而输入文件也变成-，又有一个-存在。"><a href="#要注意的地方在于输出文件变成-而输入文件也变成-，又有一个-存在。" class="headerlink" title="要注意的地方在于输出文件变成 - 而输入文件也变成 - ，又有一个 | 存在。"></a>要注意的地方在于输出文件变成 - 而输入文件也变成 - ，又有一个 | 存在。</h1><h1 id="这分别代表-standard-output-standard-input-与管道命令。"><a href="#这分别代表-standard-output-standard-input-与管道命令。" class="headerlink" title="这分别代表 standard output, standard input 与管道命令。"></a>这分别代表 standard output, standard input 与管道命令。</h1><h1 id="简单的想法中，你可以将-想成是在内存中的一个设备（缓冲区）。"><a href="#简单的想法中，你可以将-想成是在内存中的一个设备（缓冲区）。" class="headerlink" title="简单的想法中，你可以将 - 想成是在内存中的一个设备（缓冲区）。"></a>简单的想法中，你可以将 - 想成是在内存中的一个设备（缓冲区）。</h1><h1 id="在当前目录下-ll-你会发现，目录下会直接出现-解压后的-etc"><a href="#在当前目录下-ll-你会发现，目录下会直接出现-解压后的-etc" class="headerlink" title="在当前目录下 ll 你会发现，目录下会直接出现 解压后的 etc/"></a>在当前目录下 ll 你会发现，目录下会直接出现 解压后的 etc/</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">上面的例子中，想要将 /etc 下面的数据直接复制到目前路径下 /tmp，但是又觉得直接复制 cp -r /etc /tmp 有点麻烦，那么就直接以这个方式来打包，其中，命令里面的 - 就是表示那个被打包的文件。由于我们不想让那个中间文件存在，所以就用这个方式来进行复制行为。</span><br><span class="line"></span><br><span class="line">- 系统备份范例</span><br><span class="line"></span><br><span class="line">系统上有非常多的重要目录需要进行备份，而且其实我们也不建议你将备份数据放置到/root目录下。假设目前你已经知道重要的目录有下面这几个：</span><br><span class="line">/etc/（配置文件）</span><br><span class="line">/home/（用户的主文件夹）</span><br><span class="line">/var/spool/mail/（系统中，所有账号的邮件信箱）</span><br><span class="line">/var/spool/cron/（所有账号的工作调度配置文件）</span><br><span class="line">/root（系统管理员的主文件夹）</span><br><span class="line">/home/loop*不需要备份，而且/root下面的压缩文件也不需要备份，另外假设你要将备份的数据放置到/backups，并且该目录仅有 root 有权限进入。此外，每次备份的文件名都希望不相同，例如使用backup-system-20171011.tar.bz2 之类的文件名来处理。那你该如何处理这个备份数据呢？（请先动手操作试试，再来查看一下下面的参考解答。）</span><br></pre></td></tr></table></figure>
+<p>#1. 先处理要放置备份数据的目录与权限：<br>[root@www ~]# mkdir /backups<br>[root@www ~]#chmod 700 /backups<br>[root@www ~]# ll -d /backups<br>drwx—— 2 root root 4096 Nov 30 16:35 /backups</p>
+<h1 id="2-假设今天是-2017-10-11-，则新建备份的方式如下："><a href="#2-假设今天是-2017-10-11-，则新建备份的方式如下：" class="headerlink" title="2. 假设今天是 2017/10/11 ，则新建备份的方式如下："></a>2. 假设今天是 2017/10/11 ，则新建备份的方式如下：</h1><p>[root@www ~]#tar -jcv -f /backups/backup-system-20171011.tar.bz2 \</p>
+<blockquote>
+<p>–exclude=/root/<em>.bz2 –exclude=/root/</em>.gz –exclude=/home/loop* \<br>/etc /home /var/spool/mail /var/spool/cron /root<br>…. 这是一个超级漫长的过程….<br>[root@www ~]# ll -h /backups/<br>-rw-r–r–1root root 8.4M Nov 30 16:43 backup-system-20091130.tar.bz2<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;h2 id=&quot;4&quot;&gt;4. 完整备份工具：dump&lt;/h2&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">某些夜黑人静的夜晚，你想要针对文件系统进行备份或者存储功能时，不能不谈到这个 dump 命令。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;h3 id=&quot;4.1&quot;&gt;4.1 dump&lt;/h3&gt;</span><br><span class="line"></span><br><span class="line">假设你的 /home 是独立的一个文件系统，那你第一次进行过dump后，再进行第二次dump时，你可以指定不同的备份等级，假如指定等级为1时，此时新备份的数据只会记录与第一次备份所有差异的文件而已。</span><br><span class="line">比如，第一次备份时使用的是 level 0，这个等级也是完整的备份。等到第二次备份时，实时文件系统内的数据已经与 level 0 不一样了，而level1 仅只是比较目前的文件系统与 level 0 之间的差异后，备份有变化过的文件而已。至于 level 2则是与 level 1 进行比较。</span><br><span class="line"></span><br><span class="line">- dump 对单一文件备份的限制</span><br><span class="line"></span><br><span class="line">`dump` 支持对整个文件系统或者是单一目录，但是**对单一目录的支持比较不足**，废话要不然还要 `tar`干啥。</span><br><span class="line">如果是单一文件系统，那么该文件系统可以使用完整的dump功能，包括利用0~9的数个level来备份，同时，备份时可以使用挂载点或者是设备文件名（例如/dev/sda5 之类的设备文件名）来进行备份。 但如果带备份数据只是目录，并非单一文件系统就包括以下限制</span><br><span class="line"></span><br><span class="line">&gt; 所有的备份数据都必须要在该目录（本例为/home/someone/）下面；</span><br><span class="line">&gt;且仅能使用 level 0，即仅支持完整备份而已；</span><br><span class="line">&gt;不支持-u参数，即无法创建/etc/dumpdates这个level备份的时间记录文件。</span><br><span class="line">&gt;dump 的参数虽然非常繁杂，不过如果只是想要简单的操作时，你只要记得下面的几个参数就很够用了。</span><br><span class="line"></span><br><span class="line">- dump 简单操作</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p>[root@www ~]# dump [-Suvj] [-level] [-f 备份文件] 待备份数据<br>[root@www ~]# dump -W<br>参数：<br>-S ：仅列出后面的待备份数据需要多少磁盘空间才能够备份完毕；<br>-u ：将这次 dump的时间记录到 /etc/dumpdateS文件中；<br>-v ：将 dump的文件过程显示出来；<br>-j ：加入bzip2的支持，将数据进行压缩，默认bzip2压缩等级为 2；<br>-level：就是我们谈到的等级，从 -0 ~ -9 共10个等级；<br>-f ：有点类似tar，后面接产生的文件，可接例如 /dev/st0 设备文件名等；<br>-W ：列出在 /etc/fstab 里面的具有 dump设置的分区是否有备份过。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 用 dump 备份完整的文件系统</span><br></pre></td></tr></table></figure></p>
+<h1 id="1-先找出系统中最小的那个文件系统，如下所示："><a href="#1-先找出系统中最小的那个文件系统，如下所示：" class="headerlink" title="1. 先找出系统中最小的那个文件系统，如下所示："></a>1. 先找出系统中最小的那个文件系统，如下所示：</h1><p>[root@www ~]# df -h<br>Filesystem Size Used Avail Use% Mounted on<br>/dev/hdc2 9.5G 3.7G 5.3G 42% /<br>/dev/hdc3 4.8G 651M 3.9G 15% /home<br>/dev/hdc1 99M 11M 83M 12% /boot &lt;==看起来最小的就是它。<br>tmpfS 363M 0 363M 0% /dev/shm</p>
+<h1 id="2-先测试一下如果要备份此文件系统需多少容量"><a href="#2-先测试一下如果要备份此文件系统需多少容量" class="headerlink" title="2. 先测试一下如果要备份此文件系统需多少容量"></a>2. 先测试一下如果要备份此文件系统需多少容量</h1><p>[root@www ~]# dump -S/dev/hdc1<br>5630976 &lt;==注意一下，这个单位是 byte，所以差不多是 5.6MB。</p>
+<h1 id="3-将完整备份的文件名记录成为-root-boot-dump，同时更新记录文件："><a href="#3-将完整备份的文件名记录成为-root-boot-dump，同时更新记录文件：" class="headerlink" title="3. 将完整备份的文件名记录成为 /root/boot.dump，同时更新记录文件："></a>3. 将完整备份的文件名记录成为 /root/boot.dump，同时更新记录文件：</h1><p>[root@www ~]# dump -0u -f /root/boot.dump/boot<br>DUMP: Date of thiSlevel0dump: Tue Dec 2 02:53:45 2008&lt;==记录等级与备份时间<br>DUMP: Dumping /dev/hdc1（/boot）to /root/boot.dump &lt;==dump的源与目标<br>DUMP: Label: /boot &lt;==文件系统的 label<br>DUMP: Writing 10 Kilobyte records<br>DUMP: mapping（PasSI）[regular files] &lt;==开始进行文件对应<br>DUMP: mapping（PasSII）[directories]<br>DUMP: estimated 5499 blocks. &lt;==评估整体block数量<br>DUMP: Volume1started with block1at: Tue Dec 2 02:53:46 2008<br>DUMP: dumping（PasSIII）[directories] &lt;==开始 dump工作<br>DUMP: dumping（PasSIV）[regular files]<br>DUMP:Closing /root/boot.dump &lt;==结束写入备份文件<br>DUMP: Volume1completed at: Tue Dec 2 02:53:47 2008<br>DUMP: Volume15550 blockS（5.42MB） &lt;==最终备份数据容量<br>DUMP: Volume1took 0:00:01<br>DUMP: Volume1transfer rate: 5550 kB/s<br>DUMP: 5550 blockS（5.42MB）on1volume（s）<br>DUMP: finished in1seconds, throughput 5550 kBytes/sec<br>DUMP: Date of thiSlevel0dump: Tue Dec 2 02:53:45 2008<br>DUMP: Date thiSdumpCompleted: Tue Dec 2 02:53:47 2008<br>DUMP: Average transfer rate: 5550 kB/s<br>DUMP: DUMPISDONE</p>
+<h1 id="在命令的执行方面，dump后面接-boot-或-dev-hdc1都可以的。"><a href="#在命令的执行方面，dump后面接-boot-或-dev-hdc1都可以的。" class="headerlink" title="在命令的执行方面，dump后面接 /boot 或 /dev/hdc1都可以的。"></a>在命令的执行方面，dump后面接 /boot 或 /dev/hdc1都可以的。</h1><h1 id="而执行-dump的过程中会出现如上的一些信息，你可以自行仔细查看。"><a href="#而执行-dump的过程中会出现如上的一些信息，你可以自行仔细查看。" class="headerlink" title="而执行 dump的过程中会出现如上的一些信息，你可以自行仔细查看。"></a>而执行 dump的过程中会出现如上的一些信息，你可以自行仔细查看。</h1><p>[root@www ~]# ll /root/boot.dump/etc/dumpdates<br>-rw-rw-r–1root disk 43 Dec 2 02:53 /etc/dumpdates<br>-rw-r–r–1root root 5683200 Dec 2 02:53 /root/boot.dump</p>
+<h1 id="由于加上-u-的选项，因此-etc-dumpdates文件的内容会被更新。注意，"><a href="#由于加上-u-的选项，因此-etc-dumpdates文件的内容会被更新。注意，" class="headerlink" title="由于加上 -u 的选项，因此 /etc/dumpdates文件的内容会被更新。注意，"></a>由于加上 -u 的选项，因此 /etc/dumpdates文件的内容会被更新。注意，</h1><h1 id="这个文件仅有在-dump完整的文件系统时才有支持自动更新的功能。"><a href="#这个文件仅有在-dump完整的文件系统时才有支持自动更新的功能。" class="headerlink" title="这个文件仅有在 dump完整的文件系统时才有支持自动更新的功能。"></a>这个文件仅有在 dump完整的文件系统时才有支持自动更新的功能。</h1><h1 id="4-查看一下系统自动新建的记录文件："><a href="#4-查看一下系统自动新建的记录文件：" class="headerlink" title="4. 查看一下系统自动新建的记录文件："></a>4. 查看一下系统自动新建的记录文件：</h1><p>[root@www ~]#cat /etc/dumpdates<br>/dev/hdc1 0 Tue Dec 2 02:53:47 2008 +0800<br>[文件系统] [等级] [ Ctime 的时间 ]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">这样就很简单的新建了/root/boot.dump 文件。该文件将整个 /boot 文件系统都备份下来，并且将备份时间写入 /etc/dumpdates 文件中，准备让下次备份时可以做一个参考依据。</span><br><span class="line"></span><br><span class="line">- 新建 level 1 备份</span><br></pre></td></tr></table></figure>
+<h1 id="1-看一下有没有任何文件系统被-dump过的数据"><a href="#1-看一下有没有任何文件系统被-dump过的数据" class="headerlink" title="1. 看一下有没有任何文件系统被 dump过的数据"></a>1. 看一下有没有任何文件系统被 dump过的数据</h1><p>[root@www ~]# dump -W<br>Last dump（s）done（Dump’&gt;’ file systems）:</p>
+<blockquote>
+<p>/dev/hdc2 （ /）Last dump: never<br>/dev/hdc3 （ /home）Last dump: never<br>/dev/hdc1 （ /boot）Last dump: Level 0, Date Tue Dec 2 02:53:47 2008</p>
+<h1 id="如上面的结果，该结果会找出-etc-fstab-里面第五字段设置有需要-dump的"><a href="#如上面的结果，该结果会找出-etc-fstab-里面第五字段设置有需要-dump的" class="headerlink" title="如上面的结果，该结果会找出 /etc/fstab 里面第五字段设置有需要 dump的"></a>如上面的结果，该结果会找出 /etc/fstab 里面第五字段设置有需要 dump的</h1><h1 id="分区，然后与-etc-dumpdateS进行比对，可以得到上面的结果。"><a href="#分区，然后与-etc-dumpdateS进行比对，可以得到上面的结果。" class="headerlink" title="分区，然后与 /etc/dumpdateS进行比对，可以得到上面的结果。"></a>分区，然后与 /etc/dumpdateS进行比对，可以得到上面的结果。</h1><h1 id="尤其是第三行，可以显示我们曾经对-dev-hdc1进行过-dump的备份操作。"><a href="#尤其是第三行，可以显示我们曾经对-dev-hdc1进行过-dump的备份操作。" class="headerlink" title="尤其是第三行，可以显示我们曾经对 /dev/hdc1进行过 dump的备份操作。"></a>尤其是第三行，可以显示我们曾经对 /dev/hdc1进行过 dump的备份操作。</h1><h1 id="2-先恶搞一下，新建一个大约-10-MB-的文件在-boot-内："><a href="#2-先恶搞一下，新建一个大约-10-MB-的文件在-boot-内：" class="headerlink" title="2. 先恶搞一下，新建一个大约 10 MB 的文件在 /boot 内："></a>2. 先恶搞一下，新建一个大约 10 MB 的文件在 /boot 内：</h1><p>[root@www ~]#dd if=/dev/zero of=/boot/testing.img bs=1MCount=10<br>10+0 recordSin<br>10+0 recordSout<br>10485760 byteS（10 MB）Copied, 0.166128 seconds, 63.1MB/s</p>
+<h1 id="3-开始新建差异备份文件，此时我们使用-level-1吧："><a href="#3-开始新建差异备份文件，此时我们使用-level-1吧：" class="headerlink" title="3. 开始新建差异备份文件，此时我们使用 level 1吧："></a>3. 开始新建差异备份文件，此时我们使用 level 1吧：</h1><p>[root@www ~]# dump -1u -f /root/boot.dump.1/boot<br>….（中间省略）….<br>[root@www ~]# ll /root/boot*<br>-rw-r–r–1root root 5683200 Dec 2 02:53 /root/boot.dump<br>-rw-r–r–1root root 10547200 Dec 2 02:56 /root/boot.dump.1</p>
+<h1 id="看看文件大小，岂不是就是刚才我们所新建的那个大文件的大小吗？"><a href="#看看文件大小，岂不是就是刚才我们所新建的那个大文件的大小吗？" class="headerlink" title="看看文件大小，岂不是就是刚才我们所新建的那个大文件的大小吗？"></a>看看文件大小，岂不是就是刚才我们所新建的那个大文件的大小吗？</h1><h1 id="4-最后再看一下是否有记录-level-1备份的时间点呢？"><a href="#4-最后再看一下是否有记录-level-1备份的时间点呢？" class="headerlink" title="4. 最后再看一下是否有记录 level 1备份的时间点呢？"></a>4. 最后再看一下是否有记录 level 1备份的时间点呢？</h1><p>[root@www ~]# dump -W<br>Last dump（s）done（Dump’&gt;’ file systems）:<br>/dev/hdc2 （ /）Last dump: never<br>/dev/hdc3 （ /home）Last dump: never<br>/dev/hdc1 （ /boot）Last dump: Level 1, Date Tue Dec 2 02:56:33 2008<br>….（中间省略）….<br>通过这个简单的方式，我们就能够仅备份差异文件的部分了。下面再来看看针对单一目录的dump用途。<br>用dump备份非文件系统，即单一目录的方法<br>现在让我们来处理一下/etc的dump备份。因为/etc并非单一文件系统，它只是个目录而已。所以依据限制的说明，-u evel 1~9 都是不适用的。我们只能够使用 level 0 的完整备份将/etcdump 下来，因此就变得很简单了。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- dump 备份单一目录</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p>#让我们将 /etc 整个目录通过 dump进行备份，且含压缩功能<br>[root@www ~]# dump -0j -f /root/etc.dump.bz2 /etc<br>DUMP: Date of thiSlevel0dump: Tue Dec 2 12:08:22 2008<br>DUMP: Dumping /dev/hdc2（/（dir etc））to /root/etc.dump.bz2<br>DUMP: Label: /1<br>DUMP: Writing 10 Kilobyte records<br>DUMP:Compressing output atCompression level 2（bzlib）<br>DUMP: mapping（PasSI）[regular files]<br>DUMP: mapping（PasSII）[directories]<br>DUMP: estimated 115343 blocks.<br>DUMP: Volume1started with block1at: Tue Dec 2 12:08:23 2008<br>DUMP: dumping（PasSIII）[directories]<br>DUMP: dumping（PasSIV）[regular files]<br>DUMP:Closing /root/etc.dump.bz2<br>DUMP: Volume1completed at: Tue Dec 2 12:09:49 2008<br>DUMP: Volume1took 0:01:26<br>DUMP: Volume1transfer rate: 218 kB/s<br>DUMP: Volume1124680kB uncompressed, 18752kBCompressed, 6.649…</p>
+<h1 id="上面特殊字体的部分显示：原本有-124680KB-的容量，被压缩成为-18752KB，"><a href="#上面特殊字体的部分显示：原本有-124680KB-的容量，被压缩成为-18752KB，" class="headerlink" title="上面特殊字体的部分显示：原本有 124680KB 的容量，被压缩成为 18752KB，"></a>上面特殊字体的部分显示：原本有 124680KB 的容量，被压缩成为 18752KB，</h1><h1 id="整个压缩比为-6-649-1，还可以。"><a href="#整个压缩比为-6-649-1，还可以。" class="headerlink" title="整个压缩比为 6.649:1，还可以。"></a>整个压缩比为 6.649:1，还可以。</h1><p>一般来说dump不会使用包含压缩的功能，不过如果你想要将备份的空间降低的话，那个-j的参数是可以使用的。加上-j之后你的dump结果会使用较少的硬盘空间。如上述的情况来看，文件大小由原本的128MB左右下滑到18MB左右，当然可以节省备份空间。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;h3 id=&quot;4.2&quot;&gt;4.3 restore&lt;/h3&gt;</span><br><span class="line"></span><br><span class="line">备份文件就是在急用时可以恢复系统的重要数据。所以有备份当然要学习如何恢复。dump 的恢复使用的就是 restore 这个命令。它的参数相当多，可以自行 man restore,下面仅是一个简单的介绍。</span><br></pre></td></tr></table></figure></p>
+<p>[root@www ~]# restore -t [-f dumpfile] [-h] &lt;==用来查看 dump文件<br>[root@www ~]# restore -C [-f dumpfile] [-D挂载点] &lt;==比较dump与实际文件<br>[root@www ~]# restore -i [-f dumpfile] &lt;==进入互动模式<br>[root@www ~]# restore -r [-f dumpfile] &lt;==还原整个文件系统<br>参数：<br>相关的各种模式，各种模式无法混用。例如不可以写 -tC 。<br>-t ：此模式用在查看 dump起来的备份文件中含有什么重要数据。类似tar-t 功能。<br>-C ：此模式可以将 dump内的数据拿出来跟实际的文件系统做比较，<br>最终会列出“在 dump文件内有记录的，且目前文件系统不一样”的文件。<br>-i ：进入互动模式，可以仅还原部分文件，用在 dump目录时的还原。<br>-r ：将整个文件系统还原的一种模式，用在还原针对文件系统的 dump备份。<br>其他较常用到的参数功能：<br>-h ：查看完整备份数据中的 inode 与文件系统 label 等信息。<br>-f ：后面就接你要处理的那个 dump文件。<br>-D ：与 -C 进行搭配，可以查出后面接的挂载点与 dump内有不同的文件。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 使用 restore -t 查阅 dump 内容</span><br></pre></td></tr></table></figure></p>
+<p>[root@www ~]# restore -t -f /root/boot.dump<br>Dump date: Tue Dec 2 02:53:45 2008 &lt;==说明备份的日期<br>Dumped from: the epoch<br>Level0dumpof /boot on www.vbird.tsai:/dev/hdc1 &lt;==说明 level 状态<br>Label: /boot &lt;==说明该文件系统的表头。<br>2 .<br>11 ./lost+found<br>2009 ./grub<br>2011 ./grub/grub.conf<br>….下面省略….<br>[root@www ~]# restore -t -f /root/etc.dump<br>Dumptape isCompressed. &lt;==加注说明数据有压缩<br>Dump date: Tue Dec 2 12:08:22 2008<br>Dumped from: the epoch<br>Level0dumpof /（dir etc）on ubuntu:/dev/hdc2 &lt;==是目录。<br>Label: /1<br>2 .<br>1912545 ./etc<br>1912549 ./etc/rpm<br>1912550 ./etc/rpm/platform<br>….下面省略….<br>这个查阅的数据其实显示出的是文件名与原文件的inode状态，所以我们可以说，dump会参考inode的记录。通过这个查询我们也能知道dump的内容为何<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 比较差异并且还原整个文件系统</span><br><span class="line"></span><br><span class="line">dump 可以进行累计备份，是因为它具有可以查询文件系统与备份文件之间的差异，并且将分析到的差异数据进行备份的缘故。</span><br></pre></td></tr></table></figure></p>
+<h1 id="1-先尝试更改文件系统的内容："><a href="#1-先尝试更改文件系统的内容：" class="headerlink" title="1. 先尝试更改文件系统的内容："></a>1. 先尝试更改文件系统的内容：</h1><p>[root@www ~]#cd /boot<br>[root@www boot]# mvConfig-2.6.18-128.el5Config-2.6.18-128.el5-back</p>
+<h1 id="2-看看查询文件系统与备份文件之间的差异。"><a href="#2-看看查询文件系统与备份文件之间的差异。" class="headerlink" title="2. 看看查询文件系统与备份文件之间的差异。"></a>2. 看看查询文件系统与备份文件之间的差异。</h1><p>[root@www boot]# restore -C -f /root/boot.dump<br>Dump date: Tue Dec 2 02:53:45 2008<br>Dumped from: the epoch<br>Level0dumpof /boot on ubuntu:/dev/hdc1<br>Label: /boot<br>filesys= /boot<br>restore: unable to stat ./config-2.6.18-128.el5: No such file or directory Some fileSwere modified!<br>1compare errors</p>
+<h1 id="看到上面的特殊字体了吧。那就是有差异的部分。总共有一个文件被更改。"><a href="#看到上面的特殊字体了吧。那就是有差异的部分。总共有一个文件被更改。" class="headerlink" title="看到上面的特殊字体了吧。那就是有差异的部分。总共有一个文件被更改。"></a>看到上面的特殊字体了吧。那就是有差异的部分。总共有一个文件被更改。</h1><p>```</p>
+<h3 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h3><p>整理笔记参考了 <a href="http://linux.vbird.org/linux_basic/0210filepermission.php#filepermission_perm" target="_blank" rel="noopener">《鸟哥的Linux私房菜》</a> 一书。这本书我是买的<a href="http://sale.jd.com/act/W5hugLDc1R.html" target="_blank" rel="noopener">京东阅读</a>的正版电子书籍。<br><br>如果不想买书看的话可以直接戳<a href="http://linux.vbird.org/" target="_blank" rel="noopener">这里进入鸟哥Linux私房菜的线上博客 : http://linux.vbird.org/</a>。请大家支持正版！！<br><br>至于笔记中的命令我是都敲过一遍的并进行了理解，并不是单纯的复制粘贴呦！</p>
+
+    </article>
+    <!-- 前后页  -->
+    <ul class="post-pager">
+        
+            <li class="next">
+                <a href= "/2017/12/11/Linux文件与文件系统的打包/" title= Linux文件与文件系统的打包 >
+                    <span>Next Post</span>
+                    <span>Linux文件与文件系统的打包</span>
+                </a>
+            </li>
+        
+        
+            <li class="previous">
+                <a href= "/2017/12/10/文件系统管理/" title= 文件系统管理 >
+                    <span>Previous Post</span>
+                    <span>文件系统管理</span>
+                </a>
+            </li>
+        
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+<div id="container"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+    var gitment = new Gitment({
+        // id: "文件与文件系统的压缩与打包", // 可选。默认为 location.href
+        owner: 'DomBro96',
+        repo: 'DomBro96.github.io',
+        oauth: {
+            client_id: '4a6fa6686f2dd417ed61',
+            client_secret: 'cc1f043ee266bc750c481d6a24a98188a185e2eb',
+        },
+    })
+    gitment.render('container')
+
+</script>
+
+    <!--PC版-->
+
+    <!--PC版-->
+
+
+    
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:460716809@qq.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="https://github.com/DomBro96" class="iconfont-archer github" target="_blank" title="github"></a>
+            
+        
+    
+        
+            
+                <a href="https://twitter.com/Bro_Doom" class="iconfont-archer twitter" target="_blank" title="twitter"></a>
+            
+        
+    
+        
+            
+                <a href="https://www.instagram.com/dombro7277/" class="iconfont-archer instagram" target="_blank" title="instagram"></a>
+            
+        
+    
+        
+            
+                <a href="https://leetcode.com/dombro96/" class="iconfont-archer others" target="_blank" title="others"></a>
+            
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">Theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+        <span id="busuanzi_container_site_pv">Welcome, No. <span id="busuanzi_value_site_pv"></span> visitor.
+        </span>
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper">
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#目录"><span class="toc-number">1.</span> <span class="toc-text">目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0"><span class="toc-number">2.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1"><span class="toc-number">3.</span> <span class="toc-text">1. 压缩文件的用途与技术</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2"><span class="toc-number">4.</span> <span class="toc-text">2. Linux 系统常见的压缩命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2.1"><span class="toc-number">4.1.</span> <span class="toc-text">2.1 gZip,zcat</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#此时屏幕上会显示该压缩文件解压后的文件内容。"><span class="toc-number"></span> <span class="toc-text">此时屏幕上会显示该压缩文件解压后的文件内容。</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#zcat可以读取纯文本文件被压缩后的压缩文件。"><span class="toc-number"></span> <span class="toc-text">zcat可以读取纯文本文件被压缩后的压缩文件。</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#与gzip相反，gzip-d-会将原本的-gz-删除，产生原本的-man-config-文件。"><span class="toc-number"></span> <span class="toc-text">与gzip相反，gzip -d 会将原本的 .gz 删除，产生原本的 man.config 文件。</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#此时-man-config-会变成-man-config-bz2"><span class="toc-number"></span> <span class="toc-text">此时 man.config 会变成 man.config.bz2</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#此时屏幕上会显示-man-config-bz2-解压缩之后的文件内容。"><span class="toc-number"></span> <span class="toc-text">此时屏幕上会显示 man.config.bz2 解压缩之后的文件内容。</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#由于加上-v-这个参数，因此正在作用中的文件名就会显示在屏幕上。"><span class="toc-number"></span> <span class="toc-text">由于加上 -v 这个参数，因此正在作用中的文件名就会显示在屏幕上。</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#如果你可以翻到第一页，会发现出现上面的错误信息，下面会讲解。"><span class="toc-number"></span> <span class="toc-text">如果你可以翻到第一页，会发现出现上面的错误信息，下面会讲解。</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#至于-p的参数，重点在于保留原本文件的权限与属性之意。"><span class="toc-number"></span> <span class="toc-text">至于 -p的参数，重点在于保留原本文件的权限与属性之意。</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#显示的消息会跟上面一模一样。"><span class="toc-number"></span> <span class="toc-text">显示的消息会跟上面一模一样。</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#为什么建议你使用-j-这个参数？从上面的数值你可以知道了吧？"><span class="toc-number"></span> <span class="toc-text">为什么建议你使用 -j 这个参数？从上面的数值你可以知道了吧？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#这次查阅文件名不含-v-参数，所以仅有文件名而已，没有详细属性-权限等参数。"><span class="toc-number"></span> <span class="toc-text">这次查阅文件名不含 -v 参数，所以仅有文件名而已，没有详细属性/权限等参数。</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#1-先找到我们要的文件名，假设解开-shadow-文件好了："><span class="toc-number"></span> <span class="toc-text">1. 先找到我们要的文件名，假设解开 shadow 文件好了：</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#先找出重要的文件名。其中那个grep是“选取”关键字的功能。"><span class="toc-number"></span> <span class="toc-text">先找出重要的文件名。其中那个grep是“选取”关键字的功能。</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-将该文件解开。语法与实际方法如下："><span class="toc-number"></span> <span class="toc-text">2. 将该文件解开。语法与实际方法如下：</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#在本例中，你不能写成-etc-shadow-，因为它是记录在-etc-tar-bz2-内的文件名。"><span class="toc-number"></span> <span class="toc-text">在本例中，你不能写成 /etc/shadow ，因为它是记录在 etc.tar.bz2 内的文件名。</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#最后一行显示的是“没有被备份的”，也即-not-dumped-的意思。"><span class="toc-number"></span> <span class="toc-text">最后一行显示的是“没有被备份的”，也即 not dumped 的意思。</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#将-etc-整个目录一边打包一边在-tmp中解开"><span class="toc-number"></span> <span class="toc-text">将 /etc 整个目录一边打包一边在 /tmp中解开</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#这个操作有点像是cp-r-etc-tmp依旧是有其有用途的。"><span class="toc-number"></span> <span class="toc-text">这个操作有点像是cp -r /etc /tmp依旧是有其有用途的。</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#要注意的地方在于输出文件变成-而输入文件也变成-，又有一个-存在。"><span class="toc-number"></span> <span class="toc-text">要注意的地方在于输出文件变成 - 而输入文件也变成 - ，又有一个 | 存在。</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#这分别代表-standard-output-standard-input-与管道命令。"><span class="toc-number"></span> <span class="toc-text">这分别代表 standard output, standard input 与管道命令。</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#简单的想法中，你可以将-想成是在内存中的一个设备（缓冲区）。"><span class="toc-number"></span> <span class="toc-text">简单的想法中，你可以将 - 想成是在内存中的一个设备（缓冲区）。</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#在当前目录下-ll-你会发现，目录下会直接出现-解压后的-etc"><span class="toc-number"></span> <span class="toc-text">在当前目录下 ll 你会发现，目录下会直接出现 解压后的 etc/</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-假设今天是-2017-10-11-，则新建备份的方式如下："><span class="toc-number"></span> <span class="toc-text">2. 假设今天是 2017/10/11 ，则新建备份的方式如下：</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#1-先找出系统中最小的那个文件系统，如下所示："><span class="toc-number"></span> <span class="toc-text">1. 先找出系统中最小的那个文件系统，如下所示：</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-先测试一下如果要备份此文件系统需多少容量"><span class="toc-number"></span> <span class="toc-text">2. 先测试一下如果要备份此文件系统需多少容量</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-将完整备份的文件名记录成为-root-boot-dump，同时更新记录文件："><span class="toc-number"></span> <span class="toc-text">3. 将完整备份的文件名记录成为 /root/boot.dump，同时更新记录文件：</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#在命令的执行方面，dump后面接-boot-或-dev-hdc1都可以的。"><span class="toc-number"></span> <span class="toc-text">在命令的执行方面，dump后面接 /boot 或 /dev/hdc1都可以的。</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#而执行-dump的过程中会出现如上的一些信息，你可以自行仔细查看。"><span class="toc-number"></span> <span class="toc-text">而执行 dump的过程中会出现如上的一些信息，你可以自行仔细查看。</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#由于加上-u-的选项，因此-etc-dumpdates文件的内容会被更新。注意，"><span class="toc-number"></span> <span class="toc-text">由于加上 -u 的选项，因此 /etc/dumpdates文件的内容会被更新。注意，</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#这个文件仅有在-dump完整的文件系统时才有支持自动更新的功能。"><span class="toc-number"></span> <span class="toc-text">这个文件仅有在 dump完整的文件系统时才有支持自动更新的功能。</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-查看一下系统自动新建的记录文件："><span class="toc-number"></span> <span class="toc-text">4. 查看一下系统自动新建的记录文件：</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#1-看一下有没有任何文件系统被-dump过的数据"><span class="toc-number"></span> <span class="toc-text">1. 看一下有没有任何文件系统被 dump过的数据</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#如上面的结果，该结果会找出-etc-fstab-里面第五字段设置有需要-dump的"><span class="toc-number"></span> <span class="toc-text">如上面的结果，该结果会找出 /etc/fstab 里面第五字段设置有需要 dump的</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#分区，然后与-etc-dumpdateS进行比对，可以得到上面的结果。"><span class="toc-number"></span> <span class="toc-text">分区，然后与 /etc/dumpdateS进行比对，可以得到上面的结果。</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#尤其是第三行，可以显示我们曾经对-dev-hdc1进行过-dump的备份操作。"><span class="toc-number"></span> <span class="toc-text">尤其是第三行，可以显示我们曾经对 /dev/hdc1进行过 dump的备份操作。</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-先恶搞一下，新建一个大约-10-MB-的文件在-boot-内："><span class="toc-number"></span> <span class="toc-text">2. 先恶搞一下，新建一个大约 10 MB 的文件在 /boot 内：</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-开始新建差异备份文件，此时我们使用-level-1吧："><span class="toc-number"></span> <span class="toc-text">3. 开始新建差异备份文件，此时我们使用 level 1吧：</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#看看文件大小，岂不是就是刚才我们所新建的那个大文件的大小吗？"><span class="toc-number"></span> <span class="toc-text">看看文件大小，岂不是就是刚才我们所新建的那个大文件的大小吗？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-最后再看一下是否有记录-level-1备份的时间点呢？"><span class="toc-number"></span> <span class="toc-text">4. 最后再看一下是否有记录 level 1备份的时间点呢？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#上面特殊字体的部分显示：原本有-124680KB-的容量，被压缩成为-18752KB，"><span class="toc-number"></span> <span class="toc-text">上面特殊字体的部分显示：原本有 124680KB 的容量，被压缩成为 18752KB，</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#整个压缩比为-6-649-1，还可以。"><span class="toc-number"></span> <span class="toc-text">整个压缩比为 6.649:1，还可以。</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#1-先尝试更改文件系统的内容："><span class="toc-number"></span> <span class="toc-text">1. 先尝试更改文件系统的内容：</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-看看查询文件系统与备份文件之间的差异。"><span class="toc-number"></span> <span class="toc-text">2. 看看查询文件系统与备份文件之间的差异。</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#看到上面的特殊字体了吧。那就是有差异的部分。总共有一个文件被更改。"><span class="toc-number"></span> <span class="toc-text">看到上面的特殊字体了吧。那就是有差异的部分。总共有一个文件被更改。</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#说明"><span class="toc-number">0.1.</span> <span class="toc-text">说明</span></a></li></ol></li></ol>
+    </div>
+    
+    <div class="back-top">&#xe639;</div>
+    <div class="sidebar">
+    <div class="sidebar-header sidebar-header-show-archive">
+        <div class="sidebar-category">
+            <span class="sidebar-archive-link"><span class="iconfont-archer">&#xe67d;</span>Archive</span>
+            <span class="sidebar-tags-link"><span class="iconfont-archer">&#xe610;</span>Tag</span>
+        </div>
+    </div>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-archive">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-archive"> Total : 12 </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2017 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/浅谈token/" >浅谈token</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/Java优雅的处理异常/" >Java优雅的处理异常</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/文件与文件系统的压缩与打包/" >文件与文件系统的压缩与打包</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/初始bash/" >初始bash</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/磁盘与Linux分区/" >磁盘与Linux分区</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/Linux文件与文件系统的打包/" >Linux文件与文件系统的打包</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/Java工厂设计模式/" >Java工厂设计模式</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/10</span><a class="archive-post-title" href= "/2017/12/10/文件系统管理/" >文件系统管理</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2017/12/01/hello-world/" >世界你好</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2017 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/10</span><a class="archive-post-title" href= "/2017/12/10/Linux文件与目录管理/" >Linux文件与目录管理</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/06</span><a class="archive-post-title" href= "/2017/12/06/动态规划-Floyed算法/" >动态规划-Floyed算法</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/04</span><a class="archive-post-title" href= "/2017/12/04/堆排序-HeapSort/" >堆排序-HeapSort</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name"><a href= "#">设计模式</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">JavaSE</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Linux</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">JavaWeb</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">hello world</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">算法algorithm</a></span>
+    
+    </div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #888; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: false
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tag-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var jsInfo = {
+        root: '/'
+    }
+</script>
+    <!-- 不蒜子  -->
+    
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ统计  -->
+    
+    </div>
+    </body>
+</html>
+
+

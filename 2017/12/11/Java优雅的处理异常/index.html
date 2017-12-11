@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
+    <title>
+        
+        Java优雅的处理异常 · Dom Blog
+        
+    </title>
+    <link rel="icon" href= http://p0bl99g4r.bkt.clouddn.com/dog.JPG>
+    <!-- TODO: 在font-face加载完毕后改变字体  -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/webfont/1.6.28/webfontloader.js"></script>
+    <!-- 提前加载place holder  -->
+    <style type="text/css">
+        @font-face {
+            font-family: 'Oswald-Regular';
+            src: url(/font/Oswald-Regular.ttf);
+        }
+    </style>
+    <style type="text/css">
+        .site-intro-placeholder {
+            position: absolute;
+            z-index: -2;
+            top: 0;
+            left: 0px;
+            width: calc(100% + 300px);
+            height: 100%;
+            background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+            background-position: center center;
+            transform: translate3d(-226px, 0, 0);
+            animation: gradient-move 2.5s ease-out 0s 1;
+        }
+        @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+</style>
+    <link rel="stylesheet" href = /css/style.css?v=20171020 />
+    <script src="//cdn.staticfile.org/jquery/3.2.1/jquery.min.js" defer></script>
+    
+    <script src="/scripts/main.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+</head>
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >DomBro Studio</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">Java优雅的处理异常</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>DomBro Studio</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-img" style="background-image: url(http://p0bl99g4r.bkt.clouddn.com/dog1.JPG)"></div>
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            Java优雅的处理异常
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <!-- 文章页标签  -->
+            
+                <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = JavaSE>JavaSE</a>
+    
+</div>
+            
+            <div class="post-intro-meta">
+                <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                <span class="post-intro-time">2017/12/11</span>
+            </div>
+        
+    </div>
+</div>
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <script>
+            var browser = {
+                    versions: function () {
+                        var u = window.navigator.userAgent;
+                        return {
+                            userAgent: u,
+                            trident: u.indexOf('Trident') > -1, //IE内核
+                            presto: u.indexOf('Presto') > -1, //opera内核
+                            webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+                            gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+                            mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+                            ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+                            android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+                            iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+                            iPad: u.indexOf('iPad') > -1, //是否为iPad
+                            webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+                            weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+                            uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+                        };
+                    }()
+                }
+
+            function fontLoaded(){
+                console.log('font loaded');
+                if (document.getElementsByClassName('site-intro-meta')) {
+                    document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+                    document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+                    var postIntroTags = document.getElementsByClassName('post-intro-tags')[0],
+                        postIntroMeat = document.getElementsByClassName('post-intro-meta')[0];
+                        if (postIntroTags) {
+                            postIntroTags.classList.add('post-fade-in');
+                        }
+                        if (postIntroMeat) {
+                            postIntroMeat.classList.add('post-fade-in');
+                        }
+                    }
+                }
+                
+            console.log("userAgent:" + browser.versions.userAgent);
+            // UC不支持跨域，所以直接显示
+            if (browser.versions.uc) {
+                console.log("UCBrowser");
+                fontLoaded();
+            } else {
+                WebFont.load({
+                    custom: {
+                        families: ['Oswald-Regular']
+                    },
+                    loading: function () {  //所有字体开始加载
+                        // console.log('loading');
+                    },
+                    active: function () {  //所有字体已渲染
+                        fontLoaded();
+                    },
+                    inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+                        console.log('inactive: timeout');
+                        fontLoaded();
+                    },
+                    timeout: 7000 // Set the timeout to two seconds
+                });
+            }
+        </script>
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><a href="#0">0. 写在前面</a></li>
+<li><a href="#1">1. 掀起Java异常的裙子来</a><ul>
+<li><a href="#1.1">1.1 个人对异常机制的理解</a></li>
+<li><a href="#1.2">1.2 Java异常扫盲行动</a></li>
+<li><a href="#1.3">1.3 Java处理异常手段</a></li>
+<li><a href="#1.3.1">1.3.1 Java抛出异常 throw、throws</a></li>
+<li><a href="#1.3.2">1.3.2 Java捕获异常</a></li>
+</ul>
+</li>
+<li><a href="#2">2. 优雅的处理异常</a></li>
+<li><a href="#3">3. 结语</a></li>
+</ul>
+<h2 id="0">0. 写在前面</h2>
+
+<p>终于要说<strong>Java异常</strong>了，按照国际惯例，在前言里面BB几句，找找感觉。开始自学Java时前面大概还顺风顺水，但是到了异常这里，原地爆炸，实在不理解Java的这个机制是干啥用的。后来了解到 C++ 等高级语言也有类似的机制(事实证明，Java异常机制仿照了C++)，<strong>很长一段时间都是看见异常就很机械性的往外抛，或try catch（这里指受检异常），不明就里</strong>。慢慢发现，不止我自己是这样迷迷糊糊碰到异常就交给编译器（alt+enter 或者其他的快捷键），<strong>仿佛好多人都在刻意逃避异常—————这个不正常的家伙</strong>。</p>
+<h2 id="1">1. 掀起Java异常的裙子来</h2>
+
+<p>虽然 Java 里面有异常处理机制，并且把它当成了一个对象，但是要明确的是，<strong>绝对不应该用正常的眼光态度看待异常</strong>！好像公司正在开会，你虽然也是这个公司的员工，但却一丝不挂的来参加会议，说明肯定是你有问题！绝对一点说，异常就是某种意义上的错误，就是问题<strong>它可能会导致程序失败</strong>！ </p>
+<h3 id="1.1">1.1 个人对异常机制的理解</h3>
+
+
+<p>可以想象一下，当你的程序需要读取一个文件时，编译器会疯狂提示你去处理一个<code>IOEXception</code>(或者是<code>FileNotFoundException</code>这里只是举一个例子)，有没有想过为什么？编译器帮我们做的太多，以至于我们没有时间去好好思考Java设计人员的良苦用心。当我们程序运行期间，如果意外停止了，那一定是因为有错误（废话）。比如开始的那个问题，根本还没有传一个文件咋就让我处理异常?假设程序在运行期间真的出现了<code>IOException</code> 这时候你还会去看控制台打印出来的错误报告？绝对不可能，这是在一个程序运行期间，已将交给用户操作了;不处理？程序就此中断，你失去了一位用户。所以很庆幸Java提供了异常这个东西，我们可以提前去处理可能出现的异常，有可能是给用户一个提示信息，有可能是把错误信息放到日志里面，保证了程序没有因为一个错误而毫无征兆的终止（这句话太严谨了，给自己打call）！<strong>总之异常就是程序在运行期间不期而至的各种状况，而Java这种硬性要求似的处理异常机制对程序的健壮性是有好处的</strong>。</p>
+<h3 id="1.2">1.2 Java异常扫盲大行动</h3>
+
+<p>帮大家和自己顺便复习一下Java异常</p>
+<ul>
+<li>Java 异常的体系</li>
+</ul>
+<p>![]<a href="http://p0bl99g4r.bkt.clouddn.com/exception.PNG" target="_blank" rel="noopener">http://p0bl99g4r.bkt.clouddn.com/exception.PNG</a>)</p>
+<p>如图 <code>Throwable</code> 是所有错误和异常的父类，一切皆可抛，说的就是他老人家。他的两个子类，<code>Error</code>和<code>Exception</code>。说一句，当你的程序出现了 <code>Error</code> 说明你中奖了，<code>Error</code> 指的是合理应用程序不应该去捕获的严重问题，问题很大，比如虚拟机崩溃之类的，出现<code>Error</code>这类问题没交给 JVM 吧，没有比他更专业的了。我们以下说的都是 <code>Exception</code> 中的内容。</p>
+<ul>
+<li>Exception </li>
+</ul>
+<p>它指出了合理的应用程序想要捕获的条件。Exception又分为两类：一种是CheckedException(受检异常)，一种是UncheckedException(非受检异常)。这两种Exception的区别主要是CheckedException需要用try…catch…显示的捕获UncheckedException不需要捕获。<strong>通常UncheckedException又叫做RuntimeException</strong>。</p>
+<blockquote>
+<p>于可恢复的条件使用被检查的异常（CheckedException），对于程序错误（言外之意不可恢复，大错已经酿成）使用运行时异常（RuntimeException）。—— 《effective java》</p>
+</blockquote>
+<p>我们常见的RuntimeExcepiton有IllegalArgumentException、IllegalStateException、NullPointerException、IndexOutOfBoundsException等等。对于那些CheckedException就不胜枚举了，我们在编写程序过程中try…catch…捕捉的异常都是CheckedException。io包中的IOException及其子类，这些都是CheckedException。</p>
+<ul>
+<li>非受查异常(UncheckedException)</li>
+</ul>
+<p>有一句话说的特别好，所有的 <code>RuntimeException</code> 都是程序员的问题。的确，当出现空指针、数组越界这些不需要被处理的问题，一定是我们的逻辑部分有问题。这类异常 Java编译器 并不会检查它，程序中可能出现这类异常，即使没有用try-catch语句捕获它，也没有用throws子句声明抛出它，也会编译通过。事实上我并不喜欢 <code>RuntimeException</code> 这种说法，因为所有的异常不都是发生运行时吗？</p>
+<ul>
+<li>受查异常(CheckedException)</li>
+</ul>
+<p>序语法角度讲是必须进行处理的异常，如果不处理，程序就不能编译通过。如IOException、SQLException等以及用户自定义的Exception异常，<strong>一般情况下不自定义检查异常</strong>。</p>
+<h3 id="1.3">1.3 Java处理异常手段</h3>
+
+<p>起初这里真的不想说太多，毕竟主题是优雅的处理异常，闲的无聊打开了《Java核心技术》看了一圈，默默的添加上了这一小节，学无止境…这里说的 Java处理异常的手段，大体上来讲就两种，抛出 和 捕获。
+　</p>
+<h3 id="1.3.1">1.3.1 Java抛出异常 throw、throws</h3>
+
+<p>英语好的同学可能一眼就能瞧出上面的两个英文啥意思，抛！这两种抛的方式都是消极处理异常的方式，注意这里的消极并不是一个贬义词。</p>
+<ul>
+<li>throw</li>
+</ul>
+<p>说实话，学习Java不到两年，这个 throw 用到的次数真的是用一个手都能数的过来。因为 throw 一般会用于程序出现某种逻辑时程序员主动抛出某种特定类型的异常。这就很尴尬了，我的编程习惯往往是通过逻辑判断去避免异常，怪不得我没怎么用到这个大兄弟。当然，Java设计者给咱们提供了，他就一定是有用的！</p>
+<ul>
+<li>throw 的用法:在方法体中通过逻辑判断，主动抛出特定类型的<strong>异常对象</strong>！注意异常对象这四个字！</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public static void main(String[] args) throws NumberFormatException&#123;  </span><br><span class="line">        String s = &quot;abc&quot;;  </span><br><span class="line">        if(s.equals(&quot;abc&quot;)) &#123; </span><br><span class="line">			//抛出一个异常对象 </span><br><span class="line">            throw new NumberFormatException();  </span><br><span class="line">        &#125; else &#123;  </span><br><span class="line">            System.out.println(s);  </span><br><span class="line">        &#125;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的这段代码，是我随便在网上copy的。目的就是举个例子，你可以看到抛出一个异常非常的简单，首先找到一个合适的异常类，然后创建这个异常类的对象(new)，最后抛出。需要说明的是，<strong>一旦这个异常抛出了，当前的这个方法也就终止了，即这个方法没有执行完</strong>。这是一句非常重要的结论！因为，在以后学习 <strong>事务</strong> 这个很重要的知识点时，一个很重要的环节就是用到了 throw ，来决定这个方法是否执行成功。所以，throw 并不是用不到哟~</p>
+<ul>
+<li>throws </li>
+</ul>
+<p>说完了 throw，再来聊一聊 throws 。这个 throws 很常用，不同于 throw 出现在方法体，throws 出现在方法声明。意思也很简单，就是把<strong>方法中可能出现的受查异常，通过 throws 抛出，交给上一级处理</strong> 。具体例子就不贴了，说一下 throws 的规范使用姿势。</p>
+<blockquote>
+<p>1) 我们不必将所有可能出现的异常都抛出，如非受查异常，因为这些异常要么根本不可控要么都可以在我们的逻辑判断下避免。<br>2) 当你调用一个受查异常的方法，如 FileInputStream 的构造器，可以抛出异常。<br>3) 程序运行中发现错误，方法体中利用 throw 抛出了某种异常，使用 throws 在方法声明处将其抛出交给上层处理。如上面throw用法的代码。<br>4) 子类如果覆盖了父类中的方法，子类方法中声明的受查异常不能比父类方法声明的更通用。如父类抛了一个IOException，子类不能抛出 IOException 的父类 Exception 。<br>5) 如果父类方法没有抛出受查异常，那么子类方法也不可以抛出受查异常。</p>
+</blockquote>
+<h3 id="1.3.2">1.3.2 Java捕获异常</h3>
+
+
+<p>首先来看一句情话</p>
+<blockquote>
+<p>世界上最真情的相依，是你在try我在catch。无论你发什么脾气，我都默默承受，静静处理。 大多数新手对java异常的感觉就是：try…catch…。没错，这是用的最多的，也是最实用的。</p>
+</blockquote>
+<p>try…catch… 遇到的可能比 throws 还要多，不想科普太多，简单的说一下个人理解。 </p>
+<ul>
+<li>catch 你真的会用吗</li>
+</ul>
+<p>很长一段时间，我照着视频生硬的在 catch 下面使用 Thrwoable.printStackTrace() 将异常信息打印到控制台。天真的认为，这是多么优秀简洁的代码呀！想想那时天真的自己真的是图样图森破，catch 就是对 try 块中的异常做出的处理，在调试阶段，我们当然可以通过控制台查看异常信息，看看到底是哪里出了问题。可是如果项目发布了，交给用户使用，这是程序捕获异常，你会让他去控制台看看到底出了啥问题？ 乃一物~~ <strong>所以我们可以在 catch 块中做的很多，因为一旦到了 catch 块中，try 里面的代码就不会被执行了！</strong> 举一个 JavaWeb 的例子</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">//以下是伪代码，场景也可不太严谨，仅仅举个例子</span><br><span class="line"></span><br><span class="line">try&#123;</span><br><span class="line"></span><br><span class="line">	//获取前台用户上传的文件 userFile</span><br><span class="line">	balabalabala...</span><br><span class="line"></span><br><span class="line">	// readExcel方法可以读取 Excel 格式文件，如果不是 Excel 格式抛出 IOException  </span><br><span class="line">	readExcel(userFile);</span><br><span class="line"></span><br><span class="line">&#125;catch(IOException e)&#123;</span><br><span class="line"> </span><br><span class="line">	//用户传来的不是 Excel 格式文件，捕获该异常,给用户提示</span><br><span class="line"></span><br><span class="line">	request.setattrabute(&quot;msg&quot;,&quot;请检查您上传文件格式&quot;);</span><br><span class="line"></span><br><span class="line">	//当然，我们还要删除用户上传的文件</span><br><span class="line">	userFile.delete();</span><br><span class="line"></span><br><span class="line">	//转发到用户刚才的页面</span><br><span class="line">	request.getRequestDispatcher(&quot;xxxx.html&quot;).forward(request,response);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>try-catch-finally</li>
+</ul>
+<p>try-catch-finally ，无论有没有捕获到异常，finally块中的代码都会被执行。很好理解的概念，可是很多教程都把这个问题讲的很复杂 。在 finally 中我们需要注意一点 <strong>不要在 finally 中将方法 return !</strong>因为这是一个非常危险的操作，他会覆盖原有的返回值。</p>
+<p>一个很常见的操作就是在 finally 中关闭资源，举个常见写法的例子</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">InputStream in = ...;</span><br><span class="line"></span><br><span class="line">try&#123;</span><br><span class="line">	balabalabala...</span><br><span class="line">&#125;catch(IOException e)&#123;</span><br><span class="line">	e.printStackTrace();</span><br><span class="line">//在 finally 中关闭资源</span><br><span class="line">&#125;finally&#123;</span><br><span class="line"></span><br><span class="line">	try&#123;</span><br><span class="line">		in.close;</span><br><span class="line">	&#125;catch(IOException e)&#123;</span><br><span class="line">     	e.printStackTrace();</span><br><span class="line">	&#125;</span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>try-with-resourse</li>
+</ul>
+<p>上面的代码确实会在 finally 中会关闭输入流，但是有没有觉得很奇怪和臃肿，在关闭 输入流 时还要对 IOException 进行捕获。这简直太不优雅了！强大的Java 开发者在 <strong> Java SE 7 的版本中 引入了 try-with-resourse </strong>。上面的带码可以简化成这个样子</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">File file = new File(&quot;D:\\1.txt&quot;);</span><br><span class="line">File file1 = new File(&quot;D:\\2.txt&quot;);</span><br><span class="line">try(InputStream inputStream = new FileInputStream(file)</span><br><span class="line">OutputStream outputStream = new FileOutputStream(file1))&#123;</span><br><span class="line">	balabalabala</span><br><span class="line">&#125; catch (IOException e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>你或许会说，这并没有关闭资源啊。别急，<strong>事实上当一个资源 实现了 AutoCloseable接口 或者 Closeable 接口，并实现了 close() 方法，在 try 块退出时，就会自动调用该资源的 close()，无论正常退出或者存在异常</strong>。 当然，这个方法或许不是一本万利，接口中的 close 方法也会抛出异常，就是说 close 抛出的异常会被压制，并被自动捕获，添加到下面的 catch 块中的异常中。但是如果你想要你的代码更加高级，优雅这种方式绝对是一个加分项。</p>
+<h2 id="2">2. 优雅的处理异常</h2>
+
+
+<p>优雅的处理异常，多么优雅的主题。事实上异常机制的处理有太多争论了，就像开头说的我们都在有意无意的去逃避异常。这一节，我总结了书上的理论，和编程中的一点体验去说一下关于异常的处理。</p>
+<ul>
+<li>1.异常处理不能代替逻辑判断</li>
+</ul>
+<p>看个例子</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">//逻辑判断</span><br><span class="line">String param = ....;</span><br><span class="line">if(param != null)</span><br><span class="line">System.out.print(param);</span><br><span class="line"></span><br><span class="line">//错误示范</span><br><span class="line">try&#123;</span><br><span class="line"></span><br><span class="line">	String param = ....;</span><br><span class="line">	System.out.print(param);</span><br><span class="line"></span><br><span class="line">&#125;catch(Exception e)&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>或许你会说，直接用 try…catch 去捕获这个空指针异常省的自己去判断，大错特错！《Java核心技术Ｉ》里面写的清楚明白，相比于简单的测试，异常处理会消耗大量的时间。<strong>我们只在异常的情况下使用异常！</strong></p>
+<ul>
+<li>2.不要过分细化异常</li>
+</ul>
+<p>不要将每一条语句分别装在一个独立的 try 语句块中。使用多个 catch 去捕获一个 try 块中的异常。例子就不举了。</p>
+<ul>
+<li>3.利用异常的层次结构</li>
+</ul>
+<p>跟我读三遍，Java异常是对象X3！异常和其他 Java对象一样，也有自己的方法，自己的爸爸和儿子，所以在捕获异常时不要用一个 Exception 或者 Throwable 一夫当关万夫莫开。选择使用哪种正确类型异常对程序的可读性很有必要。</p>
+<ul>
+<li>4.不要放任异常</li>
+</ul>
+<p>如果你捕获异常，那请你在 catch 块中做点什么吧！</p>
+<ul>
+<li>5.不要羞于异常的传递</li>
+</ul>
+<p>我记得在我刚开始编程时，我认为那些看到异常就往外抛的行为真的是不负责任，你有错误都不改正！实际上，当然还是我天真！我记得我说过，所谓的架构师就是把问题甩给别人…我们在底层（这里指被调用层）编写出来带异常的的方法，往往不知道该如何正确处理，过早的处理调用者就无法把错误消息传给更高级，所以，异常该抛就抛吧！</p>
+<ul>
+<li>6.不要不捕获异常（注意是个双重否定）</li>
+</ul>
+<p>第5点说让我们放下顾虑，勇敢的抛出异常，那是不是一直抛到最上层的调用者，然后最上层也把它抛出去？当然不是！要找到最恰当的时机去捕获，去做一些处理。</p>
+<ul>
+<li>7.捕获异常的时机</li>
+</ul>
+<p>什么时机才是捕获异常的大好时机？要看你的具体需求，如果你想在出现异常时给用户一些提示信息，那就要在最上层或者次上层捕获。如果你在测试阶段，想做一个判断，在异常出现时打印一句话，那就直接在异常出现的地方捕获。</p>
+<ul>
+<li>8.出现异常时对用户要友好</li>
+</ul>
+<p>当程序出现异常，在测试阶段会导致程序不能正常运行。已发布的项目，要是也按照这个套路来，程序终止了，留在用户在那里一脸懵逼，这就是程序员的噩梦，说明你没有考虑到异常出现时要怎样给用户一个交代！</p>
+<ul>
+<li>9.配合日志</li>
+</ul>
+<p>如果项目（JavaWeb）发布到了tomcat上面，那tomcat上的log日志会记录这个程序的运行状态，出现异常可以日志上面的记录的信息去查看哪里出了问题。如果项目没有发布在 tomcat ，可以使用一些日志框架如 log4j ，将每次出现异常的情况打印在上面。</p>
+<ul>
+<li>补充：对于非受查异常使用逻辑判断去代替异常的捕获</li>
+</ul>
+<p>在网上经常看到一些讲解异常的博客，出现用 try…catch 去捕获非受查异常这种奇葩例子（比如不会空指针，数组越界），看的我很难受！<strong>不要让程序的性能为你的逻辑错误而买单！</strong>获取参数时先判断是否为空，遍历数组时考虑一下数组下标！</p>
+<h2 id="3">3. 结语</h2>
+
+<p>浅谈了 Java 异常机制，还有好多没总结到，比如自定义异常类，异常对象的方法，异常链（确实不想了解）等等，就瞎写到这里吧。</p>
+
+    </article>
+    <!-- 前后页  -->
+    <ul class="post-pager">
+        
+            <li class="next">
+                <a href= "/2017/12/11/Java工厂设计模式/" title= Java工厂设计模式 >
+                    <span>Next Post</span>
+                    <span>Java工厂设计模式</span>
+                </a>
+            </li>
+        
+        
+            <li class="previous">
+                <a href= "/2017/12/11/初始bash/" title= 初始bash >
+                    <span>Previous Post</span>
+                    <span>初始bash</span>
+                </a>
+            </li>
+        
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+<div id="container"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+    var gitment = new Gitment({
+        // id: "Java优雅的处理异常", // 可选。默认为 location.href
+        owner: 'DomBro96',
+        repo: 'DomBro96.github.io',
+        oauth: {
+            client_id: '4a6fa6686f2dd417ed61',
+            client_secret: 'cc1f043ee266bc750c481d6a24a98188a185e2eb',
+        },
+    })
+    gitment.render('container')
+
+</script>
+
+    <!--PC版-->
+
+    <!--PC版-->
+
+
+    
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:460716809@qq.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="https://github.com/DomBro96" class="iconfont-archer github" target="_blank" title="github"></a>
+            
+        
+    
+        
+            
+                <a href="https://twitter.com/Bro_Doom" class="iconfont-archer twitter" target="_blank" title="twitter"></a>
+            
+        
+    
+        
+            
+                <a href="https://www.instagram.com/dombro7277/" class="iconfont-archer instagram" target="_blank" title="instagram"></a>
+            
+        
+    
+        
+            
+                <a href="https://leetcode.com/dombro96/" class="iconfont-archer others" target="_blank" title="others"></a>
+            
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">Theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+        <span id="busuanzi_container_site_pv">Welcome, No. <span id="busuanzi_value_site_pv"></span> visitor.
+        </span>
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper">
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#目录"><span class="toc-number">1.</span> <span class="toc-text">目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0"><span class="toc-number">2.</span> <span class="toc-text">0. 写在前面</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1"><span class="toc-number">3.</span> <span class="toc-text">1. 掀起Java异常的裙子来</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1.1"><span class="toc-number">3.1.</span> <span class="toc-text">1.1 个人对异常机制的理解</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1.2"><span class="toc-number">3.2.</span> <span class="toc-text">1.2 Java异常扫盲大行动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1.3"><span class="toc-number">3.3.</span> <span class="toc-text">1.3 Java处理异常手段</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1.3.1"><span class="toc-number">3.4.</span> <span class="toc-text">1.3.1 Java抛出异常 throw、throws</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1.3.2"><span class="toc-number">3.5.</span> <span class="toc-text">1.3.2 Java捕获异常</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2"><span class="toc-number">4.</span> <span class="toc-text">2. 优雅的处理异常</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3"><span class="toc-number">5.</span> <span class="toc-text">3. 结语</span></a></li></ol>
+    </div>
+    
+    <div class="back-top">&#xe639;</div>
+    <div class="sidebar">
+    <div class="sidebar-header sidebar-header-show-archive">
+        <div class="sidebar-category">
+            <span class="sidebar-archive-link"><span class="iconfont-archer">&#xe67d;</span>Archive</span>
+            <span class="sidebar-tags-link"><span class="iconfont-archer">&#xe610;</span>Tag</span>
+        </div>
+    </div>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-archive">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-archive"> Total : 12 </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2017 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/浅谈token/" >浅谈token</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/Java优雅的处理异常/" >Java优雅的处理异常</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/文件与文件系统的压缩与打包/" >文件与文件系统的压缩与打包</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/初始bash/" >初始bash</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/磁盘与Linux分区/" >磁盘与Linux分区</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/Linux文件与文件系统的打包/" >Linux文件与文件系统的打包</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/Java工厂设计模式/" >Java工厂设计模式</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/10</span><a class="archive-post-title" href= "/2017/12/10/文件系统管理/" >文件系统管理</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2017/12/01/hello-world/" >世界你好</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2017 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/10</span><a class="archive-post-title" href= "/2017/12/10/Linux文件与目录管理/" >Linux文件与目录管理</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/06</span><a class="archive-post-title" href= "/2017/12/06/动态规划-Floyed算法/" >动态规划-Floyed算法</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/04</span><a class="archive-post-title" href= "/2017/12/04/堆排序-HeapSort/" >堆排序-HeapSort</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name"><a href= "#">设计模式</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">JavaSE</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Linux</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">JavaWeb</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">hello world</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">算法algorithm</a></span>
+    
+    </div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #888; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: false
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tag-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var jsInfo = {
+        root: '/'
+    }
+</script>
+    <!-- 不蒜子  -->
+    
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ统计  -->
+    
+    </div>
+    </body>
+</html>
+
+

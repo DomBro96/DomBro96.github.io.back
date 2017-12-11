@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
+    <title>
+        
+        Java工厂设计模式 · Dom Blog
+        
+    </title>
+    <link rel="icon" href= http://p0bl99g4r.bkt.clouddn.com/dog.JPG>
+    <!-- TODO: 在font-face加载完毕后改变字体  -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/webfont/1.6.28/webfontloader.js"></script>
+    <!-- 提前加载place holder  -->
+    <style type="text/css">
+        @font-face {
+            font-family: 'Oswald-Regular';
+            src: url(/font/Oswald-Regular.ttf);
+        }
+    </style>
+    <style type="text/css">
+        .site-intro-placeholder {
+            position: absolute;
+            z-index: -2;
+            top: 0;
+            left: 0px;
+            width: calc(100% + 300px);
+            height: 100%;
+            background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+            background-position: center center;
+            transform: translate3d(-226px, 0, 0);
+            animation: gradient-move 2.5s ease-out 0s 1;
+        }
+        @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+</style>
+    <link rel="stylesheet" href = /css/style.css?v=20171020 />
+    <script src="//cdn.staticfile.org/jquery/3.2.1/jquery.min.js" defer></script>
+    
+    <script src="/scripts/main.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+</head>
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >DomBro Studio</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">Java工厂设计模式</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>DomBro Studio</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-img" style="background-image: url(http://p0bl99g4r.bkt.clouddn.com/dog1.JPG)"></div>
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            Java工厂设计模式
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <!-- 文章页标签  -->
+            
+                <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = 设计模式>设计模式</a>
+    
+</div>
+            
+            <div class="post-intro-meta">
+                <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                <span class="post-intro-time">2017/12/11</span>
+            </div>
+        
+    </div>
+</div>
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <script>
+            var browser = {
+                    versions: function () {
+                        var u = window.navigator.userAgent;
+                        return {
+                            userAgent: u,
+                            trident: u.indexOf('Trident') > -1, //IE内核
+                            presto: u.indexOf('Presto') > -1, //opera内核
+                            webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+                            gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+                            mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+                            ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+                            android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+                            iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+                            iPad: u.indexOf('iPad') > -1, //是否为iPad
+                            webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+                            weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+                            uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+                        };
+                    }()
+                }
+
+            function fontLoaded(){
+                console.log('font loaded');
+                if (document.getElementsByClassName('site-intro-meta')) {
+                    document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+                    document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+                    var postIntroTags = document.getElementsByClassName('post-intro-tags')[0],
+                        postIntroMeat = document.getElementsByClassName('post-intro-meta')[0];
+                        if (postIntroTags) {
+                            postIntroTags.classList.add('post-fade-in');
+                        }
+                        if (postIntroMeat) {
+                            postIntroMeat.classList.add('post-fade-in');
+                        }
+                    }
+                }
+                
+            console.log("userAgent:" + browser.versions.userAgent);
+            // UC不支持跨域，所以直接显示
+            if (browser.versions.uc) {
+                console.log("UCBrowser");
+                fontLoaded();
+            } else {
+                WebFont.load({
+                    custom: {
+                        families: ['Oswald-Regular']
+                    },
+                    loading: function () {  //所有字体开始加载
+                        // console.log('loading');
+                    },
+                    active: function () {  //所有字体已渲染
+                        fontLoaded();
+                    },
+                    inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+                        console.log('inactive: timeout');
+                        fontLoaded();
+                    },
+                    timeout: 7000 // Set the timeout to two seconds
+                });
+            }
+        </script>
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><a href="#0">0.阅读指南</a></li>
+<li><a href="#1">1. 前言</a></li>
+<li><a href="#2">2. What</a><ul>
+<li><a href="#2.1">2.1 简单工厂模式</a></li>
+<li><a href="#2.2">2.2 工厂方法模式</a></li>
+<li><a href="#2.3">2.3 抽象工厂模式</a></li>
+</ul>
+</li>
+<li><a href="#3">3. How</a><ul>
+<li><a href="#3.1">3.1 引子</a></li>
+<li><a href="#3.2">3.2 Why</a></li>
+</ul>
+</li>
+<li><a href="#4">4. When</a></li>
+<li><a href="#5">5.总结</a></li>
+<li><a href="#6">6.参考</a></li>
+</ul>
+<h2 id="0">0.阅读指南</h2>
+
+<p>初次接触工厂模式的同学，如果不想看枯燥的概念，可以先从<a href="#3.1">3.1引子</a>看起，回过头来在看一下概念性较多的<a href="#2">What</a>部分。</p>
+<h2 id="1">1.前言</h2>
+
+
+<p>当老师讲设计模式这门课整天嘴上挂着面向对象、OOP等专业术语，觉得离自己太遥远。总以为技术上的low逼怎么可能理解或者用到 GoF 的《设计模式》这本书…然鹅事实并非如此。上课迷迷糊糊听到老师讲到工厂模式，听到了Factory 这个单词，我马上被吸引了，Spring、MyBatis里面都有Factory…莫非有啥关系吗?好好看过书与上网查阅资料后，才发现设计模式离我如此之近！！！</p>
+<h2 id="2">2.What</h2>
+
+<p>在 GoF 四位大佬写的《设计模式》（被面向对象编程人员当做圣经的一本书）<strong>创建型模式</strong>这一章中，提到了五种创建型模式，这其中包括<strong>抽象工厂模式(ABSTRACT FACTORY)</strong>、<strong>工厂方法模式(FACTORY METHOD)</strong>。<br>创建型模式，顾名思义创造对象实例化过程的模式，也就是帮你造对象的模式，主要的<strong>功能就是帮助我们把对象的实例化部分抽取了出来，优化了系统的架构，并且增强了系统的扩展性</strong>。虽然四大佬在书里只提到两种创建型工厂模式，其实还有一种Java语言常用的<strong>简单工厂模式</strong>。今天就来撸一撸这三种工厂模式！</p>
+<h3 id="2.1">2.1 简单工厂模式</h3>
+
+
+<p>简单工厂模式的工厂类一般是使用静态方法，通过接收的参数的不同来返回不同的对象实例。不修改代码的话，是无法扩展的</p>
+<p><img src="http://p0bl99g4r.bkt.clouddn.com/SimpleFactory.PNG" alt=""></p>
+<h3 id="2.2">2.2 工厂方法模式</h3>
+
+
+<p>工厂方法是针对每一种产品提供一个工厂类。通过不同的工厂实例来创建不同的产品实例。在同一等级结构中，支持增加任意产品。</p>
+<p><img src="http://p0bl99g4r.bkt.clouddn.com/FactoryMethod.PNG" alt=""></p>
+<h3 id="2.3">2.3 抽象工厂模式</h3>
+
+
+<p>抽象工厂是应对产品族概念的。应对产品族概念而生，增加新的产品线很容易，但是无法增加新的产品。</p>
+<p><img src="http://p0bl99g4r.bkt.clouddn.com/AbstractFactory.PNG" alt=""></p>
+<h2 id="3">3. How</h2>
+
+
+<p>事实上这三种工厂模式并没有严格的好坏之分，会因为使用场景的不同而有最适合的模式。</p>
+<h3 id="3.1">3.1 引子</h3>
+
+
+<p>在面向对象的世界中，最高阶的功法与核心就是模拟真实世界，把真实世界中的事物抽象成类，整个程序靠各个类的实例互相通信、互相协作完成系统功能，这非常符合真实世界的运行状况，也是面向对象思想的精髓。<br>本着这种精髓来举个例子，有这样一个人，就叫他大黄吧，他想要<strong>驾驶一辆汽车兜兜风</strong>，他可能会这样：</p>
+<ul>
+<li>剧本一 大黄自己造汽车</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">											产品</span><br><span class="line">//汽车类</span><br><span class="line">class Car&#123;</span><br><span class="line"></span><br><span class="line">  public void move()&#123;</span><br><span class="line">     System.out.println(&quot;我只是一辆普通的小汽车，我开动了&quot;)</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">使用者：</span><br><span class="line"></span><br><span class="line">//大黄先生类（调用类）</span><br><span class="line">public class DaHuang&#123;</span><br><span class="line"></span><br><span class="line">   public void drive()&#123;</span><br><span class="line">   //自己造汽车，累的一批</span><br><span class="line">   Car car = new Car();</span><br><span class="line">   //启动车</span><br><span class="line">   car.move();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>有没有很累呀，大黄先生只想安静的开车兜风，但却要自己亲自造一个车(new Car) 。太不suang了，后来大黄先生发现家附近有一个汽车工厂，不仅可以造汽车，还可以选择宝马和奔驰这两种品牌，这可乐坏了大黄先生，于是：</p>
+<ul>
+<li>剧本二 工厂为大黄造汽车（<a href="#2.1">简单工厂模式，戳我看概念</a>）</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line">			                 	          产品</span><br><span class="line">//汽车接口</span><br><span class="line">interface Car&#123;</span><br><span class="line"></span><br><span class="line">  public void move();</span><br><span class="line">   </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//宝马汽车类</span><br><span class="line">class Bwm implements Car&#123;</span><br><span class="line"></span><br><span class="line"> public void move()&#123;</span><br><span class="line">     System.out.println(&quot;我可是宝马老铁，我开动了，速度可快了呢！&quot;)</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//奔驰汽车类</span><br><span class="line">class Benz implements Car&#123;</span><br><span class="line"></span><br><span class="line"> public void move()&#123;</span><br><span class="line">     System.out.println(&quot;我是奔驰呀，我开动了，我的稳定性很好&quot;)</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">工厂：</span><br><span class="line"></span><br><span class="line">class CarFactory&#123;</span><br><span class="line"></span><br><span class="line">  public static Car createCar(String carBrand)&#123;</span><br><span class="line">    switch(carBrand)&#123;</span><br><span class="line">      case &quot;Bwm&quot;:</span><br><span class="line">       return new Bwm();</span><br><span class="line">	   break;	</span><br><span class="line">      case &quot;Benz&quot;:</span><br><span class="line">       return new Benz();</span><br><span class="line">	   break;         </span><br><span class="line"></span><br><span class="line">     &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">使用者：</span><br><span class="line"></span><br><span class="line">//大黄先生类（调用类）</span><br><span class="line">public class DaHuang()&#123;</span><br><span class="line">   //依赖汽车接口</span><br><span class="line">   private Car car;</span><br><span class="line"></span><br><span class="line">   public void drive()&#123;</span><br><span class="line">   //找工厂要指定型号的汽车 </span><br><span class="line">   car = CarFactory.createCar(&quot;Bwm&quot;);</span><br><span class="line">   //启动车</span><br><span class="line">   car.move();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>大黄先生开着从工厂造出来的宝马，心里想那以后开奔驰的时候还要特意跑来工厂跟厂长说我只想要奔驰，靠，我只想开车呀！可不可以在省力一点！就在这个时候厂长打来电话，告诉大黄先生，我们厂改革啦，造奔驰和造宝马的分成两个不同的厂子啦，以后给指定的厂子打电话就可以<strong>送货上门</strong>！真的吗？大黄先生高兴坏了：</p>
+<ul>
+<li>剧本三 大黄给奔驰汽车厂打电话，送货上门(<a href="#2.2">工厂方法模式，戳我看概念</a>)</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br></pre></td><td class="code"><pre><span class="line">										产品</span><br><span class="line">//汽车接口</span><br><span class="line">interface Car&#123;</span><br><span class="line"></span><br><span class="line">  public void move();</span><br><span class="line">   </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//宝马汽车类</span><br><span class="line">class Bwm implements Car&#123;</span><br><span class="line"></span><br><span class="line"> public void move()&#123;</span><br><span class="line">     System.out.println(&quot;我可是宝马老铁，我开动了，速度可快了呢！&quot;)</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//奔驰汽车类</span><br><span class="line">class Benz implements Car&#123;</span><br><span class="line"></span><br><span class="line"> public void move()&#123;</span><br><span class="line">     System.out.println(&quot;我是奔驰呀，我开动了，我的稳定性很好&quot;)</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">工厂：</span><br><span class="line"></span><br><span class="line">//工厂改革了，不在这个厂区生产了，只进行图纸研发，即变成接口，只规定一些规范，</span><br><span class="line">interface CarFactory&#123;</span><br><span class="line">   </span><br><span class="line">  public Car createCar();</span><br><span class="line">  </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//宝马汽车厂</span><br><span class="line">class BwmFactory implements CarFactory&#123;</span><br><span class="line">    </span><br><span class="line">	private BwmFactory()&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //单例模式,即只提供送货上门</span><br><span class="line">    public static BwmFactory getInstance()&#123;</span><br><span class="line">        return BwmFactory();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    //只生产宝马</span><br><span class="line">	public Car createCar()&#123;</span><br><span class="line">    	return new Bwm();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//奔驰汽车厂</span><br><span class="line">class BenzFactory implements CarFactory&#123;</span><br><span class="line">    </span><br><span class="line">    private BenzFactory()&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    //单例模式,即只提供送货上门</span><br><span class="line">    public static BenzFactory getInstence()&#123;</span><br><span class="line"></span><br><span class="line">       return new BenzFactory();</span><br><span class="line">	&#125;</span><br><span class="line">     </span><br><span class="line">    //只生产宝马</span><br><span class="line">	public Car createCar()&#123;</span><br><span class="line">    	return new Benz();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">使用者:</span><br><span class="line"></span><br><span class="line">//大黄先生类（调用类）</span><br><span class="line">public class DaHuang()&#123;</span><br><span class="line">   //依赖汽车接口</span><br><span class="line">   private Car car;</span><br><span class="line">   public void drive()&#123;</span><br><span class="line">   //直接给生产奔驰的厂区打电话，叫他们把奔驰送过来</span><br><span class="line">   car = BenzFactory.getInstence().createCar();</span><br><span class="line">   //启动车</span><br><span class="line">   car.move();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这下大黄舒服满意了吧？他开着厂家送过来的奔驰，突然发现自己的车没有安装行车记录仪，大黄当然自己可以造一款行车记录仪（new Tachograph），但是大黄只想开车，于是大黄开车找到了行车记录仪厂家，当然可以帮大黄安装，但大黄只想开车呀，各位乡亲父老，他只想开车有错吗？这时候，汽车厂厂长又打来了电话，告诉大黄先生说，我们厂的业务扩充到行车记录仪的领域啦，以后给下面分厂打电话就可以把<strong>装有指定品牌的行车记录仪的奔驰或宝马</strong> 送货上门啦！大黄先生默默拨通了电话:</p>
+<ul>
+<li>剧本四 装有行车记录仪的奔驰汽车送到大黄家(<a href="#2.3">抽象工厂模式，戳我看概念</a>)</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br></pre></td><td class="code"><pre><span class="line">												产品</span><br><span class="line">//汽车接口</span><br><span class="line">interface Car&#123;</span><br><span class="line"></span><br><span class="line">  public void move();</span><br><span class="line">   </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//宝马汽车类</span><br><span class="line">class Bwm implements Car&#123;</span><br><span class="line"></span><br><span class="line"> public void move()&#123;</span><br><span class="line">     System.out.println(&quot;我可是宝马老铁，我开动了，速度可快了呢！&quot;)</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//奔驰汽车类</span><br><span class="line">class Benz implements Car&#123;</span><br><span class="line"></span><br><span class="line"> public void move()&#123;</span><br><span class="line">     System.out.println(&quot;我是奔驰呀，我开动了，我的稳定性很好&quot;)</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//行车记录仪接口</span><br><span class="line">interface Tachograph()&#123;</span><br><span class="line">	public void record();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//A品牌行车记录仪</span><br><span class="line">class TachographA() implements Tachograph&#123;</span><br><span class="line">	public void record()&#123;</span><br><span class="line">	 System.out.println(&quot;我是A品牌行车记录仪，我开始记录了&quot;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//B品牌行车记录仪</span><br><span class="line">class TachographB() implements Tachograph&#123;</span><br><span class="line">	public void record()&#123;</span><br><span class="line">	 System.out.println(&quot;我是B品牌行车记录仪，我开始记录了&quot;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》</span><br><span class="line">					     				工厂</span><br><span class="line"></span><br><span class="line">//工厂升级了，不止生产汽车，还生产行车记录仪</span><br><span class="line">interface CarAndTachographFactory&#123;</span><br><span class="line">   </span><br><span class="line">  public Car createCar();</span><br><span class="line"></span><br><span class="line">  public Tachograph creatTachograph();</span><br><span class="line">  </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//既生产宝马又生产A品牌行车记录仪的工厂</span><br><span class="line">class BwmAndTachographAFactory()&#123;</span><br><span class="line">  </span><br><span class="line">  private BwmAndTachographAFactory()&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    //单例模式,即只提供送货上门</span><br><span class="line">    public static BwmAndTachographAFactory getInstence()&#123;</span><br><span class="line"></span><br><span class="line">       return new BwmAndTachographAFactory();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  public Car createCar()&#123;</span><br><span class="line">	return new Bwm();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  public Tachograph creatTachograph()&#123;</span><br><span class="line">    return new  TachographA();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//既生产奔驰又生产B类行车记录仪的工厂</span><br><span class="line">class BenzAndTachographBFactory()&#123;</span><br><span class="line"></span><br><span class="line">   private BenzAndTachographBFactory()&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    //单例模式,即只提供送货上门</span><br><span class="line">    public static BenzAndTachographBFactory getInstence()&#123;</span><br><span class="line"></span><br><span class="line">       return new BenzAndTachographBFactory();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">  public Car createCar()&#123;</span><br><span class="line">	return new Benz();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  public Tachograph creatTachograph()&#123;</span><br><span class="line">    return new  TachographB();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》</span><br><span class="line">										 使用者</span><br><span class="line"></span><br><span class="line">//大黄先生类（调用类）</span><br><span class="line">public class DaHuang()&#123;</span><br><span class="line">   //依赖汽车接口</span><br><span class="line">   private Car car;</span><br><span class="line">   //依赖行车记录仪接口 </span><br><span class="line">   private Tachograph tachograph;</span><br><span class="line"></span><br><span class="line">   public void drive()&#123;</span><br><span class="line">   //给生产奔驰和A品牌行车记录仪的厂家打电话，叫他们把奔驰车送来</span><br><span class="line">   car = BenzAndTachographBFactory.getInstence().createCar();</span><br><span class="line">   //把A品牌行车记录仪也送过来</span><br><span class="line">   tachograph = BenzAndTachographBFactory.getInstence().creatTachograph();</span><br><span class="line">   //启动车</span><br><span class="line">   car.move();</span><br><span class="line">   //记录	</span><br><span class="line">   tachograph.record();</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样一来，大黄就不用再把注意力放在如何得到汽车和行车记录仪，只需要给生产指定产品组合的工厂 打call ，等待工厂为他造好就可以了。 </p>
+<h3 id="3.2">3.2 Why</h3>
+
+<p>看了上面的引子和概念，没错想必你还是一脸的懵逼。这里特意准备了几个问题，供你参考。</p>
+<ul>
+<li>看了这么多，所以为什么我们不要自己去 new 对象，反而要写这么多啰嗦的代码？</li>
+</ul>
+<blockquote>
+<p>(1).就像引子中的多次强调的，当一个调用者的关注点仅仅是调用产品中的方法，而不想亲自创建这个具体产品的对象时，通过工厂模式可以让调用模块更加规范专注于结构上的编码。<br>(2). 实际上当我们在程序中，使用了 new 关键字，就会在内存中开辟一块地址空间，这个看似简单的过程，要经过很多的判断，例如要生成哪个子对象实例，是否需要计算或取得对象的初始设置，或在生成你需要的对象之前必须先生成一些辅助功能的对象等等判断，这不就好像一个造汽车的过程吗？<br>(3). 合作开发时的考虑，有的时候需要多人协作来完成一些项目，不同人员那肯定是写不同层次的代码如，底层，应用层，调用层，当编写调用层的人想要去获取应用层是实例，那就尴尬了，应用层根本不是他写的呀，擅自实例化肯定有危险，所以写应用层的人要为他提供工厂，让调用层实例。</p>
+</blockquote>
+<ul>
+<li>直接去弄一个Factory把需要实例化的具体产品实例化不就好了吗？</li>
+</ul>
+<blockquote>
+<p>这真的是一个好问题，也困扰了我很久。但实际上确实有问题中的这种工厂类（反射机制）。以下是我自己的见解，我认为所说的三种工厂设计模式是<strong>通过多态去实例化一类的产品</strong>，想一下如果你每实例化一个产品（注意是一个），都在万能类中去反射获得一个实例，你需要传入这个产品的具体类名，那这和你去 new 一个对象有什么区别? 因为这个具体的产品（类名）还是在调用的时候被暴露了！ </p>
+</blockquote>
+<ul>
+<li>怎么有那么多的接口(抽象类)？工厂接口，产品接口…?</li>
+</ul>
+<blockquote>
+<p>为什么会有这么多的接口，实际上一提到接口就一定会想到多态。如引子里面所描述的产品宝马汽车和奔驰汽车都是汽车这一类产品（产品接口），而工厂接口则进行了一个规定，即我的实现类或子类，必须去生产汽车这类产品，加入以后汽车产品新增了奥迪汽车，那只需要在实现一个奥迪汽车工厂用来生产奥迪就好了。保证了我们程序的可扩展性。</p>
+</blockquote>
+<ul>
+<li>为什么调用者只依赖于抽象的产品接口？</li>
+</ul>
+<blockquote>
+<p>实际上这是面向接口百年城的内容，这个问题和上一个问题可以一起回答，上一个问题是为什么有产品接口和工厂接口，我可以用一个词来回答你！多态！多态！还他md是多态！想一下要是不依赖于产品接口，那你的调用者要依赖一个甚至是多个具体的产品，并且一旦这个具体的产品有所改动，那整个调用者都会跟着改动。在一定程度上解耦合，依赖接口还不依赖具体实现，在替换实现类的时候，可以将影响减到最小。</p>
+</blockquote>
+<h2 id="4">4. When</h2>
+
+<p>说了这么多，这三种工厂模式什么时候使用呢？在 MVC 设计模式下，service 与 DAO 不正好是调用者和产品的关系吗？ service 层并不在乎 DAO 如何创建，却需要 DAO 中的方法。 而设计 DAO 的方式多种多样，举几个小例子</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">//一个DAO接口，需要子类实现增删改查操作</span><br><span class="line">interface DAO&#123;</span><br><span class="line"></span><br><span class="line">boolean updata(arg...);</span><br><span class="line">boolean insert(arg...);</span><br><span class="line">boolean list&lt;Object&gt; get(arg...);</span><br><span class="line">boolean Object&lt;Object&gt; getList(arg...);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>简单工厂</li>
+</ul>
+<p>我们知道，简单工厂模式一般只有一个具体工厂类，所以当具体产品较少时，适合使用简单工厂。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">//只有两个具体实现</span><br><span class="line">class StudentDAOImp implements DAO&#123;</span><br><span class="line">	      略....</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class BookDAOImp implemets DAO&#123;</span><br><span class="line">		  略....	</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//工厂接口</span><br><span class="line">interface IDAOFactory()&#123;</span><br><span class="line">     static DAO getDAO(String target);</span><br><span class="line">&#125;</span><br><span class="line">//简单接口</span><br><span class="line"></span><br><span class="line">class DAOFactory()&#123;</span><br><span class="line"> static	public DAO getDAO(String target)&#123;</span><br><span class="line">		switch(target)&#123;</span><br><span class="line">         case &quot;stu&quot; :</span><br><span class="line"> 			return new StudentDAOImp();</span><br><span class="line">			break;</span><br><span class="line">		 case &quot;book&quot; :</span><br><span class="line">			return new BookDAOImp();</span><br><span class="line">			break;</span><br><span class="line">     &#125;	</span><br><span class="line">     &#125;	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>工厂方法 </li>
+</ul>
+<p>实际简单工厂是上工厂方法的特例，所以当你认为你的某类DAO产品有点多，并且很有可能还会新增这类DAO的具体实现，那就使用工厂方法模式，为该类DAO的每个具体实现派生具体工厂类。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">class StudentDAOFactory()&#123;</span><br><span class="line"> static	public DAO getDAO(String target)&#123;</span><br><span class="line">		 </span><br><span class="line"> 	    return new StudentDAOImp();</span><br><span class="line">	 </span><br><span class="line">      &#125;	</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class BookDAOFactory()&#123;</span><br><span class="line"> static	public DAO getDAO(String target)&#123;</span><br><span class="line">		 </span><br><span class="line"> 	    return new  BookDAOImp();</span><br><span class="line">	 </span><br><span class="line">      &#125;	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>抽象工厂</li>
+</ul>
+<p>实际上，有些时候我们的可能DAO并没有那么简单，发现并不是单纯的增删改查就万事大吉，针对不同的表有不同的操作，比如 StudentDAO 和 BookDAO 并抽取不出太多相同的操作。那这个时候 StudentDAO 和 BookDAO 就属于两种产品类，但却属于同一产品族。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">//如下，这是两个不同的产品</span><br><span class="line">interface StudentDAO&#123;</span><br><span class="line">    List&lt;Student&gt; getStudents(args...);</span><br><span class="line">	List&lt;Student&gt; findById(int id);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">interface BookDAO&#123;</span><br><span class="line">    int getBookId(args...);</span><br><span class="line">	boolean deleteBook(int args); </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>针对不同的DAO产品，那具体DAO产品的实现肯定不同</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">//使用JDBC实现的StudentDAO</span><br><span class="line">class StudentDAOByJdbc implements StudentDAO&#123;</span><br><span class="line"></span><br><span class="line">   略...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//使用MyBatis框架实现的StudentDAO</span><br><span class="line">class StudentDAOByMyBatis implements StudentDAO&#123;</span><br><span class="line"></span><br><span class="line">   略...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//使用JDBC实现的BookDAO</span><br><span class="line">class BookDAOByMyBatis implements BookDAO&#123;</span><br><span class="line"></span><br><span class="line">   略...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//使用MyBatis框架实现的BookDAO</span><br><span class="line">class BookDAOByMyBatis implements BookDAO&#123;</span><br><span class="line"></span><br><span class="line">   略...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>重点在于抽象工厂</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">interface IDAOFactory &#123;</span><br><span class="line">	</span><br><span class="line">   StudentDAO getStudentDAO();</span><br><span class="line">   BookDAO getBookDAO(); 	</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">class JdbcDAOFactory implements IDAOFactory&#123;</span><br><span class="line">    StudentDAO getStudentDAO()&#123;</span><br><span class="line">      return new StudentDAOByJdbc();</span><br><span class="line">	&#125;</span><br><span class="line">    BookDAO getBookDAO()&#123;</span><br><span class="line">	  return new BookDAOByJdbc();	</span><br><span class="line">	&#125; </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">class MyBatisDAOFactory implements IDAOFactory&#123;</span><br><span class="line">    StudentDAO getStudentDAO()&#123;</span><br><span class="line">      return new StudentDAOByMyBatis();</span><br><span class="line">	&#125;</span><br><span class="line">    BookDAO getBookDAO()&#123;</span><br><span class="line">	  return new BookDAOByMyBatis();	</span><br><span class="line">	&#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>事实上，当然不会有人写直接在程序中两套DAO接口，但是当我们遇到更好的DAO解决办法（比如有Jdbc升级到MyBatis），如果再去修改原有的DAO实现，是一件很恐怖的事情，所以可以将将新写好的一套具体DAO的实现封装在实现了抽象工厂的具体工厂中，在调用层代用这个工厂中的DAO实例就OK了！！</p>
+<h2 id="5">5. 总结</h2>
+
+<ul>
+<li>总结</li>
+</ul>
+<blockquote>
+<p>1.工厂模式中，重要的是工厂类，而不是产品类。产品类可以是多种形式，多层继承或者是单个类都是可以的。但要明确的，工厂模式的接口只会返回一种类型的实例，这是在设计产品类的时候需要注意的，最好是有父类或者共同实现的接口。</p>
+<p>2.使用工厂模式，返回的实例一定是工厂创建的，而不是从其他对象中获取的。</p>
+<p>3.工厂模式返回的实例可以不是新创建的，返回由工厂创建好的实例也是可以的。</p>
+<p>4.简单工厂 ： 用来生产同一等级结构中的任意产品。（对于增加新的产品，无能为力）</p>
+<p>5.工厂方法 ：用来生产同一等级结构中的固定产品。（支持增加任意产品）</p>
+<p>6.抽象工厂 ：用来生产不同产品族的全部产品。（对于增加新的产品，无能为力；支持增加产品族）  </p>
+<p>7.以上三种工厂 方法在等级结构和产品族这两个方向上的支持程度不同。所以要根据情况考虑应该使用哪种方法。  </p>
+<p>8.简单工厂优点：客户端可以免除直接创建产品对象的责任，而仅仅是“消费”产品。简单工厂模式通过这种做法实现了对责任的分割。</p>
+<p>9.工厂方法有点：允许系统在不修改具体工厂角色的情况下引进新产品。</p>
+<p>10.抽象工厂优点：向客户端提供一个接口，使得客户端在不必指定产品具体类型的情况下，创建多个产品族中的产品对象 </p>
+</blockquote>
+<h2 id="6">6. 参考</h2>
+
+<p>图书：<br>GoF《设计模式》</p>
+<p>博客：<br><a href="http://zyjustin9.iteye.com/blog/2094960" target="_blank" rel="noopener">http://zyjustin9.iteye.com/blog/2094960</a></p>
+<p><a href="http://blog.csdn.net/hguisu/article/details/7505909" target="_blank" rel="noopener">http://blog.csdn.net/hguisu/article/details/7505909</a></p>
+<p><a href="http://blog.csdn.net/u014600626/article/details/52131016" target="_blank" rel="noopener">http://blog.csdn.net/u014600626/article/details/52131016</a></p>
+<p><a href="http://blog.csdn.net/u013604031/article/details/50595107" target="_blank" rel="noopener">http://blog.csdn.net/u013604031/article/details/50595107</a></p>
+
+    </article>
+    <!-- 前后页  -->
+    <ul class="post-pager">
+        
+            <li class="next">
+                <a href= "/2017/12/11/浅谈token/" title= 浅谈token >
+                    <span>Next Post</span>
+                    <span>浅谈token</span>
+                </a>
+            </li>
+        
+        
+            <li class="previous">
+                <a href= "/2017/12/11/Java优雅的处理异常/" title= Java优雅的处理异常 >
+                    <span>Previous Post</span>
+                    <span>Java优雅的处理异常</span>
+                </a>
+            </li>
+        
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+<div id="container"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+    var gitment = new Gitment({
+        // id: "Java工厂设计模式", // 可选。默认为 location.href
+        owner: 'DomBro96',
+        repo: 'DomBro96.github.io',
+        oauth: {
+            client_id: '4a6fa6686f2dd417ed61',
+            client_secret: 'cc1f043ee266bc750c481d6a24a98188a185e2eb',
+        },
+    })
+    gitment.render('container')
+
+</script>
+
+    <!--PC版-->
+
+    <!--PC版-->
+
+
+    
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:460716809@qq.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="https://github.com/DomBro96" class="iconfont-archer github" target="_blank" title="github"></a>
+            
+        
+    
+        
+            
+                <a href="https://twitter.com/Bro_Doom" class="iconfont-archer twitter" target="_blank" title="twitter"></a>
+            
+        
+    
+        
+            
+                <a href="https://www.instagram.com/dombro7277/" class="iconfont-archer instagram" target="_blank" title="instagram"></a>
+            
+        
+    
+        
+            
+                <a href="https://leetcode.com/dombro96/" class="iconfont-archer others" target="_blank" title="others"></a>
+            
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">Theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+        <span id="busuanzi_container_site_pv">Welcome, No. <span id="busuanzi_value_site_pv"></span> visitor.
+        </span>
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper">
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#目录"><span class="toc-number">1.</span> <span class="toc-text">目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0"><span class="toc-number">2.</span> <span class="toc-text">0.阅读指南</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1"><span class="toc-number">3.</span> <span class="toc-text">1.前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2"><span class="toc-number">4.</span> <span class="toc-text">2.What</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2.1"><span class="toc-number">4.1.</span> <span class="toc-text">2.1 简单工厂模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2.2"><span class="toc-number">4.2.</span> <span class="toc-text">2.2 工厂方法模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2.3"><span class="toc-number">4.3.</span> <span class="toc-text">2.3 抽象工厂模式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3"><span class="toc-number">5.</span> <span class="toc-text">3. How</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3.1"><span class="toc-number">5.1.</span> <span class="toc-text">3.1 引子</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3.2"><span class="toc-number">5.2.</span> <span class="toc-text">3.2 Why</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4"><span class="toc-number">6.</span> <span class="toc-text">4. When</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5"><span class="toc-number">7.</span> <span class="toc-text">5. 总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6"><span class="toc-number">8.</span> <span class="toc-text">6. 参考</span></a></li></ol>
+    </div>
+    
+    <div class="back-top">&#xe639;</div>
+    <div class="sidebar">
+    <div class="sidebar-header sidebar-header-show-archive">
+        <div class="sidebar-category">
+            <span class="sidebar-archive-link"><span class="iconfont-archer">&#xe67d;</span>Archive</span>
+            <span class="sidebar-tags-link"><span class="iconfont-archer">&#xe610;</span>Tag</span>
+        </div>
+    </div>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-archive">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-archive"> Total : 12 </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2017 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/浅谈token/" >浅谈token</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/Java优雅的处理异常/" >Java优雅的处理异常</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/文件与文件系统的压缩与打包/" >文件与文件系统的压缩与打包</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/初始bash/" >初始bash</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/磁盘与Linux分区/" >磁盘与Linux分区</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/Linux文件与文件系统的打包/" >Linux文件与文件系统的打包</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/Java工厂设计模式/" >Java工厂设计模式</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/10</span><a class="archive-post-title" href= "/2017/12/10/文件系统管理/" >文件系统管理</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2017/12/01/hello-world/" >世界你好</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2017 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/10</span><a class="archive-post-title" href= "/2017/12/10/Linux文件与目录管理/" >Linux文件与目录管理</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/06</span><a class="archive-post-title" href= "/2017/12/06/动态规划-Floyed算法/" >动态规划-Floyed算法</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/04</span><a class="archive-post-title" href= "/2017/12/04/堆排序-HeapSort/" >堆排序-HeapSort</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name"><a href= "#">设计模式</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">JavaSE</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Linux</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">JavaWeb</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">hello world</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">算法algorithm</a></span>
+    
+    </div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #888; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: false
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tag-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var jsInfo = {
+        root: '/'
+    }
+</script>
+    <!-- 不蒜子  -->
+    
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ统计  -->
+    
+    </div>
+    </body>
+</html>
+
+

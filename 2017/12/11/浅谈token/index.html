@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
     <title>
         
-        世界你好 · Dom Blog
+        浅谈token · Dom Blog
         
     </title>
     <link rel="icon" href= http://p0bl99g4r.bkt.clouddn.com/dog.JPG>
@@ -63,7 +63,7 @@
                 <a href="/" >DomBro Studio</a>
             </div>
             <div class="post-title">
-                <a href="#" class="post-name">世界你好</a>
+                <a href="#" class="post-name">浅谈token</a>
             </div>
     </div>
     
@@ -84,7 +84,7 @@
         <h1 class="intro-title">
             <!-- 主页  -->
             
-            世界你好
+            浅谈token
             <!-- 404 -->
             
         </h1>
@@ -102,13 +102,13 @@
             
                 <div class= post-intro-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-href = hello world>hello world</a>
+        <a class="post-tag" href="javascript:void(0);" data-href = JavaWeb>JavaWeb</a>
     
 </div>
             
             <div class="post-intro-meta">
                 <span class="post-intro-calander iconfont-archer">&#xe676;</span>
-                <span class="post-intro-time">2017/12/01</span>
+                <span class="post-intro-time">2017/12/11</span>
             </div>
         
     </div>
@@ -179,21 +179,124 @@
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        <h1 id="Hello-World"><a href="#Hello-World" class="headerlink" title="Hello World"></a>Hello World</h1><p>程序员的职业病？尝试一个新事物就要写个”Hello World”嘚瑟一下。</p>
-<h1 id="That’s-Fun"><a href="#That’s-Fun" class="headerlink" title="That’s Fun"></a>That’s Fun</h1><p>第一次尝试用 github + hexo 搭建自己的博客，简直不要太爽！打今儿起也不再死板的用 github 记笔记了，也潮流一次！感叹互联网技术为我们带来的便捷，一个前端小白都可以搭建自己喜好风格的博客。用 hexo 写博客是一件很享受和放松的事情，最重要还可以装装B…hhhh</p>
-<h1 id="To-Me"><a href="#To-Me" class="headerlink" title="To Me"></a>To Me</h1><p>最后送给自己一句话：<strong>坚持会让所有的幸福如期而至</strong>！</p>
+        <h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><a href="#1">1.不保存状态的 HTTP 协议</a><ul>
+<li><a href="#1.1">1.1 cookie &amp; session</a></li>
+</ul>
+</li>
+<li><a href="#2">2.Token</a><ul>
+<li><a href="#2.1">2.1 Token哪里好</a></li>
+<li><a href="#2.2">2.2 Token是个啥</a></li>
+<li><a href="#2.3">2.3 JWT的Java实现</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="1">1. 不保存状态的 HTTP 协议</h2>
+
+<p>目前我们接触到的所有 Web 项目，基本上都是基于 HTTP 协议的，至于啥叫 HTTP协议？简单来说就是从客户端请求访问文本或图像这一类资源(<strong>使用 URI定位</strong>)，服务器端可以提供该资源的响应(<strong>不主动提供响应</strong>)。</p>
+<ul>
+<li>不保存状态的 HTTP 协议</li>
+</ul>
+<p><img src="https://i.imgur.com/iWmfdEO.jpg" alt=""></p>
+<h3 id="1.1">1.1cookie &amp; session</h3> 
+
+<p>使用 HTTP 协议，每当有新的请求发送时，就会有对应的新响应产生。  无状态导致的业务处理变得棘手情况增多。比如登录购物网站，即使他跳转到该站的其他页面后，也需要能继续保持登陆状态。 因此网站需要保存用户状态，为了实现期望保持状态功能，引入了 Cookie 技术。</p>
+<ul>
+<li>cookie 流程</li>
+</ul>
+<p>cookie 就是在客户端保持状态信息的方案。Cookie 是浏览器访问Web服务器的某个资源时，由Web服务器在Http响应头中附带传给浏览器的小文本文件。这些文本文件，可以保存在浏览器缓存或硬盘中。</p>
+<p>1.浏览器向某个URL发起HTTP请求（可以是任何请求，比如GET一个页面、POST一个登录表单等）</p>
+<p>2.对应的服务器收到该HTTP请求，并计算应当返回给浏览器的HTTP响应。（HTTP响应包括请求头和请求体两部分）</p>
+<p>3.在响应头加入Set-Cookie字段，它的值是要设置的Cookie。</p>
+<p>4.浏览器收到来自服务器的HTTP响应。</p>
+<p>5.浏览器在响应头中发现Set-Cookie字段，就会将该字段的值保存在内存或者硬盘中。（Set-Cookie字段的值可以是很多项Cookie，每一项都可以指定过期时间Expires。 默认的过期时间是用户关闭浏览器时。）</p>
+<p>6.浏览器下次给该服务器发送HTTP请求时， 会将服务器设置的Cookie附加在HTTP请求的头字段Cookie中。（浏览器可以存储多个域名下的Cookie，但只发送当前请求的域名曾经指定的Cookie， 这个域名也可以在Set-Cookie字段中指定）。）</p>
+<p>7.服务器收到这个HTTP请求，发现请求头中有Cookie字段， 便知道之前就和这个用户打过交道了.</p>
+<p>8.过期的Cookie会被浏览器删除。</p>
+<p>（此处举个例子）</p>
+<p><strong>思考题：在后端执行以下代码时，HTTP协议到底做了什么？</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Cookie cookie = new Cookie(&quot;username&quot;,&quot;王大锤&quot;);</span><br><span class="line">response.addCookie(cookie);</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>cookie 的安全隐患</li>
+</ul>
+<p>Cookie提供了一种手段使得HTTP请求可以附加当前状态， 现今的网站也是靠Cookie来标识用户的登录状态的：</p>
+<p>1.用户提交用户名和密码的表单，这通常是一个POST HTTP请求。</p>
+<p>2.服务器验证用户名与密码，如果合法则返回200（OK）并设置Set-Cookie为authed=true。</p>
+<p>3.浏览器存储该Cookie。</p>
+<p>4.浏览器发送请求时，设置Cookie字段为authed=true。</p>
+<p>5.服务器收到第二次请求，从Cookie字段得知该用户已经登录。 按照已登录用户的权限来处理此次请求。</p>
+<p>问题是什么？？风险是什么？？</p>
+<p>我们知道可以发送HTTP请求的不只是浏览器，很多HTTP客户端软件（包括curl、Node.js）都可以发送任意的HTTP请求，可以设置任何头字段。 <strong>假如我们直接设置Cookie字段为authed=true并发送该HTTP请求， 服务器岂不是被欺骗了？这种攻击非常容易，Cookie是可以被篡改的</strong>！</p>
+<p><em>当然，cookie 是有防篡改机制的，不过我不太了解，但还是有风险！！因为 cookie 是明文传输的，因此 cookie 中最好不要放敏感数据</em></p>
+<ul>
+<li>session 的原理</li>
+<li></li>
+</ul>
+<p><strong>第一次听到 session 就是 cookie 的时候我真的一脸懵逼。WTF 说话一点都不严谨。我们可以说 session 机制是通过 cookie 机制在 HTTP服务器实现保持状态的机制！Session 是存储在服务器端的，避免了在客户端Cookie中存储敏感数据。 Session 可以存储在HTTP服务器的内存中</strong>，也可以存在内存数据库（如redis）中， 对于重量级的应用甚至可以存储在数据库中。<br>session 大家就很熟了可以将用户信息，或其他敏感信息放到 session 对象里面，并且 sesson 可以跨页面（跨页面获取 ？此处有问题？）<br>为什么可以跨页面获取，当然是通过 cookie 啦！ HTTP 每生成（新建）一个session ，都会对应生成一个 sessionId ，这个 sessionId 是该session对象的唯一对应，sessionId 实际上就是一个 cookie ，  将该Cookie传给客户端，在下次请求时就会自动带上sessionId(Cookie)。为了防止混淆，在浏览器中此Cookie默认为JSESSIONID。</p>
+<p>思考题：后端执行这段代码 HTTP 协议到底做了什么？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">User user = new User(1，&quot;王大锤&quot;,&quot;男&quot;);</span><br><span class="line">HttpSession session = request.getSession();</span><br><span class="line">session.setAttribute(&quot;user&quot;,user);</span><br><span class="line">session.getAttribute(&quot;user&quot;);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>session 的实现机制</li>
+</ul>
+<p>1.用户提交包含用户名和密码的表单，发送HTTP请求。</p>
+<p>2.服务器验证用户发来的用户名密码。</p>
+<p>3.如果正确则把当前用户名（通常是用户对象）存储到redis中，并生成它在redis中的ID。</p>
+<p>这个ID称为Session ID，通过Session ID可以从Redis中取出对应的用户对象， 敏感数据（比如authed=true）都存储在这个用户对象中。</p>
+<p>4.设置Cookie为sessionId=xxxxxx|checksum并发送HTTP响应， 仍然为每一项Cookie都设置签名。</p>
+<p>5.用户收到HTTP响应后，便看不到任何敏感数据了。在此后的请求中发送该Cookie给服务器。</p>
+<p>6.服务器收到此后的HTTP请求后，发现Cookie中有SessionID，进行放篡改验证。</p>
+<p>7.如果通过了验证，根据该ID从Redis中取出对应的用户对象， 查看该对象的状态并继续执行业务逻辑。</p>
+<p>实现上述过程，在Web应用中可以直接获得当前用户。 相当于在HTTP协议之上，通过Cookie实现了持久的会话。这个会话便称为Session。</p>
+<h2 id="2">2. Token</h2>
+
+
+<p>很好，开胃菜结束了，<strong>迎来了今天的主菜 Token 。</strong> 大家掌声欢迎一下 ！</p>
+<h3 id="2.1">2.1 Token 哪里好</h3>
+
+
+
+<p>1.支持跨域访问: Cookie是不允许垮域访问的，这一点对Token机制是不存在的，前提是传输的用户认证信息通过HTTP头传输。（垮域访问：两个域名之间不能跨过域名来发送请求或者请求数据）</p>
+<p>2.<strong>无状态(也称：服务端可扩展行):Token机制在服务端不需要存储session信息，因为Token 自身包含了所有登录用户的信息，只需要在客户端的cookie或本地介质存储状态信息</strong>.</p>
+<p>3.<strong>更适用CDN: 可以通过内容分发网络请求你服务端的所有资料（如：javascript，HTML,图片等），而你的服务端只要提供API即可</strong>.</p>
+<p>4.<strong>去耦: 不需要绑定到一个特定的身份验证方案。Token可以在任何地方生成，只要在你的API被调用的时候，你可以进行Token生成调用即可</strong>.</p>
+<p>5.<strong>更适用于移动应用: 当你的客户端是一个原生平台（iOS, Android，Windows 8等）时，Cookie是不被支持的（你需要通过Cookie容器进行处理），这时采用Token认证机制就会简单得多</strong>。</p>
+<p>6.<strong>CSRF:因为不再依赖于Cookie，所以你就不需要考虑对CSRF（跨站请求伪造）的防范</strong>。</p>
+<p>7.<strong>性能: 一次网络往返时间（通过数据库查询session信息）总比做一次HMACSHA256计算 的Token验证和解析要费时得多</strong>.</p>
+<p>8.<strong>不需要为登录页面做特殊处理: 如果你使用Protractor 做功能测试的时候，不再需要为登录页面做特殊处理</strong>.</p>
+<p>9.基于标准化:你的API可以采用标准化的 JSON Web Token (JWT). 这个标准已经存在多个后端库（.NET, Ruby, Java,Python, PHP）和多家公司的支持（如：Firebase,Google, Microsoft）.</p>
+<h3 id="2.2">2.2 Token 是个啥</h3>
+
+<p>Token 是 一种保持状态的的机制。不过并不像我们在 web 中学过的 Cookie 和 Session 那样是已经写好的类或对应的对象。Token 是一种用指定算法生成的 “ 串 ”。</p>
+<ul>
+<li>Token 原理</li>
+</ul>
+<p>1.将荷载payload，以及Header信息进行Base64加密，形成密文payload密文，header密文。<br>2.将形成的密文用句号链接起来，用服务端秘钥进行HS256加密，生成签名.<br>3.将前面的两个密文后面用句号链接签名形成最终的token返回到服务端<br>无图言屌</p>
+<p><img src="https://i.imgur.com/O12gxcB.jpg" alt=""></p>
+<p>因此 <strong>Token 可以简化为 base64url_encode(Header) + ‘.’ + base64url_encode(Claims) + ‘.’ + base64url_encode(Signature)</strong><br><strong>实际上生成这个 Token 生成一个 加密字符串(包含用户信息的加密字符串)的过程</strong></p>
+<ul>
+<li>Token 用法</li>
+</ul>
+<p>1.用户请求时携带此token（分为三部分，header密文，payload密文，签名）到服务端，服务端解析第一部分（header密文），用Base64解密，可以知道用了什么算法进行签名，此处解析发现是HS256。<br>2.服务端使用原来的秘钥与密文(header密文+”.”+payload密文)同样进行HS256运算，然后用生成的签名与token携带的签名进行对比，若一致说明token合法，不一致说明原文被修改。<br>3.判断是否过期，客户端通过用Base64解密第二部分（payload密文），可以知道荷载中授权时间，以及有效期。通过这个与当前时间对比发现token是否过期。</p>
+<p><img src="https://i.imgur.com/0SklpWT.png" alt=""></p>
+<h3 id="2.3">2.3 JWT 的 Java实现</h3>
+
+<p>JWT 是一种基于 Token 的认证方案，生成 Token 的方式有很多种（反正给前台） 。JWT 算法可以理解为是专门为生成 Token 而存在的，它可以通过方法设置 Header , 载荷信息，设置Token过期时间等等功能。</p>
+<ul>
+<li>依赖</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">       &lt;groupId&gt;io.jsonwebtoken&lt;/groupId&gt;</span><br><span class="line">       &lt;artifactId&gt;jjwt&lt;/artifactId&gt;</span><br><span class="line">       &lt;version&gt;0.7.0&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+<p>当然，Token 并不代表着万事大吉，大吉大利，只是相对于 cookie 来说是一种更好的选择，毕竟没有完美的 web 策略嘛</p>
 
     </article>
     <!-- 前后页  -->
     <ul class="post-pager">
         
-            <li class="next">
-                <a href= "/2017/12/04/堆排序-HeapSort/" title= 堆排序-HeapSort >
-                    <span>Next Post</span>
-                    <span>堆排序-HeapSort</span>
+        
+            <li class="previous">
+                <a href= "/2017/12/11/Java工厂设计模式/" title= Java工厂设计模式 >
+                    <span>Previous Post</span>
+                    <span>Java工厂设计模式</span>
                 </a>
             </li>
-        
         
     </ul>
     <!-- 评论插件 -->
@@ -207,7 +310,7 @@
 <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
 <script>
     var gitment = new Gitment({
-        // id: "世界你好", // 可选。默认为 location.href
+        // id: "浅谈token", // 可选。默认为 location.href
         owner: 'DomBro96',
         repo: 'DomBro96.github.io',
         oauth: {
@@ -287,7 +390,7 @@
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Hello-World"><span class="toc-number">1.</span> <span class="toc-text">Hello World</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#That’s-Fun"><span class="toc-number">2.</span> <span class="toc-text">That’s Fun</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#To-Me"><span class="toc-number">3.</span> <span class="toc-text">To Me</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#目录"><span class="toc-number">1.</span> <span class="toc-text">目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1"><span class="toc-number">2.</span> <span class="toc-text">1. 不保存状态的 HTTP 协议</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1.1"><span class="toc-number">2.1.</span> <span class="toc-text">1.1cookie & session</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2"><span class="toc-number">3.</span> <span class="toc-text">2. Token</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2.1"><span class="toc-number">3.1.</span> <span class="toc-text">2.1 Token 哪里好</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2.2"><span class="toc-number">3.2.</span> <span class="toc-text">2.2 Token 是个啥</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2.3"><span class="toc-number">3.3.</span> <span class="toc-text">2.3 JWT 的 Java实现</span></a></li></ol></li></ol>
     </div>
     
     <div class="back-top">&#xe639;</div>

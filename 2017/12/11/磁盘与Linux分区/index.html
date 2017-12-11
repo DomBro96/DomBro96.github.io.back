@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
+    <title>
+        
+        磁盘与Linux分区 · Dom Blog
+        
+    </title>
+    <link rel="icon" href= http://p0bl99g4r.bkt.clouddn.com/dog.JPG>
+    <!-- TODO: 在font-face加载完毕后改变字体  -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/webfont/1.6.28/webfontloader.js"></script>
+    <!-- 提前加载place holder  -->
+    <style type="text/css">
+        @font-face {
+            font-family: 'Oswald-Regular';
+            src: url(/font/Oswald-Regular.ttf);
+        }
+    </style>
+    <style type="text/css">
+        .site-intro-placeholder {
+            position: absolute;
+            z-index: -2;
+            top: 0;
+            left: 0px;
+            width: calc(100% + 300px);
+            height: 100%;
+            background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+            background-position: center center;
+            transform: translate3d(-226px, 0, 0);
+            animation: gradient-move 2.5s ease-out 0s 1;
+        }
+        @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+</style>
+    <link rel="stylesheet" href = /css/style.css?v=20171020 />
+    <script src="//cdn.staticfile.org/jquery/3.2.1/jquery.min.js" defer></script>
+    
+    <script src="/scripts/main.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+</head>
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >DomBro Studio</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">磁盘与Linux分区</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>DomBro Studio</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-img" style="background-image: url(http://p0bl99g4r.bkt.clouddn.com/dog1.JPG)"></div>
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            磁盘与Linux分区
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <!-- 文章页标签  -->
+            
+                <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = Linux>Linux</a>
+    
+</div>
+            
+            <div class="post-intro-meta">
+                <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                <span class="post-intro-time">2017/12/11</span>
+            </div>
+        
+    </div>
+</div>
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <script>
+            var browser = {
+                    versions: function () {
+                        var u = window.navigator.userAgent;
+                        return {
+                            userAgent: u,
+                            trident: u.indexOf('Trident') > -1, //IE内核
+                            presto: u.indexOf('Presto') > -1, //opera内核
+                            webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+                            gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+                            mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+                            ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+                            android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+                            iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+                            iPad: u.indexOf('iPad') > -1, //是否为iPad
+                            webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+                            weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+                            uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+                        };
+                    }()
+                }
+
+            function fontLoaded(){
+                console.log('font loaded');
+                if (document.getElementsByClassName('site-intro-meta')) {
+                    document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+                    document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+                    var postIntroTags = document.getElementsByClassName('post-intro-tags')[0],
+                        postIntroMeat = document.getElementsByClassName('post-intro-meta')[0];
+                        if (postIntroTags) {
+                            postIntroTags.classList.add('post-fade-in');
+                        }
+                        if (postIntroMeat) {
+                            postIntroMeat.classList.add('post-fade-in');
+                        }
+                    }
+                }
+                
+            console.log("userAgent:" + browser.versions.userAgent);
+            // UC不支持跨域，所以直接显示
+            if (browser.versions.uc) {
+                console.log("UCBrowser");
+                fontLoaded();
+            } else {
+                WebFont.load({
+                    custom: {
+                        families: ['Oswald-Regular']
+                    },
+                    loading: function () {  //所有字体开始加载
+                        // console.log('loading');
+                    },
+                    active: function () {  //所有字体已渲染
+                        fontLoaded();
+                    },
+                    inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+                        console.log('inactive: timeout');
+                        fontLoaded();
+                    },
+                    timeout: 7000 // Set the timeout to two seconds
+                });
+            }
+        </script>
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <p>Linux系统安装在哪里？当然是在硬盘上。</p>
+<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><a href="#1">1. 计算机磁盘（机械）</a><ul>
+<li><a href="#1.1">1.1 硬盘的物理组成</a></li>
+<li><a href="#1.2">1.2 盘片上的数据</a></li>
+<li><a href="#1.3">1.3 传输接口</a></li>
+</ul>
+</li>
+<li><a href="#2">2. 磁盘分区</a><ul>
+<li><a href="#2.1">2.1 磁盘连接的方式与设备文件名的关系</a></li>
+<li><a href="#2.2">2.2 主引导分区与分区表</a></li>
+<li><a href="#2.3">2.3 磁盘分区原因</a></li>
+<li><a href="#2.3">2.4 扩展分区与逻辑分区</a></li>
+</ul>
+</li>
+<li><a href="#3">3. 文件系统与目录树的关系</a><ul>
+<li><a href="#3.1">3.1 目录树结构</a></li>
+<li><a href="#3.2">3.2文件系统与目录树的关系(挂载)</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="1">1. 计算机硬盘（机械）</h2>
+
+
+<p>计算机上面的存储设备设备包括硬盘、软盘、MO、CD、DVD、磁带机、U盘等，都是可以用来存储数据的。而其中最常见的就是硬盘了。注意这里说的都是传统的机械硬盘。</p>
+<h3 id="1.1">1.1 硬盘的物理组成</h3>
+
+<p>大家应该都看过硬盘吧。硬盘依据桌面型与笔记本又分为3.5英寸及2.5英寸的大小。我们以3.5英寸的硬盘来说明。硬盘其实是由许多的盘片、机械手臂、磁头与主轴马达所组成的。它大概是长酱婶的</p>
+<p><img src="http://p0bl99g4r.bkt.clouddn.com/disk.jpg" alt=""></p>
+<p>实际的<strong>数据都是写在具有磁性物质的盘片上</strong>，而读写主要是通过在机械手臂上的读取头（Head）来完成。实际运行时，主轴马达让盘片转动，然后机械手臂可伸展让读取头在盘片上面进行读写的操作。另外由于单一盘片的容量有限，因此有的硬盘内部会有两个以上的盘片。</p>
+<h3 id="1.2">1.2 盘片上的数据</h3>
+
+<p>整个盘片上面好像有多个同心圆绘制出的饼图，而由圆心以放射状的方式分割出磁盘的最小存储单位，那就是<strong>扇区（Sector），在物理组成分面，每个扇区大小为512bytes，这个值是不会改变的</strong>。而扇区组成一个圆就成为磁道（Track），如果是在多硬盘上面，在所有盘片上面的同一个磁道可以组成一个柱面（Cylinder），柱面也是一般我们分割硬盘时的最小单位了！<br>在计算整个硬盘的存储量时，简单的计算公式就是：header数量x每个header负责的柱面数量 x 每个柱面所含有的扇区数量 x 扇区的容量，单位换算为：header x cylinder/header x secter/cylinder x 512bytes/secter，简单的写法如下：Head x Cylinder x Sector x 512bytes。不过要注意的是，一般硬盘制造商在显示硬盘的容量时，大多是以十进制来编号，因此市售的500GB硬盘，理论上仅会有460GB左右的容量。盘片其实是酱婶的</p>
+<p><img src="http://p0bl99g4r.bkt.clouddn.com/sector.png" alt=""></p>
+<h3 id="1.3">1.3 传输接口</h3>
+
+
+<p>目前硬盘与主机系统的连接主要有下面传输接口规格</p>
+<ul>
+<li>IDE接口</li>
+</ul>
+<blockquote>
+<p>IDE接口插槽所使用的排线较宽，每条排线上面可以接两个 IDE 设备，由于可以接两个设备，为了判别两个设备的主/从（Master/Slave）架构，因此这种磁盘驱动器上面需要调整跳针（Jump）成为Master或Slave才行。这种接口的最高传输速度为Ultra 133规格，即每秒理论传输速度可达133MB。</p>
+</blockquote>
+<ul>
+<li>SATS接口</li>
+</ul>
+<blockquote>
+<p>每条SATA连接线仅能接一个SATA设备。SATA接口除了速度较快之外，由于其排线较细小，所以有利于主机壳内部的散热与安装。目前SATA已经发展到了第二代，其速度由SATA-1的每秒150MB提升到SATA-2每秒300MB的传输速度，因此目前主流的个人计算机硬盘已经被SATA替代了。</p>
+</blockquote>
+<ul>
+<li>SCSI接口</li>
+</ul>
+<blockquote>
+<p>另一种常见于工作站等级以上的硬盘传输接口为SCSI接口，这种接口的硬盘在控制器上含有一块处理器，所以除了运转速度快之外，也比较不会耗费CPU资源。在个人计算机上面这种接口的硬盘不常见。</p>
+</blockquote>
+<h2 id="2">2. 磁盘分区</h2>
+
+<p>Linux系统是安装在计算机组件的磁盘部分。一块磁盘是可以被分区成多个分区（partition），以 Windows 观点来看，你可能会有一块磁盘并且将它分区成为 C:, D:, E:盘。那个 C, D, E就是分区。但是Linux的设备都是以文件的类型存在，那分区的文件名又是什么？如何进行磁盘分区，磁盘分区有哪些限制？是我们这个小节所要探讨的内容。</p>
+<h3 id="2.1">2.1 磁盘连接的方式与设备文件名的关系</h3>
+
+<p>由上面<a href="#1.3">传输接口</a>可以知道，常见的个人计算机磁盘接口有两种，IDE和SATA（主流）接口。称可连接到IDE接口的设备为IDE设备，<strong>不管是磁盘还是光盘设备</strong>。<br>以IDE接口来说，由于一个IDE扁平电缆可以连接两个IDE设备，通常主机又都会提供两个IDE接口，因此最多可以接到四个IDE设备。也就是说，如果你已经有一个光盘设备了，那么最多就只能再接三块IDE接口的磁盘。这两个IDE接口通常被称为IDE1（primary）及IDE2（secondary），而每条扁平电缆上面的IDE设备可以被区分为Master（主设备）与Slave（从设备）。IDE设备和文件名的关系是酱婶的</p>
+<p><img src="http://p0bl99g4r.bkt.clouddn.com/IDE.jpg" alt=""></p>
+<p>再以SATA接口来说，由于SATA/USB/SCSI等磁盘接口都是使用SCSI模块来驱动的，因此这些接口的磁盘设备文件名都是/dev/sd[a-p]的格式。但是与IDE接口不同的是，SATA/USB接口的磁盘根本就没有一定的顺序，那如何决定它的设备文件名呢？这个时候就得要根据Linux内核检测到磁盘的顺序了</p>
+<ul>
+<li>SATA设备文件名例子</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">如果你的PC上面有两个SATA磁盘以及一个USB磁盘，而主板上面有六个SATA的插槽。这两个SATA磁盘分别安插在主板上的SATA1, SATA5插槽上，请问这三个磁盘在Linux中的设备文件名是什么？</span><br><span class="line">答：由于是使用检测到的顺序来决定设备文件名，并非与实际插槽代号有关，因此设备的文件名如下：</span><br><span class="line">1．SATA1插槽上的文件名：/dev/sda</span><br><span class="line">2．SATA5插槽上的文件名：/dev/sdb</span><br><span class="line">3．USB磁盘（开机完成后才被系统识别）：/dev/sdc</span><br></pre></td></tr></table></figure>
+<p>这就是在Linux系统中不同接口的磁盘设备文件名，即 IDE接口的设备文件名为 /dev/hd[a-d] SATA接口的设备文件名为 /dev/sd[a-p]<br>可是知道了这些当然还不够!现在知道了每个磁盘设备文件名是什么，那磁盘的每个分区又该叫什么？为什么要这么纠结磁盘与设备的文件名捏？因为在<strong>Linux下面一切都是以文件的方式存在的</strong>！</p>
+<h3 id="2.2">2.2 主引导分区与分区表</h3>
+
+<p>上面提到了<a href="#1.1">磁盘的组成</a>（由盘片、机械臂、磁头、主轴马达组成）和<a href="#1.2">盘片上的数据</a>，盘片上可以分出扇区和柱面两种单位，每个扇区有512byte那么大。在这么多的扇区里面<strong>磁盘的第一个扇区最重要</strong>！！因为<strong>第一块扇区记录了整块磁盘最重要的两个信息————主引导分区和分区表</strong></p>
+<ul>
+<li>主引导分区(Master Boot Record,MBR)</li>
+</ul>
+<blockquote>
+<p>可以安装引导加载程序的地方，有446bytes。MBR是非常重要的。系统在开机时会主动去读取这个区块的内容，这样系统才会知道你的程序放在哪了该如何进行开机。</p>
+</blockquote>
+<ul>
+<li>磁盘分区表</li>
+</ul>
+<blockquote>
+<p>你拿到的整块硬盘就像原木，你必须要在这根木头上切割出你想要的区段，这个区段才能在制作成为你想要的家具。同样地道理，硬盘进行分区才能更好的被利用。<br>磁盘上面的<strong>起始与结束柱面</strong>(也就是柱面的号码)就是分区的最小单位，也就是文件系统的最小单位。其实就是利用柱面的参考柱面的号码进行磁盘的分区的。在分区表所在的64byte容量中，总共分为四组记录区，每组记录了该区段的起始与结束的柱面号码。若是以硬盘为长方形来看如下图</p>
+</blockquote>
+<p><img src="http://p0bl99g4r.bkt.clouddn.com/partition01.jpg" alt=""></p>
+<p>假设上图设备文件名为 /dev/hda 时，那么自四个分区在Linux系统中的设备文件名分别为 P1:/dev/hda1、P2:/dev/hda2、P3:/dev/hda3、P4:/dev/hda4 <strong>重点在于文件名后面的数字，这个数字与该分区所在的位置有关</strong>。由于分区表就只有64byte，最多只能容纳四个分区，这四个分区被称为主（Primary）或扩展(Extened)分区。</p>
+<ul>
+<li>分区本质</li>
+</ul>
+<blockquote>
+<p>1.其实<strong>所谓的分区就是针对那个64bytes的分区表进行设置而已</strong>。<br>2.硬盘默认的分区表仅能写入四组分区信息。这四组分区信息我们称为主(Primary)或扩展(Extended)分区。<br>3.分区的最小单位为柱面<br>4.当系统写入磁盘时，一定会参考磁盘分区表，才能针对某个分区进行数据处理。</p>
+</blockquote>
+<h3 id="2.3">2.3 磁盘分区原因</h3>
+
+<p>有没有想过这个问题，磁盘为什么要进行分区？处于以下两个方面的考虑</p>
+<ul>
+<li>数据的安全性</li>
+</ul>
+<p>因为每个分区的数据是分开的。所以，当你需要将某个分区的数据重整时，例如你要重新安装Windows时，可以将C盘中其他重要数据移到其他分区，例如将邮件、桌面数据移动到D盘去，那么重装系统并不会影响到D盘。所以善用分区，可以让你的数据更安全。</p>
+<ul>
+<li>系统的性能考虑</li>
+</ul>
+<p>由于分区将数据集中在某个柱面的区段，例如上图 当中第一个分区位于柱面号码 1～100号，如此一来当有数据要读取自该分区时，磁盘只会搜寻前面1～100的柱面范围，由于数据集中了，将有助于数据读取的速度与性能！所以说，分区是很重要的。</p>
+<h3 id="2.4">2.4 扩展分区与逻辑分区</h3>
+
+<p>有没有想过这个问题，既然分区表只有记录四组数据的空间，那是不是一块硬盘最多可以分出四个分区？我默默的看了一眼放在H盘下面的岛国动作片，显然我的电脑不止四个分区。可以做到不止四个分区的操作是如何达到的呢？答案就是扩展分区</p>
+<ul>
+<li>扩展分区</li>
+</ul>
+<p>扩展分区的想法是，既然第一个扇区所在的分区表只能记录四条数据，那我是否可以利用额外的扇区来记录更多的分区信息？就像下图</p>
+<p><img src="http://p0bl99g4r.bkt.clouddn.com/partition02.jpg" alt=""></p>
+<p>图中P1为主分区，P2则为扩展分区。这个扩展分区的目的是使用额外的扇区来记录分区信息，扩展分区本身并不能拿来格式化，因为他并不是一个可以挂载的文件系统。我们可以通过扩展分区所指向的那个区块继续做分区的记录。</p>
+<ul>
+<li>逻辑分区</li>
+</ul>
+<p>扩展分区指向的区块在进行切割出来的就是逻辑分区。由于逻辑分区是由扩展分区继续分区出来的，所以他可以使用的柱面范围就是扩展分区设定的范围！<br>逻辑分区的数量依操作系统而不同，在Linux系统中，IDE硬盘最多有59个逻辑分区（5号到63号），SATA硬盘则有11个逻辑分区（5号到15号）。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">同样，上图分区在Linux系统中的设备文件名分别如下：</span><br><span class="line">P1:/dev/hda1</span><br><span class="line">P2:/dev/hda2</span><br><span class="line">L1:/dev/hda5</span><br><span class="line">L2:/dev/hda6</span><br><span class="line">L3:/dev/hda7</span><br><span class="line">L4:/dev/hda8</span><br><span class="line">L5:/dev/hda9</span><br><span class="line">仔细看看，怎么设备文件名没有/dev/hda3 与/dev/hda4 呢？因为前面四个号码都是保留给Primary或Extended用的。所以逻辑分区的设备名称号码就由5号开始了，这是个很重要的特性，不能忘记。</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>主分区、扩展分区与逻辑分区的特性的简单定义</li>
+</ul>
+<blockquote>
+<p>主分区和扩展分区最多可以有四个(硬盘限制)<br>扩展分区最多只能有一个(操作系统限制)<br>逻辑分区是由扩展分区持续切割出来的分区<br>能够被格式化后作为数据访问的为主分区和逻辑分区。扩展分区无法格式化</p>
+</blockquote>
+<h2 id="3">3. 文件系统与目录树的关系</h2>
+
+<p>在Linux中所有文件都是以文件形态来呈现的。</p>
+<h3 id="3.1">3.1 目录树结构</h3>
+
+<p>Linux内的所有数据都是以文件的形态来呈现的，所以，整个Linux系统最重要的地方就是在于目录树结构。所谓的目录树结构（directory tree）就是以根目录为主，然后向下呈现分支状的目录结构的一种文件结构。所以，整个目录树结构最重要的就是那个根目录（root directory），这个根目录的表示方法为一条斜线“/”，所有的文件都与目录树有关。目录树的呈现方式如图</p>
+<p><img src="http://p0bl99g4r.bkt.clouddn.com/directory.jpg" alt=""></p>
+<p>整个Linux系统使用的是目录树结构，但是我们的文件数据其实是放置在磁盘分区当中的，如何结合目录树的架构与磁盘内的数据，这就涉及到了挂载</p>
+<h3 id="3.2">文件系统与目录树的关系(挂载)</h3>
+
+<p>挂载就是利用一个目录当成进入点，将磁盘分区的数据放置在该目录下，也就是说，<strong>进入该目录就可以读取该分区的意思</strong>。这个操作就叫挂载。<strong>这个进入点我们称为挂载点</strong> 。由于整个Linux系统最重要的是根目录，因此根目录一定需要挂载到某个分区的。至于其他的目录则可依用户自己的需求来给予挂载到不同的分区。<br>举个栗子</p>
+<p><img src="http://p0bl99g4r.bkt.clouddn.com/mount.jpg" alt=""></p>
+<p>图 中假设我的硬盘分为两区，partition 1 挂载到根目录，至于 partition 2 则是挂载到/home这个目录。这也就是说，当我的数据放置在/home 内的各次目录时，数据是放置到 partition 2 的，如果不是放在/home 下面的目录，那么数据就会被放置到 partition 1。<br>其实判断某个文件在哪个partition下面是很简单的（前提是你要知道有哪些patrition），通过反向追踪即可。以上图来说，当我想要知道/home/vbird/test 这个文件在哪个 partition 时，由test –&gt; vbird –&gt; home –&gt;/，看哪个“进入点”先被查到那就是使用的进入点了。所以test使用的是/home这个进入点而不是/</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>简单归纳了计算机磁盘和Linux文件系统的关系</p>
+<h3 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h3><p>整理笔记参考了 <a href="http://linux.vbird.org/linux_basic/0210filepermission.php#filepermission_perm" target="_blank" rel="noopener">《鸟哥的Linux私房菜》</a> 一书。这本书我是买的<a href="http://sale.jd.com/act/W5hugLDc1R.html" target="_blank" rel="noopener">京东阅读</a>的正版电子书籍。<br><br>如果不想买书看的话可以直接戳<a href="http://linux.vbird.org/" target="_blank" rel="noopener">这里进入鸟哥Linux私房菜的线上博客 : http://linux.vbird.org/</a>。请大家支持正版！！<br><br>至于笔记中的命令我是都敲过一遍的并进行了理解，并不是单纯的复制粘贴呦！</p>
+
+    </article>
+    <!-- 前后页  -->
+    <ul class="post-pager">
+        
+            <li class="next">
+                <a href= "/2017/12/11/初始bash/" title= 初始bash >
+                    <span>Next Post</span>
+                    <span>初始bash</span>
+                </a>
+            </li>
+        
+        
+            <li class="previous">
+                <a href= "/2017/12/11/Linux文件与文件系统的打包/" title= Linux文件与文件系统的打包 >
+                    <span>Previous Post</span>
+                    <span>Linux文件与文件系统的打包</span>
+                </a>
+            </li>
+        
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+<div id="container"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+    var gitment = new Gitment({
+        // id: "磁盘与Linux分区", // 可选。默认为 location.href
+        owner: 'DomBro96',
+        repo: 'DomBro96.github.io',
+        oauth: {
+            client_id: '4a6fa6686f2dd417ed61',
+            client_secret: 'cc1f043ee266bc750c481d6a24a98188a185e2eb',
+        },
+    })
+    gitment.render('container')
+
+</script>
+
+    <!--PC版-->
+
+    <!--PC版-->
+
+
+    
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:460716809@qq.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="https://github.com/DomBro96" class="iconfont-archer github" target="_blank" title="github"></a>
+            
+        
+    
+        
+            
+                <a href="https://twitter.com/Bro_Doom" class="iconfont-archer twitter" target="_blank" title="twitter"></a>
+            
+        
+    
+        
+            
+                <a href="https://www.instagram.com/dombro7277/" class="iconfont-archer instagram" target="_blank" title="instagram"></a>
+            
+        
+    
+        
+            
+                <a href="https://leetcode.com/dombro96/" class="iconfont-archer others" target="_blank" title="others"></a>
+            
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">Theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+        <span id="busuanzi_container_site_pv">Welcome, No. <span id="busuanzi_value_site_pv"></span> visitor.
+        </span>
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper">
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#目录"><span class="toc-number">1.</span> <span class="toc-text">目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1"><span class="toc-number">2.</span> <span class="toc-text">1. 计算机硬盘（机械）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1.1"><span class="toc-number">2.1.</span> <span class="toc-text">1.1 硬盘的物理组成</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1.2"><span class="toc-number">2.2.</span> <span class="toc-text">1.2 盘片上的数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1.3"><span class="toc-number">2.3.</span> <span class="toc-text">1.3 传输接口</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2"><span class="toc-number">3.</span> <span class="toc-text">2. 磁盘分区</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2.1"><span class="toc-number">3.1.</span> <span class="toc-text">2.1 磁盘连接的方式与设备文件名的关系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2.2"><span class="toc-number">3.2.</span> <span class="toc-text">2.2 主引导分区与分区表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2.3"><span class="toc-number">3.3.</span> <span class="toc-text">2.3 磁盘分区原因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2.4"><span class="toc-number">3.4.</span> <span class="toc-text">2.4 扩展分区与逻辑分区</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3"><span class="toc-number">4.</span> <span class="toc-text">3. 文件系统与目录树的关系</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3.1"><span class="toc-number">4.1.</span> <span class="toc-text">3.1 目录树结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3.2"><span class="toc-number">4.2.</span> <span class="toc-text">文件系统与目录树的关系(挂载)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">4.3.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#说明"><span class="toc-number">4.4.</span> <span class="toc-text">说明</span></a></li></ol></li></ol>
+    </div>
+    
+    <div class="back-top">&#xe639;</div>
+    <div class="sidebar">
+    <div class="sidebar-header sidebar-header-show-archive">
+        <div class="sidebar-category">
+            <span class="sidebar-archive-link"><span class="iconfont-archer">&#xe67d;</span>Archive</span>
+            <span class="sidebar-tags-link"><span class="iconfont-archer">&#xe610;</span>Tag</span>
+        </div>
+    </div>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-archive">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-archive"> Total : 12 </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2017 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/浅谈token/" >浅谈token</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/Java优雅的处理异常/" >Java优雅的处理异常</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/文件与文件系统的压缩与打包/" >文件与文件系统的压缩与打包</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/初始bash/" >初始bash</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/磁盘与Linux分区/" >磁盘与Linux分区</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/Linux文件与文件系统的打包/" >Linux文件与文件系统的打包</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/Java工厂设计模式/" >Java工厂设计模式</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/10</span><a class="archive-post-title" href= "/2017/12/10/文件系统管理/" >文件系统管理</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2017/12/01/hello-world/" >世界你好</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2017 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/10</span><a class="archive-post-title" href= "/2017/12/10/Linux文件与目录管理/" >Linux文件与目录管理</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/06</span><a class="archive-post-title" href= "/2017/12/06/动态规划-Floyed算法/" >动态规划-Floyed算法</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/04</span><a class="archive-post-title" href= "/2017/12/04/堆排序-HeapSort/" >堆排序-HeapSort</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name"><a href= "#">设计模式</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">JavaSE</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Linux</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">JavaWeb</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">hello world</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">算法algorithm</a></span>
+    
+    </div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #888; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: false
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tag-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var jsInfo = {
+        root: '/'
+    }
+</script>
+    <!-- 不蒜子  -->
+    
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ统计  -->
+    
+    </div>
+    </body>
+</html>
+
+
