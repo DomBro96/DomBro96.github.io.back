@@ -422,7 +422,7 @@
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">dombro@ubuntu:~$ ls -al | tee ls_file|grep newfile </span><br><span class="line">-rwxr-xr-x  1 dombro dombro    27 Aug 29 20:49 newfile</span><br><span class="line">dombro@ubuntu:~$ cat ls_file  &lt;== 查看一下</span><br><span class="line">total 184</span><br><span class="line">drwxr-xr-x 19 dombro dombro  4096 Dec 12 11:13 .</span><br><span class="line">drwxr-xr-x  6 root   root    4096 Nov 13 14:04 ..</span><br><span class="line">-rw-rwxr--  1 dombro dombro     0 Aug 27 10:38 at_example.txt</span><br><span class="line">-rw-------  1 dombro dombro 10455 Dec 12 14:03 .bash_history</span><br><span class="line">-rw-r--r--  1 dombro dombro   220 Aug 13 17:08 .bash_logout</span><br><span class="line">-rw-r--r--  1 dombro dombro  3771 Aug 13 17:08 .bashrc</span><br></pre></td></tr></table></figure>
 <p>如果想已累加的方式将数据流存入文件 <code>tee -a file</code> 即可。<br><strong>tee 可以让 stdout 转存一份到文件内并将同样的数据继续送到屏幕去处理</strong>。这样除了可以让我们同时分析一份数据并记录下来之外，还可以作为处理一份数据的中间暂存盘记录。</p>
-<h4 id="3.2.4a">3.2.4 字符转换命令: tr、col、join、paste、expand</h4>
+<h4 id="3.2.4">3.2.4 字符转换命令: tr、col、join、paste、expand</h4>
 
 <p>下面介绍几个与字符转换相关的管道命令。</p>
 <ul>
@@ -562,7 +562,7 @@
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#目录"><span class="toc-number">1.</span> <span class="toc-text">目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1"><span class="toc-number">2.</span> <span class="toc-text">1. 数据流重定向</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1.1"><span class="toc-number">2.1.</span> <span class="toc-text">1.1 what</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#undefined"><span class="toc-number">2.1.1.</span> <span class="toc-text">1.1.1 标准输出 & 标准错误输出</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1.1.2"><span class="toc-number">2.1.2.</span> <span class="toc-text">1.1.2 数据流重定向功能</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1.1.3"><span class="toc-number">2.1.3.</span> <span class="toc-text">1.1.3 标准输入</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#undefined"><span class="toc-number">2.2.</span> <span class="toc-text">1.2 why</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2"><span class="toc-number">3.</span> <span class="toc-text">2. 命令执行的判断依据 ;、&&、||</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2.1"><span class="toc-number">3.1.</span> <span class="toc-text">2.1 ;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2.2"><span class="toc-number">3.2.</span> <span class="toc-text">2.2 &&、||</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3"><span class="toc-number">4.</span> <span class="toc-text">3. 管道命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3.1"><span class="toc-number">4.1.</span> <span class="toc-text">3.1 what</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3.2"><span class="toc-number">4.2.</span> <span class="toc-text">3.2 一些管道命令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3.2.1"><span class="toc-number">4.2.1.</span> <span class="toc-text">选取命令： cut,grep</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3.2.3"><span class="toc-number">4.2.2.</span> <span class="toc-text">3.2.3 双向重定向：tee</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3.2.4a"><span class="toc-number">4.2.3.</span> <span class="toc-text">3.2.4 字符转换命令: tr、col、join、paste、expand</span></a></li></ol></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#目录"><span class="toc-number">1.</span> <span class="toc-text">目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1"><span class="toc-number">2.</span> <span class="toc-text">1. 数据流重定向</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1.1"><span class="toc-number">2.1.</span> <span class="toc-text">1.1 what</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#undefined"><span class="toc-number">2.1.1.</span> <span class="toc-text">1.1.1 标准输出 & 标准错误输出</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1.1.2"><span class="toc-number">2.1.2.</span> <span class="toc-text">1.1.2 数据流重定向功能</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1.1.3"><span class="toc-number">2.1.3.</span> <span class="toc-text">1.1.3 标准输入</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#undefined"><span class="toc-number">2.2.</span> <span class="toc-text">1.2 why</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2"><span class="toc-number">3.</span> <span class="toc-text">2. 命令执行的判断依据 ;、&&、||</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2.1"><span class="toc-number">3.1.</span> <span class="toc-text">2.1 ;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2.2"><span class="toc-number">3.2.</span> <span class="toc-text">2.2 &&、||</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3"><span class="toc-number">4.</span> <span class="toc-text">3. 管道命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3.1"><span class="toc-number">4.1.</span> <span class="toc-text">3.1 what</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3.2"><span class="toc-number">4.2.</span> <span class="toc-text">3.2 一些管道命令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3.2.1"><span class="toc-number">4.2.1.</span> <span class="toc-text">选取命令： cut,grep</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3.2.3"><span class="toc-number">4.2.2.</span> <span class="toc-text">3.2.3 双向重定向：tee</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3.2.4"><span class="toc-number">4.2.3.</span> <span class="toc-text">3.2.4 字符转换命令: tr、col、join、paste、expand</span></a></li></ol></li></ol></li></ol>
     </div>
     
     <div class="back-top">&#xe639;</div>
@@ -576,6 +576,12 @@
     <div class="sidebar-content sidebar-content-show-archive">
           <div class="sidebar-archive">
     <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
     
     
     
@@ -792,32 +798,17 @@
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/初识bash/" >初识bash</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/文件与文件系统的压缩与打包/" >文件与文件系统的压缩与打包</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/浅谈token/" >浅谈token</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
             <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/Linux文件与文件系统的打包/" >Linux文件与文件系统的打包</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/Java优雅的处理异常/" >Java优雅的处理异常</a>
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/初识bash/" >初识bash</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/vim编辑器/" >vim编辑器</a>
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/Java工厂设计模式/" >Java工厂设计模式</a>
         </li>
     
     
@@ -827,7 +818,22 @@
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/Java工厂设计模式/" >Java工厂设计模式</a>
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/文件与文件系统的压缩与打包/" >文件与文件系统的压缩与打包</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/vim编辑器/" >vim编辑器</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/Java优雅的处理异常/" >Java优雅的处理异常</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/浅谈token/" >浅谈token</a>
         </li>
     
     
@@ -851,6 +857,11 @@
         </li>
     
     
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/04</span><a class="archive-post-title" href= "/2017/12/04/堆排序-HeapSort/" >堆排序-HeapSort</a>
+        </li>
+    
+    
     
     
     
@@ -864,28 +875,14 @@
             <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2017/12/01/hello-world/" >世界你好</a>
         </li>
     
-    
-    
-    
-    
-        </ul>
-    
-    <div class="archive-year"> 2017 </div>
-    <ul class="year-list">
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/04</span><a class="archive-post-title" href= "/2017/12/04/堆排序-HeapSort/" >堆排序-HeapSort</a>
-        </li>
-    
     </div>
   </div>
         <div class="sidebar-tags">
     <div class="sidebar-tags-name">
     
-        <span class="sidebar-tag-name"><a href= "#">设计模式</a></span>
-    
         <span class="sidebar-tag-name"><a href= "#">JavaSE</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">设计模式</a></span>
     
         <span class="sidebar-tag-name"><a href= "#">Linux</a></span>
     
