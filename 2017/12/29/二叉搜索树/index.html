@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
+    <title>
+        
+        二叉搜索树 · Dom Blog
+        
+    </title>
+    <link rel="icon" href= http://p0bl99g4r.bkt.clouddn.com/ti.JPG>
+    <!-- TODO: 在font-face加载完毕后改变字体  -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/webfont/1.6.28/webfontloader.js"></script>
+    <!-- 提前加载place holder  -->
+    <style type="text/css">
+        @font-face {
+            font-family: 'Oswald-Regular';
+            src: url(/font/Oswald-Regular.ttf);
+        }
+    </style>
+    <style type="text/css">
+        .site-intro-placeholder {
+            position: absolute;
+            z-index: -2;
+            top: 0;
+            left: 0px;
+            width: calc(100% + 300px);
+            height: 100%;
+            background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+            background-position: center center;
+            transform: translate3d(-226px, 0, 0);
+            animation: gradient-move 2.5s ease-out 0s 1;
+        }
+        @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+</style>
+    <link rel="stylesheet" href = /css/style.css?v=20171020 />
+    <script src="//cdn.staticfile.org/jquery/3.2.1/jquery.min.js" defer></script>
+    
+    <script src="/scripts/main.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+</head>
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >DomBro Studio</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">二叉搜索树</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>DomBro Studio</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-img" style="background-image: url(http://p0bl99g4r.bkt.clouddn.com/dog1.JPG)"></div>
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            二叉搜索树
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <!-- 文章页标签  -->
+            
+                <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = 数据结构 Data Structures>数据结构 Data Structures</a>
+    
+</div>
+            
+            <div class="post-intro-meta">
+                <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                <span class="post-intro-time">2017/12/29</span>
+            </div>
+        
+    </div>
+</div>
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <script>
+            var browser = {
+                    versions: function () {
+                        var u = window.navigator.userAgent;
+                        return {
+                            userAgent: u,
+                            trident: u.indexOf('Trident') > -1, //IE内核
+                            presto: u.indexOf('Presto') > -1, //opera内核
+                            webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+                            gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+                            mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+                            ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+                            android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+                            iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+                            iPad: u.indexOf('iPad') > -1, //是否为iPad
+                            webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+                            weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+                            uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+                        };
+                    }()
+                }
+
+            function fontLoaded(){
+                console.log('font loaded');
+                if (document.getElementsByClassName('site-intro-meta')) {
+                    document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+                    document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+                    var postIntroTags = document.getElementsByClassName('post-intro-tags')[0],
+                        postIntroMeat = document.getElementsByClassName('post-intro-meta')[0];
+                        if (postIntroTags) {
+                            postIntroTags.classList.add('post-fade-in');
+                        }
+                        if (postIntroMeat) {
+                            postIntroMeat.classList.add('post-fade-in');
+                        }
+                    }
+                }
+                
+            console.log("userAgent:" + browser.versions.userAgent);
+            // UC不支持跨域，所以直接显示
+            if (browser.versions.uc) {
+                console.log("UCBrowser");
+                fontLoaded();
+            } else {
+                WebFont.load({
+                    custom: {
+                        families: ['Oswald-Regular']
+                    },
+                    loading: function () {  //所有字体开始加载
+                        // console.log('loading');
+                    },
+                    active: function () {  //所有字体已渲染
+                        fontLoaded();
+                    },
+                    inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+                        console.log('inactive: timeout');
+                        fontLoaded();
+                    },
+                    timeout: 7000 // Set the timeout to two seconds
+                });
+            }
+        </script>
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>对于大量输入的数据，链表的线性访问时间太慢了。树是一种简单的数据结构，其大部分操作运行时间平均为 O(log N)。(tree)树在计算机科学中是非常有用的抽象概念。博客要介绍的二叉查找树(brinary scarch tree)也是Java语言中两种类库集合类 TreeSet 和 TreeMap 的实现基础。Are you ready?</p>
+<h2 id="开始之前"><a href="#开始之前" class="headerlink" title="开始之前"></a>开始之前</h2><p>在正式开始之前，我们应该做一些准备工作。比如树是什么？二叉树是什么？他们的特点又是啥？弄不清这些，那就会陷入一个”我是谁？我在那？我在干什么？”的尴尬境地。</p>
+<h3 id="树"><a href="#树" class="headerlink" title="树"></a>树</h3><p>这里说的树当然不是大树的意思，树在计算机科学中就是一种数据结构，将它的抽象结构画出来很想一棵倒过来的树。树的应用也是很广泛，比如你电脑操作系统的文件系统等等balabala。</p>
+<h4 id="树的概念"><a href="#树的概念" class="headerlink" title="树的概念"></a>树的概念</h4><p>引用书上的话</p>
+<blockquote>
+<p>一棵树是一些节点的集合。这个集合可以是空集；若不是空集，则树由称作根的节点root以及 0个或多个非空的子树 T1，T2,T3，…Tn组成，这些子树的每个根都被来自根 root 的一条有向边所连接。<br>每一棵子树的根叫做root的儿子(child),而 root 是每一棵子树的父亲(parent)。</p>
+</blockquote>
+<p>这段像绕口令的官方解释，翻译成普通话就是，树是由一个根节点和一堆子树组成的，注意这些子树也是树，也就是说<strong>树是可以通过递归来定义的</strong>。如下图就是利用递归定义的树</p>
+<p><img src="http://p0bl99g4r.bkt.clouddn.com/ds_tree.PNG" alt="树的定义"></p>
+<p>一棵树是 N 个节点和 N-1 条边的集合(要不信自己画一个)，其中的一个节点叫做根，除了根以外每个节点都会有一条边连接该节点的父亲，所以一棵树就有 N-1 条边！</p>
+<h4 id="树的特点"><a href="#树的特点" class="headerlink" title="树的特点"></a>树的特点</h4><p>通过下面这张图告诉你树的特点</p>
+<p><img src="http://p0bl99g4r.bkt.clouddn.com/ds_treenode.PNG" alt="树的节点"></p>
+<p>1.每个节点可以有任意个儿子。<br>2.没有儿子的节点叫他叶子节点（或树叶或终端节点），如 B、F、H、J、K、L、M。<br>3.具有相同父亲的节点为兄弟(siblings)，B、C、D、E、F 就互为兄弟。<br>4.一棵树中从根到每个节点恰好存在一条路径。<br>5.对任意节点，该节点的深度(depth)等于从根开始的层次数，如 H 在树的第三层，深度为3，以此类推。<br>6.由 特点5 ，根的深度为1.<br>7.树中最大层次成为树的深度或高度。<br>8.节点有几个子节点，称之为该节点的度，树叶节点的度为 0。如 G 的度为 3。</p>
+<h4 id="树的实现"><a href="#树的实现" class="headerlink" title="树的实现"></a>树的实现</h4><p>那么如何用 Java 语言来实现一棵树呢？根据概念，树是由节点和边的集合。很容易想到类似链表的写法，定义一个节点类，其中包含对其孩子节点的引用(指针)，可是问题来了：不同于链表知道每个节点后面只连接一个next节点,树的儿子结点是任意未知的，怎么破？ <strong>由于每个节点的儿子树可以变化很大并且实现不知道，因此在数据结构中建立到各个儿子结点的直接连接是不可行的，因为这样会长生太多浪费的空间</strong>。<br>实际上解决方法很简单：利用上面提到的兄弟节点概念，在每个节点中仅包含两个链接，其中一个链接该节点的第一个儿子，另一个链接当前节点的兄弟节点。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">class TreeNode&#123;</span><br><span class="line">  //数据域</span><br><span class="line">  Object element;</span><br><span class="line">  //第一个儿子的引用</span><br><span class="line">  TreeNode firstChild;</span><br><span class="line">  //兄弟的引用</span><br><span class="line">  TreeNode nextSiblings</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="二叉树"><a href="#二叉树" class="headerlink" title="二叉树"></a>二叉树</h3><h4 id="二叉树的概念"><a href="#二叉树的概念" class="headerlink" title="二叉树的概念"></a>二叉树的概念</h4><p>首先二叉树(binary tree)是一棵树，特点是每个节点都不能有多于两个的儿子。下图是一颗由根和两个子树组成的二叉树，任意子树均可以为空</p>
+<p><img src="http://p0bl99g4r.bkt.clouddn.com/ds_binarytree.PNG" alt="二叉树"></p>
+<h4 id="二叉树的性质"><a href="#二叉树的性质" class="headerlink" title="二叉树的性质"></a>二叉树的性质</h4><p>以下图为例列举一些二叉树重要的性质</p>
+<p><img src="http://p0bl99g4r.bkt.clouddn.com/ds_fullbinarytree.PNG" alt="满二叉树"></p>
+<p>1.在二叉树的第 i (深度+1)层上至多有2<sup>i+1</sup>个节点 (i&gt;=1)。<br>2.深度为 k 的二叉树至多有 2<sup>k</sup>-1个节点(k&gt;=1)。<br>3.任意一棵二叉树 T，如果其终端节点数(叶子节点)为 n<sub>0</sub> ，度为 2 的节点数为 n<sub>2</sub> 则 n<sub>0</sub> = n<sub>2</sub> + 1。<br>4.一棵深度为 k 且有  2<sup>k</sup>-1 个节点的二叉树叫做满二叉树。<br>5.二叉树中的所有节点约定 从根节点起，自上而下，从左至右的排列叫做完全二叉树，如下图</p>
+<p><img src="http://p0bl99g4r.bkt.clouddn.com/ds_completebinarytree.PNG" alt="完全二叉树"></p>
+<p>下图则是非完全二叉树</p>
+<p><img src="http://p0bl99g4r.bkt.clouddn.com/ds_uncompletebinarytree.PNG" alt="非完全二叉树"></p>
+<p>6.满二叉树一定是完全二叉树，完全二叉树不一定是满二叉树。<br>7.具有n个节点的完全二叉树的深度为不大于 log<sub>2</sub>n+1 的整数。</p>
+<h4 id="二叉树的实现"><a href="#二叉树的实现" class="headerlink" title="二叉树的实现"></a>二叉树的实现</h4><p>因为一个二叉树节点最多有两个子节点，所以可以直接在节点在类中保存直接连接到他们的链，有点类似于双端链表的声明,下面是二叉树节点代码。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">class BinaryNode&#123;</span><br><span class="line"></span><br><span class="line">  Object element;</span><br><span class="line">  //左孩子引用</span><br><span class="line">  BinaryTree leftChild;</span><br><span class="line">  //右孩子引用</span><br><span class="line">  BinaryTree rightChild;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里要注意的是，再画链表时习惯使用矩形表示数据域，并且用带有方向的直线连接，虽然二叉树的实现方式有双端链表类似但是习惯上用圆形便是数据，并且连接节点与孩子也不必表明方向，因为树和二叉树并不是线性结构。</p>
+<h2 id="二叉搜索树"><a href="#二叉搜索树" class="headerlink" title="二叉搜索树"></a>二叉搜索树</h2><p>经过前面的长途跋涉，终于看到了今天的主角，二叉搜索树。经过上面的二叉树小节，已经对二叉树有了一个简要的了解。二叉搜索树从名字的定义显然是一种二叉树！</p>
+<h3 id="二叉搜索树概念"><a href="#二叉搜索树概念" class="headerlink" title="二叉搜索树概念"></a>二叉搜索树概念</h3><p>按照国际惯例看一下二叉搜索树概念，<strong>二叉搜索树的一个重要应用是它们在查找中的使用</strong>。使二叉树成为二叉搜索树的性质是，对于二叉树中每个节点X，它的左子树中所有项的值都小于X中的项，而它的右子树中所有项的值都大于X中的项，如下图是以项的类型为整型为例。</p>
+<p><img src="http://p0bl99g4r.bkt.clouddn.com/ds_binarysearchtree.PNG" alt="二叉搜索树"></p>
+<p>根据二叉搜索树的概念，在二叉搜索树中每个节点的左子树中所有节点均比该节点项的值小。</p>
+<h3 id="二叉搜索树实现"><a href="#二叉搜索树实现" class="headerlink" title="二叉搜索树实现"></a>二叉搜索树实现</h3><h4 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h4><p>由于二叉搜索树要求每个项(节点)都可以进行排序(就是项与项之间可以进行比较)，这是他在实现上区别于一般二叉树的地方。如何达到这个效果？你可能才想到了，利用 Comparable 这个接口。我的原则是利用 泛型+Comparable接口：<strong>泛型 AnyType 作为 每个节点数据项的类型，同时也需要是 Comparable 的子类型(即Comparable的实现)，这样项与项之间就可以通过 compareTo 进行比较</strong>。所以代码的大体框架是下面这个样子滴</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">public class BinarySearchTree&lt;AnyType extends Comparable&lt;? super AnyType&gt;&gt;&#123;</span><br><span class="line"></span><br><span class="line">  //嵌套的节点类</span><br><span class="line">  private static class BinaryNode&lt;AnyType&gt;&#123;</span><br><span class="line">        //见嵌套节点类小节</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  //根节点引用</span><br><span class="line">  private BinaryNode&lt;AnyType&gt; root;</span><br><span class="line">  //令二叉搜索树为空</span><br><span class="line">  public void makeEmpty()&#123;//见二叉搜索树的初始化与置空小节&#125;;</span><br><span class="line">  //判断二叉树是否为空</span><br><span class="line">  public boolean isEmpty()&#123;//见二叉搜索树的初始化与置空小节&#125;;</span><br><span class="line">  //寻找二叉树中最小值</span><br><span class="line">  public AnyType findMin()&#123;//见最大值与最小值小节&#125;;</span><br><span class="line">  //寻找二叉树中最大值</span><br><span class="line">  public AnyType findMax()&#123;//见最大值与最小值小节&#125;;</span><br><span class="line">  //插入节点</span><br><span class="line">  public void insert(AnyType x)&#123;//见插入新数据小节&#125;</span><br><span class="line">  //删除节点</span><br><span class="line">  public void remove(AnyType x)&#123;//见删除操作小节&#125;</span><br><span class="line">  //判断树中是否包含某项</span><br><span class="line">  public boolean contains(AnyType x)&#123;//见查找是否包含某项小节&#125;</span><br><span class="line">  //打印树</span><br><span class="line">  public void printTree()&#123;//见树的遍历小节&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="嵌套节点类"><a href="#嵌套节点类" class="headerlink" title="嵌套节点类"></a>嵌套节点类</h4><p>由于二叉搜索树同样是二叉树，每个节点拥有数据项和左右两个儿子，所以节点类的代码是很简单的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">private static class BinaryNode&lt;AnyType&gt;&#123;</span><br><span class="line"></span><br><span class="line">    //数据项</span><br><span class="line">    AnyType elements;</span><br><span class="line">    //左孩子节点</span><br><span class="line">    BinaryNode&lt;AnyType&gt; left;</span><br><span class="line">    //右孩子节点</span><br><span class="line">    BinaryNode&lt;AnyType&gt; right;</span><br><span class="line"></span><br><span class="line">    BinaryNode(AnyType theElement, BinaryNode&lt;AnyType&gt; lt, BinaryNode&lt;AnyType&gt; rt)&#123;</span><br><span class="line">       elements = theElement;</span><br><span class="line">       left = lt;</span><br><span class="line">       right = rt;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">    BinaryNode(AnyType theElement)&#123;</span><br><span class="line">       this(theElement,null,null);</span><br><span class="line">     &#125;   </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="二叉搜索树的初始化与置空"><a href="#二叉搜索树的初始化与置空" class="headerlink" title="二叉搜索树的初始化与置空"></a>二叉搜索树的初始化与置空</h4><p>树结构是从根节点开始向下插入节点，一棵树只有一个根，所以任何一棵树的初始化与置空操作都是判断根节点是否为空。这就好像如果一个家族，根本没有祖先(生育他们的人)，那下面这些孩子是不可能存在的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">//利用构造方法初始化</span><br><span class="line"> public BinarySearchTree()&#123;</span><br><span class="line">     root = null;</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> //令二叉搜索树为空</span><br><span class="line"> public void makeEmpty()&#123;</span><br><span class="line">     root = null;</span><br><span class="line"> &#125;</span><br><span class="line"> //判断二叉树是否为空</span><br><span class="line"> public boolean isEmpty()&#123;</span><br><span class="line">     return root == null;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="最大值与最小值"><a href="#最大值与最小值" class="headerlink" title="最大值与最小值"></a>最大值与最小值</h4><p>如果不是二叉搜索树，这个功能实现起来会异常麻烦并且毫无意义，而二叉搜索树作为存在大小规律的二叉树，最小值节点一定在根节点左子树中最左面的节点，最大值一定在根节点右子树中最右边的节点，掌握这个那就很好办了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">//寻找最大最小一定是从根节点开始寻找</span><br><span class="line"></span><br><span class="line">public AnyType findMin()&#123;</span><br><span class="line">       if (isEmpty())</span><br><span class="line">           throw new BufferUnderflowException();</span><br><span class="line">       return findMin(root).elements;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">public AnyType findMax()&#123;</span><br><span class="line">       if (isEmpty())</span><br><span class="line">           throw new BufferUnderflowException();</span><br><span class="line">       return findMax(root).elements;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">private BinaryNode&lt;AnyType&gt; findMin(BinaryNode&lt;AnyType&gt; t)&#123;</span><br><span class="line">         if (t != null)&#123;</span><br><span class="line">            //当左子树中的左节点的左节点为空那一定是最小的</span><br><span class="line">             while (t.left != null)&#123;</span><br><span class="line">                 t = t.left;</span><br><span class="line">             &#125;</span><br><span class="line">         &#125;</span><br><span class="line">         return t;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">private BinaryNode&lt;AnyType&gt; findMax(BinaryNode&lt;AnyType&gt; t)&#123;</span><br><span class="line">        if (t != null)&#123;</span><br><span class="line">           //当右树中的左节点的右节点为空那一定是最大的</span><br><span class="line">            while (t.right != null)&#123;</span><br><span class="line">                t = t.right;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return t;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="查找是否包含某项"><a href="#查找是否包含某项" class="headerlink" title="查找是否包含某项"></a>查找是否包含某项</h4><p>由于二叉树并不是线性的表结构，所以这里所说的查找并不会把位置说出来，当输入一个数据项时会判断树中是否含有该数据。实现起来也很简单，从根节点比较传入的数据项，如果相等则找到该节点，如果传入数据较小则根节点一定在根节点的左子树中，以此类推，聪明的你一定会想到使用递归了吧~~</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">//从根节点判断该二叉搜索树是否有节点的数据项与传入节点相同</span><br><span class="line">public boolean contains(AnyType x)&#123;</span><br><span class="line">       return contains(x,root);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">private boolean contains(AnyType x, BinaryNode&lt;AnyType&gt; t)&#123;</span><br><span class="line">       if (t == null)</span><br><span class="line">            return false;</span><br><span class="line">       int compareResult = x.compareTo(t.elements);</span><br><span class="line">       //如果传入数据比当前节点的数据小，则去当前节点的左孩子查找</span><br><span class="line">       if (compareResult &lt; 0)&#123;</span><br><span class="line">            return contains(x,t.left);</span><br><span class="line">        //如果传入数据比当前节点的数据大，则去当前节点的右孩子查找</span><br><span class="line">         &#125;else if (compareResult &gt; 0)&#123;</span><br><span class="line">             return contains(x,t.right);</span><br><span class="line">         &#125;else</span><br><span class="line">             return true;</span><br><span class="line">      &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="插入新数据"><a href="#插入新数据" class="headerlink" title="插入新数据"></a>插入新数据</h4><p>二叉搜索树的插入实际上是最重要的了，原因就是我们上面所说的查找最小最大、查看是否包含、以及下面要提到的删除操作，都是基于插入操作正确插入的条件下，原因很简单上述操作我们会比较树中节点的大小，而这些节点一定要按照规则插入才行！而这个规则实际上就是二叉搜索树的定义呀，即每个节点的做儿子中的值比该节点值小，右儿子中的值比该节点值大！这里咱们约定一下，当插入树有已有数据时，不做插入即树中的个个节点的数据域是不同的。依然使用递归去实现。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">//从根节点开始插入</span><br><span class="line">public void insert(AnyType x)&#123;</span><br><span class="line">       root = insert(x,root);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">private BinaryNode&lt;AnyType&gt; insert(AnyType x,BinaryNode&lt;AnyType&gt; t)&#123;</span><br><span class="line"></span><br><span class="line">    if (t == null)&#123;</span><br><span class="line">        return new BinaryNode&lt;&gt;(x,null,null);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    int compareResult = x.compareTo(t.elements);</span><br><span class="line">    //如果插入项比当前节点的数据域小，则递归调用插入该节点的左儿子节点</span><br><span class="line">    if (compareResult &lt; 0)&#123;</span><br><span class="line">        t.left = insert(x,t.left);</span><br><span class="line">    //如果插入项比当前节点的数据域大，则递归调用插入该节点的右儿子节点    </span><br><span class="line">    &#125;else if (compareResult &gt; 0 )</span><br><span class="line">        t.right = insert(x,t.right);</span><br><span class="line">    else</span><br><span class="line">        ;</span><br><span class="line">    return t;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="删除操作"><a href="#删除操作" class="headerlink" title="删除操作"></a>删除操作</h4><p>删除操作可以说是整个二叉搜索树最复杂的地方了。原因是在我们删除一个节点后，我们还要保持删除后的二叉搜索树依然是一个二叉搜索树，有点像绕口令哈~~为了在删除后保持原状分为以下三种情况：<br>1.被删除的节点没有儿子节点，直接删除(变为null)</p>
+<p><img src="http://p0bl99g4r.bkt.clouddn.com/ds_binarysearchdele1.PNG" alt=""></p>
+<p>2.被删除的节点有一个儿子节点，用该儿子节点替代该节点位置</p>
+<p><img src="http://p0bl99g4r.bkt.clouddn.com/ds_binarysearchdele2.PNG" alt=""></p>
+<p>3.被删除节点有两个儿子节点，这是最麻烦的情况，咋办？别急有一个技巧，这种情况下我们只<strong>需要找到被删除节点右子树中最小节点，并将其数据项的值赋给要删除节点，再删除该最小节点即可</strong>。为什么？想一下被删除节点的右子树中所有节点一定都比被删除节点左子树的大，而右子树中最小数据项我们可以轻易的获取(通过 上面的findMin方法)！</p>
+<p><img src="http://p0bl99g4r.bkt.clouddn.com/ds_binarysearchdele3.PNG" alt=""></p>
+<p>下面是代码，依然使用递归实现</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">public void remove(AnyType x)&#123;</span><br><span class="line">         remove(x,root);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">//删除节点</span><br><span class="line">private BinaryNode&lt;AnyType&gt; remove(AnyType x,BinaryNode&lt;AnyType&gt; t)&#123;</span><br><span class="line"></span><br><span class="line">       if (t == null)&#123;</span><br><span class="line">           return t;</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       int compareResult = x.compareTo(t.elements);</span><br><span class="line"></span><br><span class="line">       if ( compareResult &lt; 0)&#123;</span><br><span class="line">           remove(x,t.left);</span><br><span class="line">       &#125;else if( compareResult &gt; 0)&#123;</span><br><span class="line">           t.right = remove(x,t.right);</span><br><span class="line">       //要删除的节点有两个孩子</span><br><span class="line">       &#125;else if ( t.left != null &amp;&amp; t.right != null)&#123;</span><br><span class="line">           //使其右子树中最小的节点替代</span><br><span class="line">           t.elements = findMin(t.right).elements;</span><br><span class="line">           //删除该最小节点</span><br><span class="line">           t.right = remove(t.elements,t.right);</span><br><span class="line">       //要删除的节点只有一个孩子,则由该孩子替代</span><br><span class="line">       &#125;else &#123;</span><br><span class="line">           t = (t.left != null) ? t.left : t.right;</span><br><span class="line">       &#125;</span><br><span class="line">       return t;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="树的遍历"><a href="#树的遍历" class="headerlink" title="树的遍历"></a>树的遍历</h4><p>树的遍历有三种方法：<br>1.中序遍历，顺序为 左 -&gt; 根 -&gt; 右，以本节开头二叉搜索树图片为例，该树中序遍历顺序为 1 -&gt; 2 -&gt; 3 -&gt; 4 -&gt; 6 -&gt; 8<br>2.前序遍历，顺序为 根 -&gt; 左 -&gt; 右，以本节开头二叉搜索树图片为例，该树中序遍历顺序为 6 -&gt; 2 -&gt; 1 -&gt; 4 -&gt; 3 -&gt; 8<br>3.后序遍历，顺序为 左 -&gt; 右 -&gt; 根，以本节开头二叉搜索树图片为例，该树后序遍历顺序为 1 -&gt; 3 -&gt; 4 -&gt; 2 -&gt; 8 -&gt; 6</p>
+<p>我使用的是中序遍历方法，依然使用递归的方式</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">//打印树</span><br><span class="line">public void printTree()&#123;</span><br><span class="line">   printTree(root);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//中序遍历</span><br><span class="line">private void printTree(BinaryNode&lt;AnyType&gt; t)&#123;</span><br><span class="line">      if (t != null &amp;&amp; t.elements != null)&#123;</span><br><span class="line">          printTree(t.left);</span><br><span class="line">          System.out.println(t.elements);</span><br><span class="line">          printTree(t.right );</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h4><p>你可能会发现，在二叉树的实现中用到了好多好多递归呀，插入、查找、删除、甚至遍历，没有错这就是二叉搜索树、树的特点，原因很简单我们将每个节点个和该节点的子树拿出来又是一颗树！这给了我们使用递归去定义二叉搜索树的机会，帮助我们更好的去理解树这种数据结构！完整代码见 <a href="https://github.com/DomBro96/datastructures/blob/master/src/main/java/cn/dombro/datastructures/tree/BinarySearchTree.java" target="_blank" rel="noopener">github</a>。</p>
+<h3 id="二叉搜索树的效率"><a href="#二叉搜索树的效率" class="headerlink" title="二叉搜索树的效率"></a>二叉搜索树的效率</h3><p>上一节提到的二叉搜索树的增(insert)、查(contains)、删除(remove)操作的平均时间复杂度均为 O(log N)。</p>
+
+    </article>
+    <!-- 前后页  -->
+    <ul class="post-pager">
+        
+        
+            <li class="previous">
+                <a href= "/2017/12/21/栈及栈的应用/" title= 栈及栈的应用 >
+                    <span>Previous Post</span>
+                    <span>栈及栈的应用</span>
+                </a>
+            </li>
+        
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+<div id="container"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+    var gitment = new Gitment({
+        // id: "二叉搜索树", // 可选。默认为 location.href
+        owner: 'DomBro96',
+        repo: 'DomBro96.github.io',
+        oauth: {
+            client_id: '4a6fa6686f2dd417ed61',
+            client_secret: 'cc1f043ee266bc750c481d6a24a98188a185e2eb',
+        },
+    })
+    gitment.render('container')
+
+</script>
+
+    <!--PC版-->
+
+    <!--PC版-->
+
+
+    
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:460716809@qq.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="https://github.com/DomBro96" class="iconfont-archer github" target="_blank" title="github"></a>
+            
+        
+    
+        
+            
+                <a href="https://twitter.com/Bro_Doom" class="iconfont-archer twitter" target="_blank" title="twitter"></a>
+            
+        
+    
+        
+            
+                <a href="https://www.instagram.com/dombro7277/" class="iconfont-archer instagram" target="_blank" title="instagram"></a>
+            
+        
+    
+        
+            
+                <a href="https://leetcode.com/dombro96/" class="iconfont-archer others" target="_blank" title="others"></a>
+            
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">Theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+        <span id="busuanzi_container_site_pv">Welcome, No. <span id="busuanzi_value_site_pv"></span> visitor.
+        </span>
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper">
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#开始之前"><span class="toc-number">2.</span> <span class="toc-text">开始之前</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#树"><span class="toc-number">2.1.</span> <span class="toc-text">树</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#树的概念"><span class="toc-number">2.1.1.</span> <span class="toc-text">树的概念</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#树的特点"><span class="toc-number">2.1.2.</span> <span class="toc-text">树的特点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#树的实现"><span class="toc-number">2.1.3.</span> <span class="toc-text">树的实现</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二叉树"><span class="toc-number">2.2.</span> <span class="toc-text">二叉树</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#二叉树的概念"><span class="toc-number">2.2.1.</span> <span class="toc-text">二叉树的概念</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#二叉树的性质"><span class="toc-number">2.2.2.</span> <span class="toc-text">二叉树的性质</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#二叉树的实现"><span class="toc-number">2.2.3.</span> <span class="toc-text">二叉树的实现</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二叉搜索树"><span class="toc-number">3.</span> <span class="toc-text">二叉搜索树</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#二叉搜索树概念"><span class="toc-number">3.1.</span> <span class="toc-text">二叉搜索树概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二叉搜索树实现"><span class="toc-number">3.2.</span> <span class="toc-text">二叉搜索树实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#实现原理"><span class="toc-number">3.2.1.</span> <span class="toc-text">实现原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#嵌套节点类"><span class="toc-number">3.2.2.</span> <span class="toc-text">嵌套节点类</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#二叉搜索树的初始化与置空"><span class="toc-number">3.2.3.</span> <span class="toc-text">二叉搜索树的初始化与置空</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#最大值与最小值"><span class="toc-number">3.2.4.</span> <span class="toc-text">最大值与最小值</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#查找是否包含某项"><span class="toc-number">3.2.5.</span> <span class="toc-text">查找是否包含某项</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#插入新数据"><span class="toc-number">3.2.6.</span> <span class="toc-text">插入新数据</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#删除操作"><span class="toc-number">3.2.7.</span> <span class="toc-text">删除操作</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#树的遍历"><span class="toc-number">3.2.8.</span> <span class="toc-text">树的遍历</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#小结"><span class="toc-number">3.2.9.</span> <span class="toc-text">小结</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二叉搜索树的效率"><span class="toc-number">3.3.</span> <span class="toc-text">二叉搜索树的效率</span></a></li></ol></li></ol>
+    </div>
+    
+    <div class="back-top">&#xe639;</div>
+    <div class="sidebar">
+    <div class="sidebar-header sidebar-header-show-archive">
+        <div class="sidebar-category">
+            <span class="sidebar-archive-link"><span class="iconfont-archer">&#xe67d;</span>Archive</span>
+            <span class="sidebar-tags-link"><span class="iconfont-archer">&#xe610;</span>Tag</span>
+        </div>
+    </div>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-archive">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-archive"> Total : 17 </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2017 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/29</span><a class="archive-post-title" href= "/2017/12/29/二叉搜索树/" >二叉搜索树</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/21</span><a class="archive-post-title" href= "/2017/12/21/栈及栈的应用/" >栈及栈的应用</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/12</span><a class="archive-post-title" href= "/2017/12/12/高级bash/" >高级bash</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/vim编辑器/" >vim编辑器</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/Linux文件与文件系统的打包/" >Linux文件与文件系统的打包</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/浅谈token/" >浅谈token</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/初识bash/" >初识bash</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/Java工厂设计模式/" >Java工厂设计模式</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/磁盘与Linux分区/" >磁盘与Linux分区</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/Java优雅的处理异常/" >Java优雅的处理异常</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/文件与文件系统的压缩与打包/" >文件与文件系统的压缩与打包</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/Linux的文件权限与目录配置/" >Linux的文件权限与目录配置</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/10</span><a class="archive-post-title" href= "/2017/12/10/文件系统管理/" >文件系统管理</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2017/12/01/hello-world/" >世界你好</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2017 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/10</span><a class="archive-post-title" href= "/2017/12/10/Linux文件与目录管理/" >Linux文件与目录管理</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/06</span><a class="archive-post-title" href= "/2017/12/06/动态规划-Floyed算法/" >动态规划-Floyed算法</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/04</span><a class="archive-post-title" href= "/2017/12/04/堆排序-HeapSort/" >堆排序-HeapSort</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name"><a href= "#">hello world</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">设计模式</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Linux</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">数据结构 Data Structures</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">JavaSE</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">算法algorithm</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">JavaWeb</a></span>
+    
+    </div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #888; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: false
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tag-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var jsInfo = {
+        root: '/'
+    }
+</script>
+    <!-- 不蒜子  -->
+    
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ统计  -->
+    
+    </div>
+    </body>
+</html>
+
+
