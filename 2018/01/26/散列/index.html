@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
+    <title>
+        
+        散列 · Dom Blog
+        
+    </title>
+    <link rel="icon" href= http://p0bl99g4r.bkt.clouddn.com/ti.JPG>
+    <!-- TODO: 在font-face加载完毕后改变字体  -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/webfont/1.6.28/webfontloader.js"></script>
+    <!-- 提前加载place holder  -->
+    <style type="text/css">
+        @font-face {
+            font-family: 'Oswald-Regular';
+            src: url(/font/Oswald-Regular.ttf);
+        }
+    </style>
+    <style type="text/css">
+        .site-intro-placeholder {
+            position: absolute;
+            z-index: -2;
+            top: 0;
+            left: 0px;
+            width: calc(100% + 300px);
+            height: 100%;
+            background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+            background-position: center center;
+            transform: translate3d(-226px, 0, 0);
+            animation: gradient-move 2.5s ease-out 0s 1;
+        }
+        @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+</style>
+    <link rel="stylesheet" href = /css/style.css?v=20171020 />
+    <script src="//cdn.staticfile.org/jquery/3.2.1/jquery.min.js" defer></script>
+    
+    <script src="/scripts/main.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+</head>
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >DomBro Studio</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">散列</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>DomBro Studio</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-img" style="background-image: url(http://p0bl99g4r.bkt.clouddn.com/dog1.JPG)"></div>
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            散列
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <!-- 文章页标签  -->
+            
+                <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = 数据结构 Data Structures>数据结构 Data Structures</a>
+    
+</div>
+            
+            <div class="post-intro-meta">
+                <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                <span class="post-intro-time">2018/01/26</span>
+            </div>
+        
+    </div>
+</div>
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <script>
+            var browser = {
+                    versions: function () {
+                        var u = window.navigator.userAgent;
+                        return {
+                            userAgent: u,
+                            trident: u.indexOf('Trident') > -1, //IE内核
+                            presto: u.indexOf('Presto') > -1, //opera内核
+                            webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+                            gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+                            mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+                            ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+                            android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+                            iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+                            iPad: u.indexOf('iPad') > -1, //是否为iPad
+                            webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+                            weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+                            uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+                        };
+                    }()
+                }
+
+            function fontLoaded(){
+                console.log('font loaded');
+                if (document.getElementsByClassName('site-intro-meta')) {
+                    document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+                    document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+                    var postIntroTags = document.getElementsByClassName('post-intro-tags')[0],
+                        postIntroMeat = document.getElementsByClassName('post-intro-meta')[0];
+                        if (postIntroTags) {
+                            postIntroTags.classList.add('post-fade-in');
+                        }
+                        if (postIntroMeat) {
+                            postIntroMeat.classList.add('post-fade-in');
+                        }
+                    }
+                }
+                
+            console.log("userAgent:" + browser.versions.userAgent);
+            // UC不支持跨域，所以直接显示
+            if (browser.versions.uc) {
+                console.log("UCBrowser");
+                fontLoaded();
+            } else {
+                WebFont.load({
+                    custom: {
+                        families: ['Oswald-Regular']
+                    },
+                    loading: function () {  //所有字体开始加载
+                        // console.log('loading');
+                    },
+                    active: function () {  //所有字体已渲染
+                        fontLoaded();
+                    },
+                    inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+                        console.log('inactive: timeout');
+                        fontLoaded();
+                    },
+                    timeout: 7000 // Set the timeout to two seconds
+                });
+            }
+        </script>
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h2 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h2><p>散列 (hashing)是常见的数据结构之一。它是以常数平均时间执行插入、删除和查找的技术。而与排序有关操作——查找最大最小值、按大小顺序打印等操作不被支持。</p>
+<h2 id="一些概念"><a href="#一些概念" class="headerlink" title="一些概念"></a>一些概念</h2><p>在 <a href="#概览">概览</a> 简单介揭开了散列的面纱。下面通过一些概念介绍散列。</p>
+<h3 id="关键字-key"><a href="#关键字-key" class="headerlink" title="关键字(key)"></a>关键字(key)</h3><p>关键字的英文就是很常见的 key 。通常我们所说的查找，查找的是查找项的某一部分(即数据域)，而这一部分就叫做关键字(key)。</p>
+<h3 id="散列"><a href="#散列" class="headerlink" title="散列"></a>散列</h3><p>散列(散列表)简单来说就是一个包含一些项的具有固定大小的数组。如果散列表的大小是 size,则让散列表从 0 到 size-1 变化。<strong>每个关键字被映射到从 0 到 size-1 这个范围中的某个数，并被放到合适的单元中</strong>，这个映射就叫做<a href="#散列函数">散列函数</a>。如下图就是一个散列表</p>
+<p><img src="http://p0bl99g4r.bkt.clouddn.com/ds_hash.PNG" alt=""></p>
+<p>在图中 tom 散列到 1 ，sim 散列到 2 ，mike 散列到 4 。</p>
+<h3 id="冲突"><a href="#冲突" class="headerlink" title="冲突"></a>冲突</h3><p>散列在理想条件下，要保证任何两个不同关键字映射到不同的单元,(如上图中的散列表就是一个理想的散列表) 但是这是不可能的，因为<strong>单元数目是有限的，而关键字实际上是用不完的</strong>！如果两个关键字散列到同一个值时，这就出现了冲突！而当冲突出现时要做什么就是我们下面要研究的问题之一。</p>
+<h3 id="装填因子"><a href="#装填因子" class="headerlink" title="装填因子"></a>装填因子</h3><p>装填因子 λ ，代表散列表中元素与表大小的比。</p>
+<h2 id="散列函数"><a href="#散列函数" class="headerlink" title="散列函数"></a>散列函数</h2><p>散列函数单独拿出来作为一节内容，当然是因为它的重要性。不夸张的说正是因为散列函数，散列表这种数据结构才得以实现。散列函数要做的就是帮助关键字找到<strong>合适的单元</strong>存储。而这个合适单元一般就是指 0 到 size-1 这个范围中的某个数。</p>
+<h3 id="合理的散列函数"><a href="#合理的散列函数" class="headerlink" title="合理的散列函数"></a>合理的散列函数</h3><h4 id="简单散列函数"><a href="#简单散列函数" class="headerlink" title="简单散列函数"></a>简单散列函数</h4><p>一般合理的散列函数是 key mod size 。若果关键字 key 是整数则直接返回 key mod size 即可，但如果 key 字符串，可以计算出该字符串每个字符的ASCⅡ码值加起来。实现如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">publlic static int hash(String hash,int size)&#123;</span><br><span class="line"></span><br><span class="line">    int hashVal = 0;</span><br><span class="line"></span><br><span class="line">    for(int i = 0; i &lt; size;i++ ) &#123;</span><br><span class="line">      hashVal += hash.cahrAt(i);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    retuen hashVal % size;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="散列表大小-size-选取"><a href="#散列表大小-size-选取" class="headerlink" title="散列表大小(size)选取"></a>散列表大小(size)选取</h4><p>表的大小 size 的选取具有一定学问，为什么呢？例如表的大小是 10 ，而关键字都是十的倍数，则经过散列函数的映射取余后所有的关键字都会映射到 0 单元，这显然不合理。<strong>好的办法是散列表大小尽量是素数，这样的散列函数不仅计算起来简单而且关键字分配也较均匀</strong>。     </p>
+<h4 id="好的散列函数"><a href="#好的散列函数" class="headerlink" title="好的散列函数"></a>好的散列函数</h4><p>什么是好的散列函数？无非就是要保证每个关键字均匀的分配在散列表的单元中，上面推荐了散列表大小尽量是素数这样的策略，但即使这样也还是有一定缺陷。考虑这样一种情况，假设每个关键字字符串均包含8个字符串，且表大小 size 为 10007(素数)。ASCⅡ字符的值最多为127，则8个字符表示最大的数为 8*127=1016,按照<a href="#简单散列函数">简单散列函数</a>的算法，所有字符串都会被映射在 0 和 1016 单元之间。显然这不是一个好的散列函数！<br>下面介绍一种好的散列函数,该函数利用到了 Horner 法则。这个函数就表的分布来说并不是最好的，但确实是简单高效的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">publlic static int hash(String hash,int size)&#123;</span><br><span class="line"></span><br><span class="line">    int hashVal = 0;</span><br><span class="line"></span><br><span class="line">    for(int i = 0; i &lt; hash.length(); i++ ) &#123;</span><br><span class="line">      hashVal =  37 * hashVal + keyn.cahrAt(i);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    hashVal %= size;</span><br><span class="line">    if(hashVal &lt; 0)</span><br><span class="line">      hashVal += size;</span><br><span class="line">    retuen hashVal % size;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="解决冲突"><a href="#解决冲突" class="headerlink" title="解决冲突"></a>解决冲突</h2><p>如果当一个元素被插入时，与一个已经插入的元素散列到一个相同的单元，那么就产生一个冲突，这个冲突需要消除。解决冲突的方法有好几种介绍最简单的两种：分离链接法和开放定址法。</p>
+<h3 id="分离链接法"><a href="#分离链接法" class="headerlink" title="分离链接法"></a>分离链接法</h3><h4 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h4><p>分离链接法做法是<strong>将散列到同一个单元的所有元素保留到一个表中</strong>。</p>
+<p><img src="http://p0bl99g4r.bkt.clouddn.com/ds_separate.PNG" alt=""></p>
+<p>上图中(该图不是一个好的例子，表的大小没有被设计成素数)关键字 0,20,30 都被散列到 0 单元，产生了冲突，但将这几个冲突的关键字放置在同一个链表中就解决了冲突。这个结构直观感受起来比描述起来更简单对吧！</p>
+<h4 id="查找过程"><a href="#查找过程" class="headerlink" title="查找过程"></a>查找过程</h4><p>使用分离链表法在进行查找时，需要使用散列函数确定关键字在哪个链表(即找到关键字对应所在单元)中，然后再被确定的链表中执行一次查找。</p>
+<h4 id="插入过程"><a href="#插入过程" class="headerlink" title="插入过程"></a>插入过程</h4><p>插入过程同样需要散列函数找到该关键字应插入单元的链表，如该关键字是一个新元素，那他将被插入到链表的前端。</p>
+<h4 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h4><p>由上所述，分离链接法解决散列冲突，<strong>散列表需要存储一个链表数组，用链表数组的索引代表散列表的单元。前面提到的散列表的大小 size 就是该链表数组的规模</strong>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line">public class SeparateChainingHashTable&lt;AnyType&gt; &#123;</span><br><span class="line">    //指定散列表默认大小</span><br><span class="line">    private static final int DEFAULT_TABLE_SIZE = 101;</span><br><span class="line">    //基于分离链表法实现，需要储存一个表的数组</span><br><span class="line">    private List&lt;AnyType&gt;[] theLists;</span><br><span class="line">    //当前散列表中插入关键字个数</span><br><span class="line">    private int currentSize;</span><br><span class="line">    //使用构造方法对 theLists 初始化</span><br><span class="line">    public SeparateChainingHashTable(int size) &#123;</span><br><span class="line">        theLists = new LinkedList[size];</span><br><span class="line">        for (int i = 0;i &lt; theLists.length;i++)&#123;</span><br><span class="line">            theLists[i] = new LinkedList&lt;&gt;();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public SeparateChainingHashTable() &#123;</span><br><span class="line">        this(DEFAULT_TABLE_SIZE);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void makeEmpty()&#123;</span><br><span class="line">        for (int i = 0; i &lt; theLists.length; i++)&#123;</span><br><span class="line">            theLists[i].clear();</span><br><span class="line">        &#125;</span><br><span class="line">        currentSize = 0;</span><br><span class="line">    &#125;</span><br><span class="line">    //散列函数</span><br><span class="line">    private int myhash(AnyType x)&#123;</span><br><span class="line">        int hashVal = x.hashCode();</span><br><span class="line">        hashVal %= hashVal/theLists.length;</span><br><span class="line">        if (hashVal &lt; 0)&#123;</span><br><span class="line">            hashVal += theLists.length;</span><br><span class="line">        &#125;</span><br><span class="line">        return hashVal;</span><br><span class="line">    &#125;</span><br><span class="line">    //判断散列表中是否包含某关键字</span><br><span class="line">    public boolean contains(AnyType x)&#123;</span><br><span class="line">        List&lt;AnyType&gt; whichList = theLists[myhash(x)];</span><br><span class="line">        return whichList.contains(x);</span><br><span class="line">    &#125;</span><br><span class="line">    //插入过程</span><br><span class="line">    public void insert(AnyType x)&#123;</span><br><span class="line">        List&lt;AnyType&gt; whichList = theLists[myhash(x)];</span><br><span class="line">        if ( !whichList.contains(x))&#123;</span><br><span class="line">            whichList.add(x);</span><br><span class="line">             if (++currentSize &gt; theLists.length)</span><br><span class="line">                 rehash();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    //删除关键字</span><br><span class="line">    public void remove(AnyType x)&#123;</span><br><span class="line">        List&lt;AnyType&gt; whichList = theLists[myhash(x)];</span><br><span class="line">        if ( whichList.contains(x))&#123;</span><br><span class="line">            whichList.remove(x);</span><br><span class="line">            currentSize--;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private void rehash() &#123;</span><br><span class="line">      //代码见下一节</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="算法分析"><a href="#算法分析" class="headerlink" title="算法分析"></a>算法分析</h4><p>分离链接法简单易懂。它的效率也很好计算，查找一次所需要的时间是计算散列函数所需要的常数时间和遍历链表所需时间。一般来说使用分离链接法的使用原则是预料的元素与表大小(链表数组长度)相等即 <a href="#装填因子">装填因子</a>λ ≈ 1，如果元素个数超过了表大小，则调用177行的rehash()方法，这个方法在<a href="#分离链接法的再散列函数">再散列小节</a>研究。分离链接法的缺点是使用了一些链表：给新单元分配地址需要时间，这使得算法速度有些慢，同时还要使用第二种数据结构实现(链表)，散列表本身就是一种数据结构。</p>
+<h3 id="无链表的散列表"><a href="#无链表的散列表" class="headerlink" title="无链表的散列表"></a>无链表的散列表</h3><p>上面提到分离链接法的缺点就是用到了另一种数据结构——链表，不用链表解决冲突的方法是尝试将产生冲突的元素散列到另一些空的单元，也就说明所有的关键字都要放入散列表内，所以散列表的大小也要比分离链接法更大。一般来说对于不使用分离链接的散列表来说  <a href="#装填因子">装填因子</a>λ应该低于0.5，这样的表叫做探测散列表。探测列表通常有三种解决方案。</p>
+<h4 id="冲突函数"><a href="#冲突函数" class="headerlink" title="冲突函数"></a>冲突函数</h4><p>探测散列表中，会使用冲突函数f(i) 解决冲突问题</p>
+<h4 id="线性探测法"><a href="#线性探测法" class="headerlink" title="线性探测法"></a>线性探测法</h4><p>听起来有点高大上，不要害怕。跟住思路，线性探测法的散列公式(即关键字插入到散列表某个单元的公式) 是 h~i~(x) = hash(x) + f(i) 其中 f(i) = i 。不难理解公式中的 f(i) = i 是冲突函数，使用hash()找到关键字应该在的散列表中单元后，如果发生冲突则从该单元开始探测逐个单元，以查找出一个空单元。</p>
+<p><img src="http://p0bl99g4r.bkt.clouddn.com/ds_probing_hash1.PNG" alt=""></p>
+<p>上图这个例子中，基于<a href="#简单散列函数">简单散列函数</a>进行散列，我找了三个极端的例 0、11、22 他们对size(本例中为11)取余均为0。具体过程图片中以给出。简单来说线性探测法在遇到冲突时会一直向下寻找下一个(可以回绕)不冲突的单元。<br>线性探测的使用场景是预计的插入元素(关键字)要小于散列表的大小，否则线性探测的效率是很低的。<br>还有一个问题值得注意，0,11,22与10中间隔了一大片空白，使用线性探测会出现这种小范围聚集的现象，被称为一次聚集，使得散列表元素分配不够均匀。为了改善这种一次聚集现象，使用平方探测法解决冲突是一个很好的选择。</p>
+<h4 id="平方探测法"><a href="#平方探测法" class="headerlink" title="平方探测法"></a>平方探测法</h4><p>平方探测是消除线性探测中一次聚集的冲突解决方法。平方探测是将 h~i~(x) = hash(x) + f(i) 中的 冲突函数 f(i) 为二次的方法。流行的选择是 f(i) = i^2^。</p>
+<p><img src="http://p0bl99g4r.bkt.clouddn.com/ds_probing_hash2.PNG" alt=""></p>
+<p>由上图所示，使用平方探测法解决冲突， 改善了一次聚集的情况，使散列表元素的分布更加均匀。</p>
+<ul>
+<li>平方探测定理</li>
+</ul>
+<blockquote>
+<p>如果使用平方探测，且表的大小是素数，那么当表至少有一半至少是空时候，总能插入一个新元素。</p>
+</blockquote>
+<h5 id="平方探测法具体实现"><a href="#平方探测法具体实现" class="headerlink" title="平方探测法具体实现"></a>平方探测法具体实现</h5><ul>
+<li>基本策略</li>
+</ul>
+<p>1.基于数组实现散列表结构，即关键字插入到该数组中。<br>2.删除元素时使用惰性删除，即将元素的 isActive 设为false</p>
+<ul>
+<li>实现代码</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br></pre></td><td class="code"><pre><span class="line">public class QuadraticProbingHashTable&lt;AnyType&gt; &#123;</span><br><span class="line"></span><br><span class="line">    private static final int DEFAULT_TABLE_SIZE = 11;</span><br><span class="line">    private HashEntry&lt;AnyType&gt;[] array;</span><br><span class="line">    private int currentSize;</span><br><span class="line"></span><br><span class="line">    public QuadraticProbingHashTable() &#123;</span><br><span class="line">        this(DEFAULT_TABLE_SIZE);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    public QuadraticProbingHashTable(int size) &#123;</span><br><span class="line">        allocateArray(size);</span><br><span class="line">        makeEmpty();</span><br><span class="line">     &#125;</span><br><span class="line">     //置空散列表</span><br><span class="line">     public void makeEmpty()&#123;</span><br><span class="line">         currentSize = 0;</span><br><span class="line">         for (int i = 0;i &lt; array.length;i++)&#123;</span><br><span class="line">             array[i] = null;</span><br><span class="line">         &#125;</span><br><span class="line">     &#125;</span><br><span class="line">     //初始化 HashEntry 数组</span><br><span class="line">    private void allocateArray(int arraySize)&#123;</span><br><span class="line">        array = new HashEntry[arraySize];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public boolean contains(AnyType x)&#123;</span><br><span class="line">        int currentPos = findPos(x);</span><br><span class="line">        return isActive(currentPos);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //判断散列表中元素是否有意义</span><br><span class="line">    private boolean isActive(int currentPos) &#123;</span><br><span class="line">        return array[currentPos] != null &amp;&amp; array[currentPos].isActive;</span><br><span class="line">    &#125;</span><br><span class="line">    //探测函数，找到关键字应插入位置</span><br><span class="line">    public int findPos(AnyType x)&#123;</span><br><span class="line">        int offset = 1;</span><br><span class="line">        int currentPos = myhash(x);</span><br><span class="line">        while (array[currentPos] != null &amp;&amp; !array[currentPos].element.equals(x))&#123;</span><br><span class="line">            currentPos += offset;</span><br><span class="line">            offset += 2;</span><br><span class="line">            if (currentPos &gt;= array.length)&#123;</span><br><span class="line">                currentPos -= array.length;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return currentPos;</span><br><span class="line">    &#125;</span><br><span class="line">    //删除，这里是惰性删除</span><br><span class="line">    public void remove(AnyType x)&#123;</span><br><span class="line">        int currentPos = findPos(x);</span><br><span class="line">        if (isActive(currentPos))&#123;</span><br><span class="line">            array[currentPos].isActive = false;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    //将关键字插入散列表中</span><br><span class="line">    public void insert(AnyType x)&#123;</span><br><span class="line">        //找到插入单元</span><br><span class="line">        int currentPos = findPos(x);</span><br><span class="line">        //如果x已存在与散列表则什么也不做</span><br><span class="line">        if (isActive(currentPos))&#123;</span><br><span class="line">            return;</span><br><span class="line">        &#125;</span><br><span class="line">        array[currentPos] = new HashEntry&lt;AnyType&gt;(x,true);</span><br><span class="line">        if (currentSize &gt; array.length/2)&#123;</span><br><span class="line">            rehash();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private void rehash() &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    private int myhash(AnyType x)&#123;</span><br><span class="line">        int hashVal = x.hashCode();</span><br><span class="line">        hashVal %= array.length;</span><br><span class="line">        if (hashVal &lt; 0)&#123;</span><br><span class="line">            hashVal += array.length;</span><br><span class="line">        &#125;</span><br><span class="line">        return hashVal;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //嵌套类，isActive属性判断元素在散列表中是否存在于散列表</span><br><span class="line">    private static class HashEntry&lt;AnyType&gt;&#123;</span><br><span class="line"></span><br><span class="line">        public AnyType element;</span><br><span class="line">        public boolean isActive;</span><br><span class="line">        public  HashEntry(AnyType e)&#123;</span><br><span class="line">            this(e,true);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        public HashEntry(AnyType e,boolean i)&#123;</span><br><span class="line">            element = e;</span><br><span class="line">            isActive = i;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>值得一提的是　findPos 方法，这个方法用于探测到元素应该插入的位置，你可能会奇怪并没有看到平方，实际上平方探测法就是为了使元素之间具有一段距离，通过 offset+2 也可以达到一样的效果，并且由于没有使用乘法，它探测的速度更快！同样rehash方法也在<a href="#探测列表法的在散列函数">再散列小节</a>研究</p>
+<h2 id="再散列"><a href="#再散列" class="headerlink" title="再散列"></a>再散列</h2><p>再散列 rehash 可以说是一个过程。例如，如果使用平方探测法，散列表中元素添加超过一半的单元，那么插入和查找的效率就很慢(对于分离链接法来说是插入元素等于单元个数时)，<strong>解决办法是建一个两倍大小的表，并扫描整个原始散列表，计算每个未删除元素的的新散列值并插入到新表中</strong>。也就是要达到下图的效果</p>
+<p><img src="http://p0bl99g4r.bkt.clouddn.com/ds_reshash.PNG" alt=""></p>
+<p>rehash 之后表的长度是 2*原表长 后的第一个素数。</p>
+<h3 id="分离链接法的再散列函数"><a href="#分离链接法的再散列函数" class="headerlink" title="分离链接法的再散列函数"></a>分离链接法的再散列函数</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">private void rehash() &#123;</span><br><span class="line"></span><br><span class="line">       List&lt;AnyType&gt;[] oldLists = theLists;</span><br><span class="line">       theLists = new List[2*theLists.length];</span><br><span class="line">       for (int i = 0; i &lt; theLists.length;i++)&#123;</span><br><span class="line">           theLists[i] = new LinkedList&lt;&gt;();</span><br><span class="line">       &#125;</span><br><span class="line">       currentSize = 0;</span><br><span class="line">       for (int j = 0; j &lt; oldLists.length; j++)&#123;</span><br><span class="line">           for (AnyType item:oldLists[j])&#123;</span><br><span class="line">               insert(item);</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="探测列表法的在散列函数"><a href="#探测列表法的在散列函数" class="headerlink" title="探测列表法的在散列函数"></a>探测列表法的在散列函数</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">private void rehash() &#123;</span><br><span class="line">      HashEntry&lt;AnyType&gt; [] oldArray = array;</span><br><span class="line">      allocateArray(2*array.length);</span><br><span class="line">      currentSize = 0;</span><br><span class="line">      for (int i = 0; i &lt; oldArray.length;i++)&#123;</span><br><span class="line">          if (oldArray[i] != null &amp;&amp; oldArray[i].isActive)&#123;</span><br><span class="line">              insert(oldArray[i].element);</span><br><span class="line">          &#125;</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Java-标准库中的散列表"><a href="#Java-标准库中的散列表" class="headerlink" title="Java 标准库中的散列表"></a>Java 标准库中的散列表</h2><p>Java标准库包括 Set 和 Map 的散列表实现，即 HashSet 和 HashMap。在 HashSet 中的项必须提供 equals 方法 和 hashCode 方法。HashSet 和 HashMap 通常是使用分离链接散列实现的。</p>
+
+    </article>
+    <!-- 前后页  -->
+    <ul class="post-pager">
+        
+        
+            <li class="previous">
+                <a href= "/2018/01/01/happy-new-year/" title= 别了，2017 >
+                    <span>Previous Post</span>
+                    <span>别了，2017</span>
+                </a>
+            </li>
+        
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+<div id="container"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+    var gitment = new Gitment({
+        // id: "散列", // 可选。默认为 location.href
+        owner: 'DomBro96',
+        repo: 'DomBro96.github.io',
+        oauth: {
+            client_id: '4a6fa6686f2dd417ed61',
+            client_secret: 'cc1f043ee266bc750c481d6a24a98188a185e2eb',
+        },
+    })
+    gitment.render('container')
+
+</script>
+
+    <!--PC版-->
+
+    <!--PC版-->
+
+
+    
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:460716809@qq.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="https://github.com/DomBro96" class="iconfont-archer github" target="_blank" title="github"></a>
+            
+        
+    
+        
+            
+                <a href="https://twitter.com/Bro_Doom" class="iconfont-archer twitter" target="_blank" title="twitter"></a>
+            
+        
+    
+        
+            
+                <a href="https://www.instagram.com/dombro7277/" class="iconfont-archer instagram" target="_blank" title="instagram"></a>
+            
+        
+    
+        
+            
+                <a href="https://leetcode.com/dombro96/" class="iconfont-archer others" target="_blank" title="others"></a>
+            
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">Theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+        <span id="busuanzi_container_site_pv">Welcome, No. <span id="busuanzi_value_site_pv"></span> visitor.
+        </span>
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper">
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#概览"><span class="toc-number">1.</span> <span class="toc-text">概览</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#一些概念"><span class="toc-number">2.</span> <span class="toc-text">一些概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#关键字-key"><span class="toc-number">2.1.</span> <span class="toc-text">关键字(key)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#散列"><span class="toc-number">2.2.</span> <span class="toc-text">散列</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#冲突"><span class="toc-number">2.3.</span> <span class="toc-text">冲突</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#装填因子"><span class="toc-number">2.4.</span> <span class="toc-text">装填因子</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#散列函数"><span class="toc-number">3.</span> <span class="toc-text">散列函数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#合理的散列函数"><span class="toc-number">3.1.</span> <span class="toc-text">合理的散列函数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#简单散列函数"><span class="toc-number">3.1.1.</span> <span class="toc-text">简单散列函数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#散列表大小-size-选取"><span class="toc-number">3.1.2.</span> <span class="toc-text">散列表大小(size)选取</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#好的散列函数"><span class="toc-number">3.1.3.</span> <span class="toc-text">好的散列函数</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解决冲突"><span class="toc-number">4.</span> <span class="toc-text">解决冲突</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#分离链接法"><span class="toc-number">4.1.</span> <span class="toc-text">分离链接法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#原理"><span class="toc-number">4.1.1.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#查找过程"><span class="toc-number">4.1.2.</span> <span class="toc-text">查找过程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#插入过程"><span class="toc-number">4.1.3.</span> <span class="toc-text">插入过程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实现"><span class="toc-number">4.1.4.</span> <span class="toc-text">实现</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#算法分析"><span class="toc-number">4.1.5.</span> <span class="toc-text">算法分析</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#无链表的散列表"><span class="toc-number">4.2.</span> <span class="toc-text">无链表的散列表</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#冲突函数"><span class="toc-number">4.2.1.</span> <span class="toc-text">冲突函数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#线性探测法"><span class="toc-number">4.2.2.</span> <span class="toc-text">线性探测法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#平方探测法"><span class="toc-number">4.2.3.</span> <span class="toc-text">平方探测法</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#平方探测法具体实现"><span class="toc-number">4.2.3.1.</span> <span class="toc-text">平方探测法具体实现</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#再散列"><span class="toc-number">5.</span> <span class="toc-text">再散列</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#分离链接法的再散列函数"><span class="toc-number">5.1.</span> <span class="toc-text">分离链接法的再散列函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#探测列表法的在散列函数"><span class="toc-number">5.2.</span> <span class="toc-text">探测列表法的在散列函数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Java-标准库中的散列表"><span class="toc-number">6.</span> <span class="toc-text">Java 标准库中的散列表</span></a></li></ol>
+    </div>
+    
+    <div class="back-top">&#xe639;</div>
+    <div class="sidebar">
+    <div class="sidebar-header sidebar-header-show-archive">
+        <div class="sidebar-category">
+            <span class="sidebar-archive-link"><span class="iconfont-archer">&#xe67d;</span>Archive</span>
+            <span class="sidebar-tags-link"><span class="iconfont-archer">&#xe610;</span>Tag</span>
+        </div>
+    </div>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-archive">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-archive"> Total : 19 </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2018 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/26</span><a class="archive-post-title" href= "/2018/01/26/散列/" >散列</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/01</span><a class="archive-post-title" href= "/2018/01/01/happy-new-year/" >别了，2017</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2017 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/29</span><a class="archive-post-title" href= "/2017/12/29/二叉搜索树/" >二叉搜索树</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/21</span><a class="archive-post-title" href= "/2017/12/21/栈及栈的应用/" >栈及栈的应用</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/12</span><a class="archive-post-title" href= "/2017/12/12/高级bash/" >高级bash</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/磁盘与Linux分区/" >磁盘与Linux分区</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/浅谈token/" >浅谈token</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/vim编辑器/" >vim编辑器</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/文件与文件系统的压缩与打包/" >文件与文件系统的压缩与打包</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/Java工厂设计模式/" >Java工厂设计模式</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/Java优雅的处理异常/" >Java优雅的处理异常</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/初识bash/" >初识bash</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/Linux文件与文件系统的打包/" >Linux文件与文件系统的打包</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/Linux的文件权限与目录配置/" >Linux的文件权限与目录配置</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/10</span><a class="archive-post-title" href= "/2017/12/10/文件系统管理/" >文件系统管理</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/10</span><a class="archive-post-title" href= "/2017/12/10/Linux文件与目录管理/" >Linux文件与目录管理</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2017/12/01/hello-world/" >世界你好</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2017 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/06</span><a class="archive-post-title" href= "/2017/12/06/动态规划-Floyed算法/" >动态规划-Floyed算法</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/04</span><a class="archive-post-title" href= "/2017/12/04/堆排序-HeapSort/" >堆排序-HeapSort</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name"><a href= "#">设计模式</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Linux</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">casual writing</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">JavaSE</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">数据结构 Data Structures</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">算法algorithm</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">JavaWeb</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">hello world</a></span>
+    
+    </div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #888; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: false
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tag-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var jsInfo = {
+        root: '/'
+    }
+</script>
+    <!-- 不蒜子  -->
+    
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ统计  -->
+    
+    </div>
+    </body>
+</html>
+
+
