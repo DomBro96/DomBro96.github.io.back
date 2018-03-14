@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
+    <title>
+        
+        线程 · Dom Blog
+        
+    </title>
+    <link rel="icon" href= http://p0bl99g4r.bkt.clouddn.com/ti.JPG>
+    <!-- TODO: 在font-face加载完毕后改变字体  -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/webfont/1.6.28/webfontloader.js"></script>
+    <!-- 提前加载place holder  -->
+    <style type="text/css">
+        @font-face {
+            font-family: 'Oswald-Regular';
+            src: url(/font/Oswald-Regular.ttf);
+        }
+    </style>
+    <style type="text/css">
+        .site-intro-placeholder {
+            position: absolute;
+            z-index: -2;
+            top: 0;
+            left: 0px;
+            width: calc(100% + 300px);
+            height: 100%;
+            background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+            background-position: center center;
+            transform: translate3d(-226px, 0, 0);
+            animation: gradient-move 2.5s ease-out 0s 1;
+        }
+        @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+</style>
+    <link rel="stylesheet" href = /css/style.css?v=20171020 />
+    <script src="//cdn.staticfile.org/jquery/3.2.1/jquery.min.js" defer></script>
+    
+    <script src="/scripts/main.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+</head>
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >DomBro Studio</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">线程</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>DomBro Studio</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-img" style="background-image: url(http://p0bl99g4r.bkt.clouddn.com/dog1.JPG)"></div>
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            线程
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <!-- 文章页标签  -->
+            
+                <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = JavaSE>JavaSE</a>
+    
+</div>
+            
+            <div class="post-intro-meta">
+                <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                <span class="post-intro-time">2018/03/11</span>
+            </div>
+        
+    </div>
+</div>
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <script>
+            var browser = {
+                    versions: function () {
+                        var u = window.navigator.userAgent;
+                        return {
+                            userAgent: u,
+                            trident: u.indexOf('Trident') > -1, //IE内核
+                            presto: u.indexOf('Presto') > -1, //opera内核
+                            webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+                            gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+                            mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+                            ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+                            android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+                            iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+                            iPad: u.indexOf('iPad') > -1, //是否为iPad
+                            webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+                            weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+                            uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+                        };
+                    }()
+                }
+
+            function fontLoaded(){
+                console.log('font loaded');
+                if (document.getElementsByClassName('site-intro-meta')) {
+                    document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+                    document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+                    var postIntroTags = document.getElementsByClassName('post-intro-tags')[0],
+                        postIntroMeat = document.getElementsByClassName('post-intro-meta')[0];
+                        if (postIntroTags) {
+                            postIntroTags.classList.add('post-fade-in');
+                        }
+                        if (postIntroMeat) {
+                            postIntroMeat.classList.add('post-fade-in');
+                        }
+                    }
+                }
+                
+            console.log("userAgent:" + browser.versions.userAgent);
+            // UC不支持跨域，所以直接显示
+            if (browser.versions.uc) {
+                console.log("UCBrowser");
+                fontLoaded();
+            } else {
+                WebFont.load({
+                    custom: {
+                        families: ['Oswald-Regular']
+                    },
+                    loading: function () {  //所有字体开始加载
+                        // console.log('loading');
+                    },
+                    active: function () {  //所有字体已渲染
+                        fontLoaded();
+                    },
+                    inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+                        console.log('inactive: timeout');
+                        fontLoaded();
+                    },
+                    timeout: 7000 // Set the timeout to two seconds
+                });
+            }
+        </script>
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h2 id="线程"><a href="#线程" class="headerlink" title="线程"></a>线程</h2><p>如果你穿越到三十年前，网络并不普及，在Internet只有几百万用户而不是现在的数十亿时，你会发现网站比现在的更加拥堵。这个问题在于，当时大多数FTP服务器会为每个连接创建一个进程，意味着100个并发用户就要处理额外的100个进程。由于进程是相当重量级的，太多进程会很快让服务器吃不消。因此人们想到了一个解决方案——使用线程。</p>
+<h3 id="什么是线程"><a href="#什么是线程" class="headerlink" title="什么是线程"></a>什么是线程</h3><blockquote>
+<p>一个程序执行多个任务，每一个任务就是一个线程。它是线程控制的简称，可以同时运行一个以上线程的程序称作多线程程序。  ——《Java核心技术卷一》</p>
+</blockquote>
+<ul>
+<li>线程 VS 进程</li>
+</ul>
+<p>回到最开始的例子，为什么使用线程替代进程就可以解决网站拥堵的问题呢？这得从他们各自的特点说起,每个进程都拥有自己的一块内存，拥有自己的一套变量(资源)。而线程则在一个进程中运行，在一块内存中共享变量(资源)。想象一下当使用多线程处理网站请求时，在一块内存中的线程处理不同的请求一定比为每个处理请求开辟新进程更加高效。</p>
+<blockquote>
+<p>使用线程来代替进程，可以让你的服务器性能提升三倍。如果重用线程池，在同样的硬件和网络连接条件下，服务器的运行可以快九倍多。           ——《Java网络编程》</p>
+</blockquote>
+<p><em>注：实际上在处理网站拥堵问题上，还有一种重用进程的解决方案，即在服务器启动时就创建固定数量的进程，处理请求不时在新建进程而重用那些处理完请求但未销毁的进程。</em></p>
+<h3 id="多线程编程"><a href="#多线程编程" class="headerlink" title="多线程编程"></a>多线程编程</h3><p>在 Java 中 Thread 是 java.lang.Thread 类的一个实例。Java 作为面向对象语言的大佬，用 Thread对象 来与虚拟机中的线程(thread)对应。这一节会你看到是Java如何启动线程，以及线程的运行。</p>
+<h4 id="Java-线程的启动"><a href="#Java-线程的启动" class="headerlink" title="Java 线程的启动"></a>Java 线程的启动</h4><p>在初次接触线程时，感觉很奇怪（大概所有习惯单线程编程的程序员都会有些奇怪），有些茫然不知所措，不知道我写的线程究竟有没有运行。Java 线程的启动，要构造一个 Thread 实例，调用它的 start() 方法:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Thread t = new Thread();</span><br><span class="line">t.start();</span><br></pre></td></tr></table></figure>
+<p>这个线程并没啥意思，因为他什么都没有做。要想让线程完成一些任务，可以继承Thread类覆盖其run()方法。也可以实现Runnable接口，将 Runnable 对象传递给Thread构造函数 。实际上 run()方法封装了线程的工作，线程结束在于run()方法是否完成。</p>
+<h4 id="派生Thread"><a href="#派生Thread" class="headerlink" title="派生Thread"></a>派生Thread</h4><p>要想让线程做一些任务，就一定要在run()方法中实现。下面介绍通过派生Thread类，重写run()方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">public class PrintThread extends Thread &#123;</span><br><span class="line"></span><br><span class="line">    private String name;</span><br><span class="line"></span><br><span class="line">    public PrintThread(String name) &#123;</span><br><span class="line">        this.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void run() &#123;</span><br><span class="line">        System.out.println(name);</span><br><span class="line">     &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        for (String name:args)&#123;</span><br><span class="line">            PrintThread printThread = new PrintThread(name);</span><br><span class="line">            printThread.start();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面这段代码，mian()方法从命令行读取参数，针对每个参数都会启动一个 PrintThread 线程，这个线程的工作实际上是在run()方法中完成的，即每个线程很简单的打印参数。<strong>请务必记住如果对Thread派生子类,就应当只覆盖run()方法。</strong></p>
+<blockquote>
+<p>并且由于run()方法签名是固定的，无法向其中传递参数和返回值。因此需要其他方法向线程传递信息和从中获取信息。传递信息最简单的方法是向构造构造函数中传递参数，这会设置Thread子类中的字段。   ——《Java网络编程》</p>
+</blockquote>
+<h4 id="实现Runnable接口"><a href="#实现Runnable接口" class="headerlink" title="实现Runnable接口"></a>实现Runnable接口</h4><p>实现Runnable接口实际上就是在实现run()方法，实现这个接口的类都必须要提供这个方法，要启动执行Runnable任务的一个线程，可以把这个Runnable对象传入Thread构造函数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">public class PrintRunnable implements Runnable &#123;</span><br><span class="line"></span><br><span class="line">    private String name;</span><br><span class="line"></span><br><span class="line">    public PrintRunnable(String name) &#123;</span><br><span class="line">        this.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void run() &#123;</span><br><span class="line">        System.out.println(name);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        for (String name:args)&#123;</span><br><span class="line">            PrintRunnable runnable = new PrintRunnable(name);]</span><br><span class="line">            Thread thread = new Thread(runnable);</span><br><span class="line">            thread.start();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>虽然并不认为实现Runnable接口一定比派生Thread方式好，毕竟在不同使用场景下二者优势各有不同。但我更倾向于使用Runnable接口，因为这会更加清楚的将线程完成的任务和线程本身分开。</p>
+<h2 id="从线程返回信息"><a href="#从线程返回信息" class="headerlink" title="从线程返回信息"></a>从线程返回信息</h2><p>把这个部分单拿出来是因为，习惯传统单线程模型的程序员在转向多线程环境时，最难掌握的一点就是如何从线程返回信息(此处的信息一般是在线程结束或者快要结束时获取)。</p>
+<blockquote>
+<p>从结束的线程获取而信息，这是多线程编程中最常被误解的方面之一。 ——《Java网络编程》</p>
+</blockquote>
+<p>之所以出现上述情况是因为，无论是start()方法还是run()方法都不会返回任何值。无法从线程中直接获得返回信息，也就不知道这个线程是否执行完毕。</p>
+<p>###一般错误方法</p>
+<p>你可能会想到在线程对象中增加一个标识，在 run()方法中给标识赋值，在线程启动后，通过该对象获取这个标识就可以在从线程返回信息，<strong>但是这确实一个在多线程操作中大错而特错的思路</strong>！</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">public class ErrorThread extends Thread&#123;</span><br><span class="line">    //标识</span><br><span class="line">    String digest;</span><br><span class="line"></span><br><span class="line">    public void run()&#123;</span><br><span class="line">        //在线程中为标识赋值</span><br><span class="line">        digest = &quot;Just test thread&quot;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //获取该标识</span><br><span class="line">    public String getDigest() &#123;</span><br><span class="line">        return digest;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        ErrorThread err = new ErrorThread();</span><br><span class="line">        err.start();</span><br><span class="line">        //通过线程获取该标识</span><br><span class="line">        System.out.println(err.getDigest());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的代码的返回结果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">null</span><br><span class="line"></span><br><span class="line">Process finished with exit code 0</span><br></pre></td></tr></table></figure>
+<p>可能会觉得奇怪，怎么会是 null ? 明明为 digest 赋值了。问题在于在单线程的程序中，线程的执行是按照代码顺序的，但是在多线程中，以上面代码为例，在主线程(即main方法)调用err.getDigest()方法之前，被调用的线程有可能还没有结束(即run方法还未执行完)，所以获取到的标识就会是一个null。当然有时候可能在启动线程之前，err.getDigest()就已经执行结束了，那样就会报一个空指针异常。总之，这是一个单线程程序员很容易掉进的坑。</p>
+<h3 id="回调"><a href="#回调" class="headerlink" title="回调"></a>回调</h3><p>回调可以有效的从线程中返回信息。</p>
+<blockquote>
+<p>回调是通过调用主类（即启动这个线程的类）中的一个方法来做到的。这被称为回调（callback），因为线程在完成是反过来调用其创建者。这样一来，主程序就可以等待线程结束期间休息，而不会占用运行线程的时间。  ——《Java网络编程》</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">public class CallbackRunnable implements Runnable &#123;</span><br><span class="line"></span><br><span class="line">    //一个被主类的引用</span><br><span class="line">    private CallbackUserInterface callback;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    public CallbackRunnable(CallbackUserInterface callback) &#123;</span><br><span class="line">        this.callback = callback;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void run() &#123;</span><br><span class="line">        String digest = &quot;Test Callback&quot;;</span><br><span class="line">        //在线程要结束时，回调主类中方法</span><br><span class="line">        callback.receiveDigest(digest);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//调用线程即主类</span><br><span class="line">public class CallbackUserInterface &#123;</span><br><span class="line"></span><br><span class="line">    //标识</span><br><span class="line">    private String digest = &quot;&quot;;</span><br><span class="line">    //接收标识</span><br><span class="line">    public void receiveDigest(String receive)&#123;</span><br><span class="line">        this.digest += &quot;线程返回的信息是:&quot;+receive;</span><br><span class="line">        System.out.println(this.digest);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void calculateDigest()&#123;</span><br><span class="line">        CallbackRunnable cb = new CallbackRunnable(this);</span><br><span class="line">        //启动线程</span><br><span class="line">        Thread thread = new Thread(cb);</span><br><span class="line">        thread.start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        CallbackUserInterface userInterface = new CallbackUserInterface();</span><br><span class="line">        userInterface.calculateDigest();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面代码返回结果:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">线程返回的信息是:Test Callback</span><br><span class="line"></span><br><span class="line">Process finished with exit code 0</span><br></pre></td></tr></table></figure>
+<p>神奇吗？可以正常显示。不要觉得神奇，相比于有主程序询问每个线程来寻找答案，而是有每个线程告知主程序答案。就好像那句”上来自己动”，让人觉得舒服。至于为什么不会显示 null 或者空指针异常，也是一个很好理解的，在run方法中告知主线程这个标记，虽然调用了主类对象方法，但还是在线程的程序执行顺序中，所以无论主线程运行顺序如何，都不影响线程的正常执行完毕。唯一要注意的是调用主类方法一定要在线程快要结束工作时进行，否则回调的这个标记就没有意义了。</p>
+<h3 id="Future、Callable和Executor"><a href="#Future、Callable和Executor" class="headerlink" title="Future、Callable和Executor"></a>Future、Callable和Executor</h3><p>如果觉得回调方式麻烦，Java 5 引入了更简单的处理回调的方式。</p>
+<blockquote>
+<p>不再是直接创建一个线程，你要创建一个ExecutorService，他会根据需要为你创建线程。可以向ExecutorService提交Callable任务，对于每个Callable任务，会分别得到一个Future。可以向Future请求得到任务结果。如果结果已经准备就绪，就会立即得到这个结果。如果结果还没准备好，轮询线程会阻塞，知道结果准备就绪。    ——《Java网络编程》</p>
+</blockquote>
+<p>Callable ——提交到——&gt; ExecutorService ——得到——&gt; Future ——查看——&gt; Callable 结果</p>
+<p>Callable 接口定义了一个call()方法,可以返回任意类型，而 Future 可以查看的 Callable 结果就是这个call返回的值。下面是使用多线程快速找到最大值的例子</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">//Callable相当于一个任务</span><br><span class="line">public class FindMax implements Callable&lt;Integer&gt;&#123;</span><br><span class="line"></span><br><span class="line">    private int[]data;</span><br><span class="line">    private int start;</span><br><span class="line">    private int end;</span><br><span class="line"></span><br><span class="line">    public FindMax(int[] data, int start, int end) &#123;</span><br><span class="line">        this.data = data;</span><br><span class="line">        this.start = start;</span><br><span class="line">        this.end = end;</span><br><span class="line">    &#125;</span><br><span class="line">    //call 方法可以有任意的返回类型</span><br><span class="line">    @Override</span><br><span class="line">    public Integer call() throws Exception &#123;</span><br><span class="line">        int max = Integer.MIN_VALUE;</span><br><span class="line">        for (int i = start; i &lt; end; i++)&#123;</span><br><span class="line">            if (data[i] &gt; max)</span><br><span class="line">                max = data[i];</span><br><span class="line">        &#125;</span><br><span class="line">        return max;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class MaxFinder &#123;</span><br><span class="line"></span><br><span class="line">    public static int max(int[] data) throws IllegalArgumentException, ExecutionException, InterruptedException &#123;</span><br><span class="line">        if (data.length == 1)&#123;</span><br><span class="line">            return data[0];</span><br><span class="line">        &#125;else if (data.length == 0)&#123;</span><br><span class="line">            throw new IllegalArgumentException();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        //将任务分解为两个部分</span><br><span class="line">        FindMax task1 = new FindMax(data,0,data.length/2);</span><br><span class="line">        FindMax task2 = new FindMax(data,data.length/2,data.length);</span><br><span class="line"></span><br><span class="line">        //创建两个线程</span><br><span class="line">        ExecutorService service = Executors.newFixedThreadPool(2);</span><br><span class="line">        //分别提交两个线程，并由Future启动</span><br><span class="line">        Future&lt;Integer&gt; future1 = service.submit(task1);</span><br><span class="line">        Future&lt;Integer&gt; future2 = service.submit(task2);</span><br><span class="line">        //通过Future.get()得到Callable的结果</span><br><span class="line">        return Math.max(future1.get(),future2.get());</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面例子，将一个数组分成两部分，利用两个线程分别找出这两个部分的最大值，再找出这两个值中最大的。这种办法几乎会同时搜索两个子数组，运行速度几乎可以达到原来的两倍。</p>
+<p><em>尽管可以直接调用call()方法，但这并不是本来目的。而是要通过Future来启动线程并获取call()的返回值，来确定线程是否执行完毕</em>。</p>
+<h2 id="同步"><a href="#同步" class="headerlink" title="同步"></a>同步</h2><p>在图书馆中的书，每个人都可以去借阅，这样可以省下自己的钱去买书。但如果你想看的书不幸被借走了，就只能申请这本书归还时为我保留。同时你也不是能在书上做标记。从图书馆借书而不是自己买，在时间和方便性会有很大的损失，但能够节约钱和存储时间。   </p>
+<blockquote>
+<p>线程就像图书馆的借阅者，它从一个中心资源池中借阅。线程通过共享内存、文件句柄、sokect和其他资源使得程序更高效。只要两个线程不同时使用相同资源，多线程程序就比多进程程序高效得多。             ——《Java网络编程》</p>
+</blockquote>
+<p>多线程的缺点是，如果两个线程同时访问同一个资源，其中一个就必须等待另一个结束。如果其中一个没有等待，资源就有可能会被破坏。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">public class PrintRunnable implements Runnable &#123;</span><br><span class="line"></span><br><span class="line">    private String name;</span><br><span class="line"></span><br><span class="line">    public PrintRunnable(String name) &#123;</span><br><span class="line">         this.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void run() &#123;</span><br><span class="line">        name += &quot;: dasdasfafasdsadasdasdsadas&quot;;</span><br><span class="line">        System.out.println(name);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line"></span><br><span class="line">        String[] strings = &#123;&quot;hello&quot;,&quot;china&quot;,&quot;good&quot;,&quot;how&quot;&#125;;</span><br><span class="line">        for (String string:strings)&#123;</span><br><span class="line">            PrintRunnable runnable = new PrintRunnable(string);</span><br><span class="line">            Thread t = new Thread(runnable);</span><br><span class="line">            t.start();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面这段代码执行结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hello: dasdasfafasdsadasdasdsadas</span><br><span class="line">china: dasdasfafasdsadasdasdsadas</span><br><span class="line">good: dasdasfafasdsadasdasdsadas</span><br><span class="line">how: dasdasfafasdsadasdasdsadas</span><br></pre></td></tr></table></figure>
+<p>根据执行结果可以看到，将 name 作为保存变量在线程打印时，这四个线程并行运行，每个线程会在控制台打印一行。但如果打印的不是保存结果的name，而是将中间结果可用时就直接打印在控制台</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">//只修改 run方法</span><br><span class="line">@Override</span><br><span class="line">    public void run() &#123;</span><br><span class="line"></span><br><span class="line">        System.out.print(name + &quot;: dasdasfafasdsadasdasdsadas&quot;);</span><br><span class="line">        System.out.println();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>执行结果:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">hello: dasdasfafasdsadasdasdsadashow: dasdasfafasdsadasdasdsadaschina: dasdasfafasdsadasdasdsadas</span><br><span class="line">//下面是两个空行</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">good: dasdasfafasdsadasdasdsadas</span><br></pre></td></tr></table></figure>
+<p>可以看到线程结果都混在一起了，造成这种现象的原因是 System.out 是由4个不同的线程共享。如果一个线程通过多个System.out语句向控制台输出，有可能他还没有完成所有写入，就有另一个线程插进来，开始他的输入。至于哪个线程会抢先于其他线程,具体顺序无法确定。</p>
+<p>需要有一种办法能够指定一个共享资源只能由一个线程独占访问来执行一个特定的语句序列。在上面的例子中共享资源是 System.out 而需要独占访问的语句是:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">System.out.print(name + &quot;: dasdasfafasdsadasdasdsadas&quot;);</span><br><span class="line">System.out.println();</span><br></pre></td></tr></table></figure>
+<h3 id="同步块"><a href="#同步块" class="headerlink" title="同步块"></a>同步块</h3><p>为了指示这两行代码应当一起执行，要把它们包围在 sychronized 块中，他会对 System.out 对象同步，使用同步块的run方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">   public void run() &#123;</span><br><span class="line">       synchronized (System.out)&#123;</span><br><span class="line">           System.out.print(name + &quot;: dasdasfafasdsadasdasdsadas&quot;);</span><br><span class="line">           System.out.println(&quot;&quot;);</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<p>执行结果:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hello: dasdasfafasdsadasdasdsadas</span><br><span class="line">china: dasdasfafasdsadasdasdsadas</span><br><span class="line">good: dasdasfafasdsadasdasdsadas</span><br><span class="line">how: dasdasfafasdsadasdasdsadas</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>一旦线程开始打印这些值，所有其他线程在打印他们得知之前就必须停止，需要等待这个线程结束。同步要求在同一个对象上同步的所有代码要连续地运行，而不能并行运行。                                     ——《Java网络编程》</p>
+</blockquote>
+<ul>
+<li>注意</li>
+</ul>
+<p>需要注意的是，对不用对象同步的代码或者根本不同步的代码仍然可以与这个代码并行运行。 Java并没有提供任何方法来组织其他线程使用共享资源。他只能防止对同一个对象同步的其他现线程使用这个共享资源。(这段话的意思是如果另一线程中使用了本线程中的同步对象，但是同步的对象与本线程中不一致，也不会影响另一个线程与该线程代码并行运行。)</p>
+<p><strong>只有当两个线程都拥有相同对象的引用时，同步才成为问题。</strong> 同步块就是将可能与其他线程共享的资源用锁包裹起来，这样其他线程在当前线程运行时，就不能对该资源操作。与同步块对应的还有同步方法，同步方法是对当前对象(this引用)同步整个方法。</p>
+<h4 id="举个例子"><a href="#举个例子" class="headerlink" title="举个例子"></a>举个例子</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line">//该类向文件中写入数据</span><br><span class="line">public class WriterFile &#123;</span><br><span class="line"></span><br><span class="line">    private Writer out;</span><br><span class="line"></span><br><span class="line">    public WriterFile(File file) throws IOException &#123;</span><br><span class="line">        FileWriter writer = new FileWriter(file);</span><br><span class="line">        this.out = new BufferedWriter(writer);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void writeEntry(String message) throws IOException &#123;</span><br><span class="line">        out.write(message);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void close() throws IOException &#123;</span><br><span class="line">        out.flush();</span><br><span class="line">        out.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//线程类，要在线程中调用 WriterFile 的方法</span><br><span class="line">public class WriteRunnable implements Runnable &#123;</span><br><span class="line"></span><br><span class="line">    private WriterFile writerFile;</span><br><span class="line"></span><br><span class="line">    private String message;</span><br><span class="line"></span><br><span class="line">    //在构造方法中为 WriterFile域 赋值</span><br><span class="line">    public WriteRunnable(WriterFile writerFile,String messasge) &#123;</span><br><span class="line">        this.writerFile = writerFile;</span><br><span class="line">        this.message = messasge;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void run() &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">          //在run()方法中会调用写入数据方法</span><br><span class="line">            writerFile.writeEntry(message);</span><br><span class="line">        &#125; catch (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//主类</span><br><span class="line">public class Test &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) throws IOException &#123;</span><br><span class="line"></span><br><span class="line">        WriterFile writerFile = new WriterFile(new File(&quot;C:\\Users\\18246\\Desktop\\thread.txt&quot;));</span><br><span class="line">        //向两个线程中传入同一个WriterFile对象</span><br><span class="line">        WriteRunnable runnable1 = new WriteRunnable(writerFile,&quot;我来自第一个线程&quot;);</span><br><span class="line">        WriteRunnable runnable2 = new WriteRunnable(writerFile,&quot;我来自第二个线程&quot;);</span><br><span class="line">        Thread t1 = new Thread(runnable1);</span><br><span class="line">        Thread t2 = new Thread(runnable2);</span><br><span class="line">        t1.start();</span><br><span class="line">        t2.start();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面例子中，在主类中向线程传入同一个WriterFile对象，这肯定是要出问题的，因为在run()方法中会调用WriterFile写入数据方法，一个线程在写入过程中另一个线程完全有可能会打断，这就会出现写入问题。有三种解决办法：</p>
+<ul>
+<li>第一种使用上面提到的同步块对Writer对象out同步</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public void writeEntry(String message) throws IOException &#123;</span><br><span class="line">        synchronized (out)&#123;</span><br><span class="line">            out.write(message);</span><br><span class="line">            out.write(&quot;\r\n&quot;);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>这是由于使用这个WriterFile对象的线程也会使用属于这个WriterFile的同一个对象out。</p>
+<ul>
+<li>第二种是对WriterFile对象本身同步，这很简单只需要用到this关键字</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public void writeEntry(String message) throws IOException &#123;</span><br><span class="line">        synchronized (this)&#123;</span><br><span class="line">            out.write(message);</span><br><span class="line">            out.write(&quot;\r\n&quot;);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>第三种是Java提供的一个快捷方式，同步方法，即在方法声明添加修饰符</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public synchronized void writeEntry(String message) throws IOException &#123;</span><br><span class="line">            out.write(message);</span><br><span class="line">            out.write(&quot;\r\n&quot;);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>同步这里说的比较多，比较啰嗦，是因为在平时写单线程代码很少遇到这种资源共享情况。但是同步也有一定弊端，比如降低性能，还会造成死锁，<strong>最关键的一点是同步可能并不会保护真正需要保护的对象。</strong> 上面例子中 out 是真正要被保护的对象，但如果其他与 WriterFile 完全不相关的类有 out 的引用，那么 out  也会写入失败。不过上面例子中，由于out是一个私有变量，由于没有提供这个对象的引用，所以其他对象也没有办法调用这个对象啦。</p>
+<h3 id="同步的替代方法"><a href="#同步的替代方法" class="headerlink" title="同步的替代方法"></a>同步的替代方法</h3><p>同步是为了保护某个可以共用的资源，那么避免同步就要想办法避免使用这种共用资源。下面有三种同步的替代方法。</p>
+<ul>
+<li>局部变量代替字段</li>
+</ul>
+<blockquote>
+<p>局部变量不存在同步问题。每次进入一个方法时，虚拟机将为这个方法创建一组全新的局部变量。这些变量是外部不可见的，而且方法退出时将被撤销。因此一个局部变量不可能有两个不同的线程共享。     ——《Java网络编程》</p>
+</blockquote>
+<p>所以上面的例子中 writeEntry() 方法可以写成</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public void writeEntry(String message) throws IOException &#123;</span><br><span class="line">    //out作为局部变量</span><br><span class="line">    Writer out = new BufferedWriter(new FileWriter(file));</span><br><span class="line">    out.write(message);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在自己的类中利用不可变性</li>
+</ul>
+<blockquote>
+<p>要使一个对象不可变，只要将其所有字段声明为 private 和 final ，而且不要编写任何能改变他们的方法。  ——《Java网络编程》</p>
+</blockquote>
+<ul>
+<li>将非线程安全的类用作为线程安全类的一个私有字段</li>
+</ul>
+<blockquote>
+<p>只要包含类只以线程安全的方式访问这个非安全类，而且只要永远不让这个私有字段的引用泄露到另一个对象中，那么这个类就是安全的。                  ——《Java网络编程》</p>
+</blockquote>
+<h2 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h2><p>上面说同步可能会导致一个问题：死锁。如果两个线程需要独占访问相同的资源集，而每个线程又分别有这些资源的不同子集的锁，就会发生死锁。这就好像大黄和小黄都要写毕设，他们都需要两本书《Java编程思想》和《前端开发》，而大黄借到了一本，小黄借到了第二本，同时他们有都不愿意放弃自己借到的书，那么都将无法完成毕设。这就是死锁问题。</p>
+<blockquote>
+<p>糟糕的是死锁可能是偶发性 bug ,很难检测。死锁通常取决于不可预知的时间问题。(作者的意思是无法提前判断这个bug)     ——《Java网络编程》</p>
+</blockquote>
+<p>要防止死锁，最重要的技术就是要避免不必要的同步。同步应当是确保线程安全的最后一道防线，如果必须要同步，要保持同步块尽可能小，而且尽量不要一次同步多个对象。</p>
+<h2 id="线程调度"><a href="#线程调度" class="headerlink" title="线程调度"></a>线程调度</h2><p>当多个线程可以同时运行时，必须考虑线程调度问题。<strong>要确保所有重要线程至少得到一些时间来运行，更重要的线程要得到更多的时间</strong>。同时你还要保证线程以合理的顺序执行。</p>
+<h3 id="线程优先级"><a href="#线程优先级" class="headerlink" title="线程优先级"></a>线程优先级</h3><p>不是每个线程创建时都可以均等的。每个线程都是有一个优先级，指定为一个从0到10的整数。在Java中，10是最高优先级，0是最低优先级。</p>
+<p>在Thread类中指定了三个命名常量（1、5和10）分别代表三和优先级</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public final static int MIN_PRIORITY = 1;</span><br><span class="line">public final static int NORM_PRIORITY = 5;</span><br><span class="line">public final static int MAX_PRIORITY = 10;</span><br></pre></td></tr></table></figure>
+<p>线程的优先级可以用 Thread.setPriority()方法来改变</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">PrintThread printThread = new PrintThread(name);</span><br><span class="line">//设置该线程优先级为8</span><br><span class="line">printThread.setPriority(8);</span><br><span class="line">printThread.start();</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>在优先级的设置上，与用户交互的线程应当获得非常高的优先级，这样就能感觉到响应非常快。另一方面，在后台完成计算的线程应当获得低优先级。很快技术的任务应当有高优先级，将花费很长时间的任务应当有低优先级，这样就不会妨碍其他任务。——《Java网络编程》</p>
+</blockquote>
+<p><em>不过一般情况下要避免对线程实用太高优先级，因为这要冒一定风险，可能使其他低优先级线程陷入饥饿</em>。</p>
+<h2 id="抢占"><a href="#抢占" class="headerlink" title="抢占"></a>抢占</h2><p>每个虚拟机都有自己的线程调度器，确定在给定的时刻运行那个线程。线程的调度主要有两种:抢占式和协作式。抢占式线程调度器确定一个线程正常的轮到其cpu时间，会暂停这个线程，将cpu控制权交给另一个线程。协作式线程调度器再将CPU控制权交给其他线程前，会等待正在运行的线程自己暂停。</p>
+<p><img src="http://p0bl99g4r.bkt.clouddn.com/se_thread.png" alt=""></p>
+<p>由此可见，抢占式线程不会像协作式线程那样容易陷入饥饿，协作式线程会让高级的线程独占cpu。<strong>因此所有Java虚拟机都确保在不同优先级之间使用抢占式线程调度</strong>。</p>
+<blockquote>
+<p>当一个低优先级线程正在运行，而一个高优先级线程准备运行时，虚拟机或早或晚会暂停这个低优先级进程，让高优先级进程运行。高优先级进程就抢占了低优先级进程。             ——《Java网络编程》</p>
+</blockquote>
+<h3 id="暂停线程"><a href="#暂停线程" class="headerlink" title="暂停线程"></a>暂停线程</h3><p>Java虚拟机使用抢占式来调度线程，让当前线程暂停，使其他线程有机会运行。那么如何具体暂停线程呢？大概有下面方法可以暂停线程或指示他准备暂停。</p>
+<ul>
+<li>对 I/O 阻塞</li>
+</ul>
+<p>当线程必须停下来等待他没有的资源的时候，就会发生阻塞。</p>
+<p><em>阻塞：当等待一个未到的资源时，程序会暂停，下面的代码不会执行，直到资源到达。</em></p>
+<blockquote>
+<p>要让网络程序中的线程自动放弃CPU控制权，最常见的方式是对I/O的阻塞。    ——《Java网络编程》</p>
+</blockquote>
+<p>很好理解的，比如当前线程要使用流读取一个文件时，在读取文件的那几毫秒就发生了阻塞，可偏偏就是这几毫秒就够其他线程完成一些重要任务。</p>
+<ul>
+<li>对同步对象阻塞</li>
+</ul>
+<p>线程在进入一个同步方法或代码块时也会阻塞。如果这个线程没有所同步对象的锁，而其他线程拥有这个锁，这个线程就会暂停,直到锁被释放。</p>
+<p><em>无论是I/O阻塞还是堆锁阻塞，都不会释放线程已经拥有的锁。</em></p>
+<ul>
+<li>放弃</li>
+</ul>
+<p>要让线程显示的放弃控制权，线程可以通过调用 Thread.yeled() 静态方法。这将通知虚拟机，如果有另一个线程准备就绪，可以运行该线程。<strong>放弃不会释放这个线程拥有的锁，</strong> 因此在线程放弃时，不应该做任何同步。</p>
+<blockquote>
+<p>一个线程放弃时，如果等待运行的其他线程都是因为这个线程的所拥有的同步资源而阻塞，那么这些线程将不能运行。       ——《Java网络编程》</p>
+</blockquote>
+<p>在实际中让一个线程放弃非常简单。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public void run()&#123;</span><br><span class="line">  //完成线程的工作</span><br><span class="line">  Thread.yield();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意的是：放弃只会使其他有相同优先级的线程有机会运行！！所以在没有必要放弃的情况下，这种防范措施效果不太明显。</p>
+<ul>
+<li>休眠</li>
+</ul>
+<p>休眠是更有力的放弃方式。放弃只是表示线程愿意暂停，其他相同优先级的线程有机会运行。而进入休眠的线程，不管有没有其他线程准备运行，休眠线程都会暂停。这样，不只是其他有相同优先级的线程的大机会，还会给更低优先级线程运行的机会。<strong>进入休眠的线程依然拥有这个线程的锁，</strong> 因此要避免在同步方法或块内让线程休眠。使用静态方法 Thread.sleep(),让线程休眠，在该方法中传入想让线程休眠的时间。</p>
+<p>使让一个线程休眠也非常简单。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public void run()&#123;</span><br><span class="line">   while(true)&#123;</span><br><span class="line">    //完成线程工作</span><br><span class="line">    try&#123;</span><br><span class="line">      //休眠5分钟</span><br><span class="line">      Thread.sleep(300000);</span><br><span class="line">    //如果其他线程唤醒该线程，该线程会抛出InterruptedException  </span><br><span class="line">    &#125;catch(InterruptedException)</span><br><span class="line">     break;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>向人一样，线程可以休眠，就可以被唤醒。如果在线程休眠时间内想让该线程提前继续运行，可以调用该线程的 interrup()方法将该线程唤醒。</p>
+<p><em>一个线程休眠并不意味着其他醒着的线程不能处理这个相应线程的Thread对象，当另一个线程唤醒休眠线程后，会让休眠中的线程得到一个InterruptedException异常。休眠线程会被唤醒并并正常执行。</em></p>
+<ul>
+<li>连接线程</li>
+</ul>
+<p>可以通过 Thread 对象的 join()方法，join()方法允许一个线程再继续执行之前等待另一个线程结束。但是该方法已经不常用。略过。</p>
+<ul>
+<li>等待一个对象</li>
+</ul>
+<p>线程可以等待一个它锁定的对象。在等待时，它会释放这个对象的锁并暂停，直到他得到其他线程的通知。另一个线程以某种方式修改这个对象，通知等待对象的线程，然后继续执行。并不要求等待线程等待线程和通知线程在另一个线程继续前必须结束。</p>
+<blockquote>
+<p>这个方式并不太出名，因为他并不涉及Thread类的任何方法。实际上，要等待某个特定的对象，希望暂停的线程首先必须使用synchronized获得这个对象的锁，然后调用是重载的 wait()方法。  ——《Java网络编程》</p>
+</blockquote>
+<p> 上面说的三个wait方法在 java.lang.Object中，也就是说任何类的任何对象都可以调用这个方法。当对象调用wait()方法时，调用该对象的线程会释放掉等待该对象的锁（但不是释放等待其他对象的锁），并进入休眠。线程会保持休眠直到：<br> 1）时间到期 : 即 wait() 方法中时间参数到期，该进程会唤醒，线程会紧挨着wait()调用之后向下继续执行。<br> 2）线程被中断 ： 与 sleep() 工作方式相同，当其他线程调用这个线程额interrup()方法，将该进程手动唤醒。<br> 3) 对象得到通知 : 这是个新方法。在其他线程在这个线程所等待的对象上调用notify()或notifyAll()方法时，就会发生通知，这两个方法都在java.lang.Object中。</p>
+<blockquote>
+<p>这两个方法都必须在线程所等待的对象上调用，而不是在Thread本身调用。再通知一个对象之前，线程必须首先使用同步方法或同步块获得这个对象的锁。 notify() 会随机通知一个正在的等待该对象的线程，并唤醒它。notifyAll()唤醒等待指定对象的每一个线程。一旦线程得到通知，它就会试图重新获得所等待对象的锁。成功就继续顺着wait()向下执行，失败，他就会陷入阻塞，知道可以得到锁。——《Java网络编程》</p>
+</blockquote>
+<p> <em>当多线程希望可以等待同一个对象时，等待和通知会更常用。</em></p>
+<ul>
+<li><p>结束</p>
+<p>最后一个让线程暂停的方式，就是结束。即 run()方法结束。</p>
+</li>
+</ul>
+<h2 id="线程池和Executor"><a href="#线程池和Executor" class="headerlink" title="线程池和Executor"></a>线程池和Executor</h2><p>想程序中添加多个线程会极大的提升性能，尤其是I/O首先程序，比如大多数网络程序。但是，线程自身也存在开销。线程需要虚拟机做大量工作，最后，虽然线程有利于更高效利用计算机有限CPU资源，但是资源毕竟是有限的！</p>
+<blockquote>
+<p>如果并发线程数达到 4000 至 20000 时，大多数虚拟机可嗯呢过会由于内存耗尽而无法承受。不故意通过使用线程池而不是为每个连接生成新线程，服务器每分钟就可以用不到100个线程来处理数千个短连接。 ——《Java网络编程》</p>
+</blockquote>
+<p>由此可见，线程池的使用场景一般是：<br>1）有大量 I/O 操作程序如网络程序。<br>2）每个线程的任务量很大，会消耗大量cpu资源。</p>
+<p>遇到上面两种情况的多线程程序都可以考虑使用线程池。</p>
+<ul>
+<li>线程池的使用</li>
+</ul>
+<p>利用 java.lang.concurrent 中的Executors类(executor是执行的意思)，可以很容易的建立一个线程池。只需要将各个任务作为 Runnable 对象提交给这个线程池，你就会得到一个 Future 对象，可以用来检查任务进度。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">//一个Runnable</span><br><span class="line">public class FileRunnable implements Runnable&#123;</span><br><span class="line">    public void run()&#123;</span><br><span class="line">       ....</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class TestPool&#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">      //创建线程池，并设置线程数为 4</span><br><span class="line">      ExectorService pool = Exectors.newFixedThreadPool(4);</span><br><span class="line">      for(int i = 0;i&lt;args.length;i++)&#123;</span><br><span class="line">        FileRunnable task = new FileRunnable();</span><br><span class="line">        //将任务提交</span><br><span class="line">        pool.submit(task);</span><br><span class="line">      &#125;</span><br><span class="line">      pool.shutdown();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>shutdown()</li>
+</ul>
+<p>要说一下这个shutdown()方法，这个方法不是终止等待中的工作。他只是通知线程池已经更多的任务需要增加到它的内部队列了，而且一旦完成了所有等待工作，就应当关闭。像上面程序中，可以这样关闭是因为他有一个终点，即只处理args.lenth个任务，所以可以使用pool.shutdown()。</p>
+<ul>
+<li>shutdownNow()</li>
+</ul>
+<p>而在一些不知道确定任务终点的线程池，如果想在运行时终止线程池的任务。可以使用 shutdownNow() 方法 。该方法会终止线程池中正在执行的任务，并忽略所有等待任务。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pool.shutdownNow();</span><br></pre></td></tr></table></figure>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>1.线程比进程轻量级，线程在进程中运行，共用一块内存、以及变量等资源。</p>
+<p>2.你可以根据需要使用继承Thread类和实现Runnable接口作为参数传给Thread构造方法两种方案创建进程。</p>
+<p>3.线程通过 Thread 对象的start()方法开启，线程的任务封装在 run()方法中。扩展Thread类时尽量只重写其run()方法，其他方法不要动。</p>
+<p>4.若想从线程返回信息可以使用回调的方式。回调就是被调用线程调用主类(调用该线程的程序)中的方法，回调返回信息尽量在run()方法快执行完时返回。</p>
+<p>5.使用Callable、Executors和Future也可以从线程返回信息，Callable 中的 call()方法可以返回任意类型，将 Callable 对象提交给 ExectorService 线程池可以执行该任务，并得到一个Future对象，该对象可以得到对应任务对象的 call()方法返回值。</p>
+<p>6.同步是为了让线程中的共享对象（资源）可以得到保护的一种机制，即当一个线程操作共享对象（资源）时另一个线程不可以对该对象进行操作。同步的策略有同步块、同步方法、同步对象三种。在编写代码时要避免不必要的同步。</p>
+<p>7.当两个线程都需要同一个资源集，但有都不愿意放弃各自手中的资源时，两个线程就会陷入等待程序无法正常运行，从而形成死锁。所以死锁可以理解为线程得不到需要的资源(被占用的资源)。要避免死锁解决方案还是要避免不必要的同步。</p>
+<p>8.线程要按照一定的规则轮番运行，这个规则就是线程的优先级，多个线程同时运行时，虚拟机通常只运行优先级最高的。</p>
+<p>9.线程优先级分为10各等级，Java 中 依次按 0 -10 优先级递增。使用 Thread 对象的setPriority(优先级)为线程设置优先级。 合理分配优先级，一般不要给一个线程过高的优先级，这会让优先级较低的线程陷入饥饿。</p>
+<p>10.在虚拟机的线程调度器中，按照抢占式的线程调度对线程进行调度。抢占式调度在某线程到了运行是时间会暂停当前运行线程，将cpu控制权交给另外的线程。</p>
+<p>11.Java中主要有四种让线程暂停，是其他线程获得运行机会的方式。</p>
+<p>12.对I/O阻塞或对同步对象阻塞，这种可以算作是一种，他们都会在等待资源(文件、对象)陷入阻塞时让另外的线程得到运行的机会。对I/O阻塞或对同步对象阻塞都不会放弃已经拥有的锁，即对同步对象阻塞可能会引起死锁。</p>
+<p>13.放弃，让线程放弃控制权。使用Thread.yield()方法，会通知虚拟机如果另一个优先级相同的线程准备就绪就可以运行。放弃也不会释放已经拥有的锁，所以在放弃时不应该做任何同步。</p>
+<p>14.休眠，为更有力的方式。与放弃的区别是休眠可以让较低线程优先级的线程运行。使用Thread.sleep()方法使线程休眠，也还以设置休眠时间。休眠同样不会释放他的锁。</p>
+<p>15.使用休眠线程对象的 interrupt() 方法可以唤醒休眠线程，被唤醒的线程会抛出一个InterruptedException 异常，所以在使用 sleep()方法时，如果要对该线程唤醒，就要捕获sleep()方法的InterruptedException。</p>
+<p>16.等待对象，等待一个被锁的对象。任何同步对象都可以被等待。一个线程如果需要另一个线程对同步对象做一些改动，该线程会释放这个对象的锁并暂停，在改动之后该线程继续执行。值得一提的是等待对象的方法是在Object.wait()，这会让该线程暂停，而对该对象改动的线程可以使用 Object对象的notify()方法，通知等待线程等待结束，可以继续运行。</p>
+<p>17.线程池可以减少过多线程对虚拟机性能的影响，在遇到过多I/O操作和每个线程的任务量很大，会消耗大量cpu资源的情况可以使用线程池。将 Runnable 对象提交给Executors 会得到 Future　对象用来获得线程执行结果。</p>
+<p>18.Executors对象的shutdown()方法不是停止等待的任务，而是告诉连接池全部任务已提交完毕，当所有任务完成后就关闭连接池；shutdownNow()方法则是关闭所有目前进行的任务，并忽略所有等待的任务。</p>
+
+    </article>
+    <!-- 前后页  -->
+    <ul class="post-pager">
+        
+        
+            <li class="previous">
+                <a href= "/2018/01/26/散列/" title= 散列 >
+                    <span>Previous Post</span>
+                    <span>散列</span>
+                </a>
+            </li>
+        
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+<div id="container"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+    var gitment = new Gitment({
+        // id: "线程", // 可选。默认为 location.href
+        owner: 'DomBro96',
+        repo: 'DomBro96.github.io',
+        oauth: {
+            client_id: '4a6fa6686f2dd417ed61',
+            client_secret: 'cc1f043ee266bc750c481d6a24a98188a185e2eb',
+        },
+    })
+    gitment.render('container')
+
+</script>
+
+    <!--PC版-->
+
+    <!--PC版-->
+
+
+    
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:460716809@qq.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="https://github.com/DomBro96" class="iconfont-archer github" target="_blank" title="github"></a>
+            
+        
+    
+        
+            
+                <a href="https://twitter.com/Bro_Doom" class="iconfont-archer twitter" target="_blank" title="twitter"></a>
+            
+        
+    
+        
+            
+                <a href="https://www.instagram.com/dombro7277/" class="iconfont-archer instagram" target="_blank" title="instagram"></a>
+            
+        
+    
+        
+            
+                <a href="https://leetcode.com/dombro96/" class="iconfont-archer others" target="_blank" title="others"></a>
+            
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">Theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+        <span id="busuanzi_container_site_pv">Welcome, No. <span id="busuanzi_value_site_pv"></span> visitor.
+        </span>
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper">
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#线程"><span class="toc-number">1.</span> <span class="toc-text">线程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#什么是线程"><span class="toc-number">1.1.</span> <span class="toc-text">什么是线程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#多线程编程"><span class="toc-number">1.2.</span> <span class="toc-text">多线程编程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Java-线程的启动"><span class="toc-number">1.2.1.</span> <span class="toc-text">Java 线程的启动</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#派生Thread"><span class="toc-number">1.2.2.</span> <span class="toc-text">派生Thread</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实现Runnable接口"><span class="toc-number">1.2.3.</span> <span class="toc-text">实现Runnable接口</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#从线程返回信息"><span class="toc-number">2.</span> <span class="toc-text">从线程返回信息</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#回调"><span class="toc-number">2.1.</span> <span class="toc-text">回调</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Future、Callable和Executor"><span class="toc-number">2.2.</span> <span class="toc-text">Future、Callable和Executor</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#同步"><span class="toc-number">3.</span> <span class="toc-text">同步</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#同步块"><span class="toc-number">3.1.</span> <span class="toc-text">同步块</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#举个例子"><span class="toc-number">3.1.1.</span> <span class="toc-text">举个例子</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#同步的替代方法"><span class="toc-number">3.2.</span> <span class="toc-text">同步的替代方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#死锁"><span class="toc-number">4.</span> <span class="toc-text">死锁</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#线程调度"><span class="toc-number">5.</span> <span class="toc-text">线程调度</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#线程优先级"><span class="toc-number">5.1.</span> <span class="toc-text">线程优先级</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#抢占"><span class="toc-number">6.</span> <span class="toc-text">抢占</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#暂停线程"><span class="toc-number">6.1.</span> <span class="toc-text">暂停线程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#线程池和Executor"><span class="toc-number">7.</span> <span class="toc-text">线程池和Executor</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">8.</span> <span class="toc-text">总结</span></a></li></ol>
+    </div>
+    
+    <div class="back-top">&#xe639;</div>
+    <div class="sidebar">
+    <div class="sidebar-header sidebar-header-show-archive">
+        <div class="sidebar-category">
+            <span class="sidebar-archive-link"><span class="iconfont-archer">&#xe67d;</span>Archive</span>
+            <span class="sidebar-tags-link"><span class="iconfont-archer">&#xe610;</span>Tag</span>
+        </div>
+    </div>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-archive">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-archive"> Total : 20 </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2018 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/11</span><a class="archive-post-title" href= "/2018/03/11/线程/" >线程</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/26</span><a class="archive-post-title" href= "/2018/01/26/散列/" >散列</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/01</span><a class="archive-post-title" href= "/2018/01/01/happy-new-year/" >别了，2017</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2017 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/29</span><a class="archive-post-title" href= "/2017/12/29/二叉搜索树/" >二叉搜索树</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/21</span><a class="archive-post-title" href= "/2017/12/21/栈及栈的应用/" >栈及栈的应用</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/12</span><a class="archive-post-title" href= "/2017/12/12/高级bash/" >高级bash</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/vim编辑器/" >vim编辑器</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/Java工厂设计模式/" >Java工厂设计模式</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2017/12/01/hello-world/" >世界你好</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2017 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/初识bash/" >初识bash</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/Java优雅的处理异常/" >Java优雅的处理异常</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/磁盘与Linux分区/" >磁盘与Linux分区</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/浅谈token/" >浅谈token</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/文件与文件系统的压缩与打包/" >文件与文件系统的压缩与打包</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/Linux文件与文件系统的打包/" >Linux文件与文件系统的打包</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/Linux的文件权限与目录配置/" >Linux的文件权限与目录配置</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/10</span><a class="archive-post-title" href= "/2017/12/10/文件系统管理/" >文件系统管理</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/10</span><a class="archive-post-title" href= "/2017/12/10/Linux文件与目录管理/" >Linux文件与目录管理</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/06</span><a class="archive-post-title" href= "/2017/12/06/动态规划-Floyed算法/" >动态规划-Floyed算法</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/04</span><a class="archive-post-title" href= "/2017/12/04/堆排序-HeapSort/" >堆排序-HeapSort</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name"><a href= "#">设计模式</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Linux</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">casual writing</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">JavaSE</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">hello world</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">数据结构 Data Structures</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">算法algorithm</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">JavaWeb</a></span>
+    
+    </div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #888; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: false
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tag-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var jsInfo = {
+        root: '/'
+    }
+</script>
+    <!-- 不蒜子  -->
+    
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ统计  -->
+    
+    </div>
+    </body>
+</html>
+
+
