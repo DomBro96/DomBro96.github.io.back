@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
+    <title>
+        
+        工厂方法引发的思考 · Dom Blog
+        
+    </title>
+    <link rel="icon" href= http://p0bl99g4r.bkt.clouddn.com/ti.JPG>
+    <!-- TODO: 在font-face加载完毕后改变字体  -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/webfont/1.6.28/webfontloader.js"></script>
+    <!-- 提前加载place holder  -->
+    <style type="text/css">
+        @font-face {
+            font-family: 'Oswald-Regular';
+            src: url(/font/Oswald-Regular.ttf);
+        }
+    </style>
+    <style type="text/css">
+        .site-intro-placeholder {
+            position: absolute;
+            z-index: -2;
+            top: 0;
+            left: 0px;
+            width: calc(100% + 300px);
+            height: 100%;
+            background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+            background-position: center center;
+            transform: translate3d(-226px, 0, 0);
+            animation: gradient-move 2.5s ease-out 0s 1;
+        }
+        @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+</style>
+    <link rel="stylesheet" href = /css/style.css?v=20171020 />
+    <script src="//cdn.staticfile.org/jquery/3.2.1/jquery.min.js" defer></script>
+    
+    <script src="/scripts/main.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+</head>
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >DomBro Studio</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">工厂方法引发的思考</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>DomBro Studio</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-img" style="background-image: url(http://p0bl99g4r.bkt.clouddn.com/dog1.JPG)"></div>
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            工厂方法引发的思考
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <!-- 文章页标签  -->
+            
+                <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = Java并发>Java并发</a>
+    
+</div>
+            
+            <div class="post-intro-meta">
+                <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                <span class="post-intro-time">2018/07/22</span>
+            </div>
+        
+    </div>
+</div>
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <script>
+            var browser = {
+                    versions: function () {
+                        var u = window.navigator.userAgent;
+                        return {
+                            userAgent: u,
+                            trident: u.indexOf('Trident') > -1, //IE内核
+                            presto: u.indexOf('Presto') > -1, //opera内核
+                            webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+                            gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+                            mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+                            ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+                            android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+                            iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+                            iPad: u.indexOf('iPad') > -1, //是否为iPad
+                            webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+                            weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+                            uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+                        };
+                    }()
+                }
+
+            function fontLoaded(){
+                console.log('font loaded');
+                if (document.getElementsByClassName('site-intro-meta')) {
+                    document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+                    document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+                    var postIntroTags = document.getElementsByClassName('post-intro-tags')[0],
+                        postIntroMeat = document.getElementsByClassName('post-intro-meta')[0];
+                        if (postIntroTags) {
+                            postIntroTags.classList.add('post-fade-in');
+                        }
+                        if (postIntroMeat) {
+                            postIntroMeat.classList.add('post-fade-in');
+                        }
+                    }
+                }
+                
+            console.log("userAgent:" + browser.versions.userAgent);
+            // UC不支持跨域，所以直接显示
+            if (browser.versions.uc) {
+                console.log("UCBrowser");
+                fontLoaded();
+            } else {
+                WebFont.load({
+                    custom: {
+                        families: ['Oswald-Regular']
+                    },
+                    loading: function () {  //所有字体开始加载
+                        // console.log('loading');
+                    },
+                    active: function () {  //所有字体已渲染
+                        fontLoaded();
+                    },
+                    inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+                        console.log('inactive: timeout');
+                        fontLoaded();
+                    },
+                    timeout: 7000 // Set the timeout to two seconds
+                });
+            }
+        </script>
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h1 id="单例工厂方法引发的思考"><a href="#单例工厂方法引发的思考" class="headerlink" title="单例工厂方法引发的思考"></a>单例工厂方法引发的思考</h1><p>emmm， 今天被朋友嘲讽了代码。有点小情绪，俗话说知耻而后勇，错了就要认嘛~</p>
+<h2 id="我的初衷——单例模式"><a href="#我的初衷——单例模式" class="headerlink" title="我的初衷——单例模式"></a>我的初衷——单例模式</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">/*** 代码清单 1 不伦不类的工厂方法 ***/</span><br><span class="line">class UserService&#123;</span><br><span class="line"></span><br><span class="line">  private UserService()&#123;&#125;</span><br><span class="line"></span><br><span class="line">  public static UserService getInstance()&#123;</span><br><span class="line">      return new UserService();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>实话实说，这代码我也没搞懂我当初要干什么。好像是为了当初让编写上层控制层的同学更好的得到 <code>UserService</code>，提供的一个接口。当初的想法应该是提供一个单例的  <code>UserService</code> (很不幸，代码清单 1 一直在创建对象)，那代码就应该是代码清单 2</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">/*** 代码清单 2 单线程的工厂方法 ***/</span><br><span class="line">class UserService&#123;</span><br><span class="line"></span><br><span class="line">  private UserService()&#123;&#125;</span><br><span class="line"></span><br><span class="line">  private  static UserService instance;</span><br><span class="line"></span><br><span class="line">  public static UserService getInstance()&#123;</span><br><span class="line">       if (instance == null)&#123;</span><br><span class="line">            instance = new UserService();</span><br><span class="line">       &#125;</span><br><span class="line">       return instance;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>嗯，很美丽。<strong>对象只有在需要时被创建(对象的延迟初始化)，而且不需要自己手动 <code>new</code> ，降低初始化类的开销</strong>。实际上代码清单 2 <em>隐藏着一个大问题——多线程访问</em>。</p>
+<h2 id="多线程的思考"><a href="#多线程的思考" class="headerlink" title="多线程的思考"></a>多线程的思考</h2><h3 id="多线程不安全的延迟初始化"><a href="#多线程不安全的延迟初始化" class="headerlink" title="多线程不安全的延迟初始化"></a>多线程不安全的延迟初始化</h3><p>代码清单 3 中，假设两个线程: 线程A 和 线程B 调用 <code>getInstance()</code> 方法，当线程A判断 instance 是否为空，而此时线程 B 虽然执行 <code>instance = new UserService</code> ，但 线程A 可能并没有看到线程B 的初始化操作(即 instance 在 线程A 看来是 null，原因见 <a href="#1">tips 1</a>)。 <strong>这个时候 线程A 和 线程B 会造出两个对象，线程不安全</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">/*** 代码清单 3 两个线程调用 getInstance***/</span><br><span class="line">public static UserService getInstance()&#123;</span><br><span class="line">     if (instance == null)&#123;                   //线程 A 执行</span><br><span class="line">          instance = new UserService();       //线程 B 执行</span><br><span class="line">     &#125;</span><br><span class="line">     return instance;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="1">tips 1</h5>
+
+<blockquote>
+<p>创建一个对象，instance = new Instance() 可以分解为下面三行伪代码:<br><br>memory = allocate();   // 1.分配对象的内存空间   <br><br>ctorInstance(memory);  // 2.初始化对象          <br><br>instance = memory;     // 3.设置 instance 指向刚分配的内存地址    <br><br>所以当 线程 B 创建对象时，有可能还没有到第三步，那么线程 A 读到的 instance 就是 null。</p>
+</blockquote>
+<h3 id="用锁的代价"><a href="#用锁的代价" class="headerlink" title="用锁的代价"></a>用锁的代价</h3><p>既然多线程不安全，自然想到使用 <code>sychronized</code> 关键字，让线程同步访问 <code>getInstance()</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">/*** 代码清单 4 加锁同步 ***/</span><br><span class="line">public sychronized static UserService getInstance()&#123;</span><br><span class="line">     if (instance == null)&#123;                   //线程 A 执行</span><br><span class="line">          instance = new UserService();       //线程 B 执行</span><br><span class="line">     &#125;</span><br><span class="line">     return instance;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>线程当然是安全的，但是当访问线程过多时，会造成性能严重下降。因为即使 instance 已经创建了，线程还是要同步的进行获取。</p>
+<h3 id="看起来很美的双重检查锁定"><a href="#看起来很美的双重检查锁定" class="headerlink" title="看起来很美的双重检查锁定"></a>看起来很美的双重检查锁定</h3><p>可不可以只有当线程判断 <code>instance == null</code>  时，再上锁呢？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">/*** 代码清单 5 双重检查锁定 ***/</span><br><span class="line">public static UserService getInstance()&#123;</span><br><span class="line">     if (instance == null)&#123;                   //一重检查</span><br><span class="line">          sychronized(UserService.class)&#123;</span><br><span class="line">              if(instance == null)&#123;           //双重检查</span><br><span class="line">                  instance = new UserService();</span><br><span class="line">              &#125;</span><br><span class="line">          &#125;   </span><br><span class="line">     &#125;</span><br><span class="line">      return instance;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>看起来很美，一重检查判断 <code>instance == null</code> 时，会同步获取当前类对象的锁，当多个线程试图同时创建对象时，会通过加锁来保证只有一个线程能创建对象。<strong>但是，这是一个错误的优化！ 代码执行到一重检查，判断 instance != null 时，instance 有可能还没有完成初始化</strong> ！</p>
+<ul>
+<li>创建对象时的重排序</li>
+</ul>
+<p>在 <a href="#1">tips 1</a> 中，解释了当一个对象创建时的三个步骤，然而这三个步骤可能会被编译器重排序。所谓重排序就是为了使代码运行的更快，编译器，处理器，或者系统内存对程序进行的一种运行时优化。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">/***代码清单 6 创建对象重排序后的伪代码***/</span><br><span class="line">memory = allocate();   //1.分配对象的内存空间    </span><br><span class="line">instance = memory;     //2.设置 instance 指向分配的内存地址   </span><br><span class="line">ctorInstance(memory);  //3.初始化对象</span><br></pre></td></tr></table></figure>
+<p>上面的重排序在单线程中是没有任何问题的，反而效率比正常的创建对象顺序更快。 但如果在多线程环境下，问题就很大了。假设 线程A 运行到  <code>instance == null</code> 时，<strong>线程 B 运行到 instance = new UserService()，并在实例化过程中发生了重排序，且刚刚执行到重排序的第二步，此时，instance 并没有被初始化，仅仅是一个空的引用。线程A于 是很悲催的返回一个空的引用</strong> 。看似线程安全的双重检查，并不是很安全哦，这种实例化过程中的重排序在 JDK 7 是很常见的。</p>
+<h3 id="解决方式"><a href="#解决方式" class="headerlink" title="解决方式"></a>解决方式</h3><p>针对双重检查锁定的解决方式，解铃换需系铃人。问题在于实例化过程中的重排序，那就针对重排序解决问题。思路有两个：</p>
+<ol>
+<li><p>禁止实例化过程中的重排序</p>
+</li>
+<li><p>允许重排序，但不让其他线程看到这个重排序</p>
+</li>
+</ol>
+<h3 id="禁止重排序-基于-volatile-的解决方案"><a href="#禁止重排序-基于-volatile-的解决方案" class="headerlink" title="禁止重排序 基于 volatile 的解决方案"></a>禁止重排序 基于 volatile 的解决方案</h3><p>说道禁止重排序，那就不得不提到并发世界中的另一个关键字 <code>volatile</code>了。</p>
+<ul>
+<li>volatile 关键字禁止重排序</li>
+</ul>
+<p> <code>volatile</code> <strong>关键字的写 永远 happens-before</strong> <code>volatile</code> <strong>的读</strong>。也就是说当一个线程在读取 <code>volatile</code> 变量时，读取到的永远都是 <code>volatile</code> 变量最新的值。所以当对象的引用为 <code>volatile</code> 时，再多线程环境下的重排序就被禁止了。</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">/*** 代码清单 7 使用 volatile 关键字解决问题***/</span><br><span class="line">class UserService&#123;</span><br><span class="line"></span><br><span class="line">  private UserService()&#123;&#125;</span><br><span class="line"></span><br><span class="line">  private volatile static UserService instance;</span><br><span class="line"></span><br><span class="line">  public static UserService getInstance()&#123;</span><br><span class="line">       if (instance == null)&#123;                   </span><br><span class="line">            sychronized(UserService.class)&#123;</span><br><span class="line">                if(instance == null)&#123;           </span><br><span class="line">                    instance = new UserService();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;   </span><br><span class="line">       &#125;</span><br><span class="line">        return instance;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> 代码清单 7 通过 volatile，保证线程安全的延迟初始化对象。</p>
+<h3 id="允许重排序，基于-类初始化-的解决方案"><a href="#允许重排序，基于-类初始化-的解决方案" class="headerlink" title="允许重排序，基于 类初始化 的解决方案"></a>允许重排序，基于 类初始化 的解决方案</h3><ul>
+<li>类的初始化</li>
+</ul>
+<blockquote>
+<p>JVM 在类初始化阶段(Class 被加载后，且被线程使用之前)，会执行类的初始化。执行类的初始化期间，JVM 会获取一个锁，<strong>这个锁可以同步多个线程对同一个类的初始化</strong> 。———《Java并发编程艺术》</p>
+</blockquote>
+<p> 每一个类和接口C，都有一个唯一的初始化锁 LC 与之对应。JVM 在初始化期间会获取这个初始化锁，并且每个线程保证 <strong>至少获取一次</strong> 锁来确保这个类被初始化。也就是在初始化一个类时会通过这个 类的LC锁 <strong>使线程同步的初始化</strong> 这个类。<strong>初始化一个类，包括执行这个类的静态初始化和初始化在这个类中声明的静态字段</strong>。</p>
+<ul>
+<li>初始化的条件</li>
+</ul>
+<p>首次发生下面任意一种情况时，一个类或一个接口T 将立即被初始化:</p>
+<ol>
+<li>T 是一个类，而且一个 T 类型的实例被创建。</li>
+<li>T 是一个类，且 T 中声明的一个静态方法被调用。</li>
+<li>T 中声明的一个静态字段被赋值。</li>
+<li>T 中声明的一个静态字段被使用，而且这个字段不是一个常量字段。</li>
+</ol>
+<ul>
+<li>原理</li>
+</ul>
+<p>由于涉及到线程获取类的 L锁 ，这个过程虽然好理解，但是比较复杂，简单总结一下。当线程触发了类初始化时，会获取这个类对应 Class对象的初始化锁 (LC)，这个锁是同步获取的，即只有一个线程可以对类进行初始化。</p>
+<ol>
+<li><p>若 类C 没有被初始化过，类的初始化状态为 status = noinit， 当线程A初始化该类时 status = initing，表示正在初始化。其他线程被阻塞。</p>
+</li>
+<li><p>线程A释放初始化锁，执行 类C 的静态初始化和初始化这个类的静态字段。此时线程B，获取到 类C 的初始化锁，查看初始化状态 status = initing, 释放初始化锁，在初始化锁的 condition 上等待(相当于wait(),进入等待队列)。</p>
+</li>
+</ol>
+<ol>
+<li><p>线程A 获取初始化锁(此时已经初始化完毕)，更改初始化状态为 status = inited，唤醒所有在锁的 condition 等待的线程。释放锁，线程A 的初始化过程完毕。</p>
+</li>
+<li><p>线程B 获取初始化锁，查看初始化状态为 status = inited, 释放锁(因为已经被初始化过了)，线程B 的初始化过程完毕。</p>
+</li>
+<li><p>其他线程获取到锁，读取到 status = inited 后，释放锁，同样不做初始化行为，完成类的初始化操作。</p>
+</li>
+</ol>
+<p>可以发现，从始至终只有一个线程会真正的执行类的初始化，即类只被初始化一次。回到本节的主题，当一个线程对类初始化时，其他的线程自然是允许在实例化重排序的。</p>
+<ul>
+<li>实现</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">/*** 代码清单 8 类初始化的解决方案 ***/</span><br><span class="line">public class UserService&#123;</span><br><span class="line">  //静态内部类</span><br><span class="line">  private static class InstanceHolder&#123;</span><br><span class="line">    public static UserService instance = new UserService();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  public static UserService getInstance()&#123;</span><br><span class="line">    return InstanceHolder.instance;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>代码清单 8 中，当线程调用 <code>InstanceHolder.instance;</code> 时，会触发类 InstanceHolder 的初始化, 属于触发类初始化的情况 4。由于 instance 是静态的，所以 instance 也是单例的。</p>
+<h3 id="两种方式的比较"><a href="#两种方式的比较" class="headerlink" title="两种方式的比较"></a>两种方式的比较</h3><p>字段的延迟初始化降低初始化类或创建实例的开销，但增加了访问被延迟初始化字段的开销。上述两种线程安全的延迟初始化方式，从胆码简介程度上来看 类初始化更加的简便。但是基于 volatile 的双重检查策略的优势是: 不仅可以延迟初始化静态字段，还可以对实例字段延迟初始化。所以得出的结论是: 如果要对静态字段延迟初始化，选用类的初始化方式；如果要对实例字段延迟初始化选用基于 volatile 的双重检查策略。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>有时候一个你很难去关注的点，它蕴含的知识点是难以想象的。从简单的单例模式，到对延迟初始化在并发环境下的思考。还真的是学无止境。</p>
+
+    </article>
+    <!-- 前后页  -->
+    <ul class="post-pager">
+        
+        
+            <li class="previous">
+                <a href= "/2018/04/21/Spring核心AOP/" title= Spring核心AOP >
+                    <span>Previous Post</span>
+                    <span>Spring核心AOP</span>
+                </a>
+            </li>
+        
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+<div id="container"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+    var gitment = new Gitment({
+        // id: "工厂方法引发的思考", // 可选。默认为 location.href
+        owner: 'DomBro96',
+        repo: 'DomBro96.github.io',
+        oauth: {
+            client_id: '4a6fa6686f2dd417ed61',
+            client_secret: 'cc1f043ee266bc750c481d6a24a98188a185e2eb',
+        },
+    })
+    gitment.render('container')
+
+</script>
+
+    <!--PC版-->
+
+    <!--PC版-->
+
+
+    
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:460716809@qq.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="https://github.com/DomBro96" class="iconfont-archer github" target="_blank" title="github"></a>
+            
+        
+    
+        
+            
+                <a href="https://twitter.com/Bro_Doom" class="iconfont-archer twitter" target="_blank" title="twitter"></a>
+            
+        
+    
+        
+            
+                <a href="https://www.instagram.com/dombro7277/" class="iconfont-archer instagram" target="_blank" title="instagram"></a>
+            
+        
+    
+        
+            
+                <a href="https://leetcode.com/dombro96/" class="iconfont-archer others" target="_blank" title="others"></a>
+            
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">Theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+        <span id="busuanzi_container_site_pv">Welcome, No. <span id="busuanzi_value_site_pv"></span> visitor.
+        </span>
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper">
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#单例工厂方法引发的思考"><span class="toc-number">1.</span> <span class="toc-text">单例工厂方法引发的思考</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#我的初衷——单例模式"><span class="toc-number">1.1.</span> <span class="toc-text">我的初衷——单例模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#多线程的思考"><span class="toc-number">1.2.</span> <span class="toc-text">多线程的思考</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#多线程不安全的延迟初始化"><span class="toc-number">1.2.1.</span> <span class="toc-text">多线程不安全的延迟初始化</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1"><span class="toc-number">1.2.1.0.1.</span> <span class="toc-text">tips 1</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#用锁的代价"><span class="toc-number">1.2.2.</span> <span class="toc-text">用锁的代价</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#看起来很美的双重检查锁定"><span class="toc-number">1.2.3.</span> <span class="toc-text">看起来很美的双重检查锁定</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#解决方式"><span class="toc-number">1.2.4.</span> <span class="toc-text">解决方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#禁止重排序-基于-volatile-的解决方案"><span class="toc-number">1.2.5.</span> <span class="toc-text">禁止重排序 基于 volatile 的解决方案</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#允许重排序，基于-类初始化-的解决方案"><span class="toc-number">1.2.6.</span> <span class="toc-text">允许重排序，基于 类初始化 的解决方案</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#两种方式的比较"><span class="toc-number">1.2.7.</span> <span class="toc-text">两种方式的比较</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">1.3.</span> <span class="toc-text">总结</span></a></li></ol></li></ol>
+    </div>
+    
+    <div class="back-top">&#xe639;</div>
+    <div class="sidebar">
+    <div class="sidebar-header sidebar-header-show-archive">
+        <div class="sidebar-category">
+            <span class="sidebar-archive-link"><span class="iconfont-archer">&#xe67d;</span>Archive</span>
+            <span class="sidebar-tags-link"><span class="iconfont-archer">&#xe610;</span>Tag</span>
+        </div>
+    </div>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-archive">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-archive"> Total : 25 </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2018 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/22</span><a class="archive-post-title" href= "/2018/07/22/工厂方法引发的思考/" >工厂方法引发的思考</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/21</span><a class="archive-post-title" href= "/2018/04/21/Spring核心AOP/" >Spring核心AOP</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/13</span><a class="archive-post-title" href= "/2018/04/13/Java并发编程基础/" >Java并发编程基础.md</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/26</span><a class="archive-post-title" href= "/2018/03/26/AVL树和红黑树/" >AVL树和红黑树</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/19</span><a class="archive-post-title" href= "/2018/03/19/几种基本排序/" >几种基本排序</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/11</span><a class="archive-post-title" href= "/2018/03/11/线程/" >线程</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/26</span><a class="archive-post-title" href= "/2018/01/26/散列/" >散列</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/01</span><a class="archive-post-title" href= "/2018/01/01/happy-new-year/" >别了，2017</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2017 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/29</span><a class="archive-post-title" href= "/2017/12/29/二叉搜索树/" >二叉搜索树</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/21</span><a class="archive-post-title" href= "/2017/12/21/栈及栈的应用/" >栈及栈的应用</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/12</span><a class="archive-post-title" href= "/2017/12/12/高级bash/" >高级bash</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/浅谈token/" >浅谈token</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/Java优雅的处理异常/" >Java优雅的处理异常</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/Java工厂设计模式/" >Java工厂设计模式</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/磁盘与Linux分区/" >磁盘与Linux分区</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/Linux文件与文件系统的打包/" >Linux文件与文件系统的打包</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/文件与文件系统的压缩与打包/" >文件与文件系统的压缩与打包</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/初识bash/" >初识bash</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/vim编辑器/" >vim编辑器</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/11</span><a class="archive-post-title" href= "/2017/12/11/Linux的文件权限与目录配置/" >Linux的文件权限与目录配置</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/10</span><a class="archive-post-title" href= "/2017/12/10/文件系统管理/" >文件系统管理</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/10</span><a class="archive-post-title" href= "/2017/12/10/Linux文件与目录管理/" >Linux文件与目录管理</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/06</span><a class="archive-post-title" href= "/2017/12/06/动态规划-Floyed算法/" >动态规划-Floyed算法</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2017/12/01/hello-world/" >世界你好</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2017 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/04</span><a class="archive-post-title" href= "/2017/12/04/堆排序-HeapSort/" >堆排序-HeapSort</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name"><a href= "#">数据结构 Data Structures</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Spring技术内幕</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">设计模式</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Linux</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">JavaSE</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Java并发</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">casual writing</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">算法algorithm</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">hello world</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">JavaWeb</a></span>
+    
+    </div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #888; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: false
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tag-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var jsInfo = {
+        root: '/'
+    }
+</script>
+    <!-- 不蒜子  -->
+    
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ统计  -->
+    
+    </div>
+    </body>
+</html>
+
+
